@@ -12,12 +12,10 @@ class Dumbot(commands.Bot):
     
 
     async def on_ready(self):
-        print(f'''
-    {"-"*20}
-        {self.user}
-        {self.status} - {round(self.latency * 1000)}ms
-    {"-"*20}
-        ''')
+        print(f'{"-"*20}\n'
+              f'{self.user}\n'
+              f'{self.status} - {round(self.latency * 1000)}ms\n'
+              f'{"-"*20}')
 
 
     async def setup_hook(self):
