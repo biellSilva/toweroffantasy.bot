@@ -13,7 +13,7 @@ class Simulacra(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name='simulacra')
+    @app_commands.command(name='simulacra', description='simulacra info')
     @app_commands.describe(name='Simulacra name')
     async def simulacra(self, interaction: discord.Interaction, name: str):
 
