@@ -1,4 +1,5 @@
 import discord
+import requests
 
 from discord.ext import commands
 from discord import app_commands
@@ -45,6 +46,16 @@ class Simulacra(commands.Cog):
         
         url_name = name.replace(' ', '-').lower()
         em.url = f'https://toweroffantasy.info/simulacra/{url_name}'
+
+        for name in [simulacra['name'], simulacra['cnName']]:
+            base_url = 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/UI/huanxing/lihui/'
+            re_1 = requests.get(f'{base_url}{name}.webp')
+            re_2 = requests.get(f'{base_url}{name.lower()}.webp')
+
+            if re_1.status_code == 200:
+                em.set_thumbnail(url=str(re_1.url))
+            if re_2.status_code == 200:
+                em.set_thumbnail(url=str(re_2.url))
 
         for region, voiceActor in simulacra['voiceActors'].items():
             if voiceActor == '':

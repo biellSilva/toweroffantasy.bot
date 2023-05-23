@@ -1,4 +1,7 @@
 import discord
+import aiohttp
+
+from typing import Literal
 
 from src.config import db_client, simulacra_collection, emojis_1, names
 
@@ -18,6 +21,17 @@ def check_name(name: str):
     return False
 
 
+async def check_url(src: Literal['simulacra', 'weapon', 'matrice'], **names):
+    async with aiohttp.ClientSession() as cs:
+        if src == 'simulacra':
+            base_url = 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/UI/huanxing/lihui/'
+            for name in names:
+                async with cs.get(base_url+name+'.webp') as res:
+                    if res.status == 200:
+                        return res.url
+
+
+
 async def home_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
 
@@ -25,8 +39,6 @@ async def home_button_func(interaction: discord.Interaction):
     skin_url = f"[Skins Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
     
     em.description=f"""
-                    Weapon: {simulacra['weapon']['name']}
-                    Rarity: {simulacra['rarity']}
                     CN Name: {simulacra['cnName'].capitalize()}
 
                     Gender: {simulacra['gender']}
@@ -37,6 +49,8 @@ async def home_button_func(interaction: discord.Interaction):
 
                     {skin_url} 
                     """
+
+
     em.clear_fields()
 
     for region, voiceActor in simulacra['voiceActors'].items():
@@ -68,6 +82,10 @@ async def weapon_button_func(interaction: discord.Interaction):
 
     analysisVideo = f"[Analysis Video]({weapon['analysisVideoSrc']})" if 'analysisVideoSrc' in weapon else ''
     abilitiesVideo = f"[Abilities Video]({weapon['abilitiesVideoSrc']})" if 'abilitiesVideoSrc' in weapon else ''
+
+
+    em.set_thumbnail(url=f'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/Icon/weapon/Icon/{weapon["imgSrc"]}.webp')
+
 
     em.clear_fields()
     em.description = f'''
