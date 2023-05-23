@@ -1,6 +1,6 @@
 import discord
 
-from src.config import db_client, simulacra_collection, emojis
+from src.config import db_client, simulacra_collection, emojis_1, names
 
 
 def ping_db():
@@ -9,13 +9,20 @@ def ping_db():
         return 'Connected'
     except Exception:
         return False
-    
+
+
+def check_name(name: str):
+    for _ in names:
+        if name.replace('[CN]', '').split(' ')[0].lower() in _.lower():
+            return _
+        
+    return False
+
 
 async def home_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
-    name = em.title.replace('[CN]', '')
 
-    simulacra = simulacra_collection.find_one({'name': name})
+    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
     skin_url = f"[Skins Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
 
     em.description=f"""
@@ -31,9 +38,7 @@ async def home_button_func(interaction: discord.Interaction):
 
                     {skin_url} 
                     """
-
-    url_name = name.replace(' ', '-').lower()
-    em.url = f'https://toweroffantasy.info/simulacra/{url_name}'
+    em.url = f'https://toweroffantasy.info/simulacra/'+ em.title.replace('[CN]', '').replace(' ', '-').lower()
 
     em.clear_fields()
     for region, voiceActor in simulacra['voiceActors'].items():
@@ -44,13 +49,11 @@ async def home_button_func(interaction: discord.Interaction):
 
 async def trait_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
-    name = em.title.replace('[CN]', '')
 
-    simulacra = simulacra_collection.find_one({'name': name})
+    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
 
+    em.description = ''
     em.clear_fields()
-    em.description = 'Traits:'
-
     for trait in simulacra['traits']:
         em.add_field(name=f'Affinity {trait["affinity"]}', value=trait['description'], inline=False)
 
@@ -59,16 +62,20 @@ async def trait_button_func(interaction: discord.Interaction):
 
 async def weapon_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
-    name = em.title.replace('[CN]', '')
 
-    simulacra = simulacra_collection.find_one({'name': name})
+    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
     weapon = simulacra['weapon']
 
     em.clear_fields()
     em.description = f'''
-                      Name: {weapon['name']} 
+                      Name: {weapon['name']} {emojis_1[weapon['element']]} {emojis_1[weapon['type']]}
                       Shatter: *{weapon['shatter']['value']} **{weapon['shatter']['tier']}***
-                      Charge: *{weapon['charge']['value']} **{weapon['charge']['tier']}**
+                      Charge: *{weapon['charge']['value']} **{weapon['charge']['tier']}***
+                      Base stats: *{" - ".join(weapon['baseStats']).title()}*
                       '''
-    # {bot.get_emoji(emojis[weapon['element']])} {bot.get_emoji(emojis[weapon['type']])}
+    
+    for i in weapon['weaponEffects']:
+        em.add_field(name=i['title'], value=i['description'], inline=False)
+
+
     return em

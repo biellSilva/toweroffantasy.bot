@@ -4,8 +4,6 @@ import os
 
 from discord.ext import commands
 
-from src.config import emojis
-
 
 class Dumbot(commands.Bot):
 
@@ -39,6 +37,5 @@ class Dumbot(commands.Bot):
 
 
 bot = Dumbot()
-
 
 bot.run(token=dotenv.get_key(dotenv_path=dotenv.find_dotenv(), key_to_get='token'))

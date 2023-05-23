@@ -8,7 +8,7 @@ class MainView(discord.ui.View):
     @discord.ui.button(custom_id='weapon', label='Weapon', style=discord.ButtonStyle.grey)
     async def weapon_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         '''weapon Button'''
-
+        await interaction.response.defer()
         em = await weapon_button_func(interaction)
         await interaction.message.edit(embeds=[em], attachments=[], view=TraitView())
 

@@ -4,6 +4,7 @@ from discord.ext import commands
 from discord import app_commands
 
 from src.config import no_bar, simulacra_collection
+from src.utils import check_name
 from src.views.views import MainView
 
 
@@ -20,16 +21,7 @@ class Simulacra(commands.Cog):
 
         await interaction.response.defer()
 
-        names = ['Alyss', 'Annabella', 'Bai Ling', 'Baiyuekui', 'Claudia', 'Cobalt-B', 'Cocoritter', 'Crow', 'Echo', 
-                 'Ene', 'Fenrir', 'Fiona', 'Frigg', 'Garnett', 'Gnonno', 'Hilda', 'Huma', 'Icarus', 'KING', 'Lan', 'Lin', 
-                 'Lyra', 'Marc', 'Meryl', 'Nemesis', 'Pepper', 'Rubilia', 'Ruby', 'Saki Fuwa', 'Samir', 'Shiro', 
-                 'Tian Lang', 'Tsubasa', 'Umi', 'Yulan', 'Zero']
-        
-        for _ in names:
-            if name.lower() in _.lower():
-                name = _
-
-        simulacra = simulacra_collection.find_one(filter={'name': name})
+        simulacra = simulacra_collection.find_one(filter={'name': check_name(name)})
 
         if simulacra == None:
             await interaction.edit_original_response(embed=discord.Embed(color=no_bar, description=f'couldn\'t find: {name}'))

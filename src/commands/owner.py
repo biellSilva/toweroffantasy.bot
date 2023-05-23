@@ -67,6 +67,9 @@ class Owner(commands.Cog):
 
                 await ctx.send(embed=em)
 
+            else:
+                await ctx.send(f'DB Connection: {ping}')
+
 
 async def setup(bot):
     await bot.add_cog(Owner(bot))
