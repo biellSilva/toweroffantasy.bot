@@ -48,4 +48,6 @@ emojis_1 = {
 names = ['Alyss', 'Annabella', 'Bai Ling', 'Baiyuekui', 'Claudia', 'Cobalt-B', 'Cocoritter', 'Crow', 'Echo', 
 'Ene', 'Fenrir', 'Fiona', 'Frigg', 'Garnett', 'Gnonno', 'Hilda', 'Huma', 'Icarus', 'KING', 'Lan', 'Lin', 
 'Lyra', 'Marc', 'Meryl', 'Nemesis', 'Pepper', 'Rubilia', 'Ruby', 'Saki Fuwa', 'Samir', 'Shiro', 
-'Tian Lang', 'Tsubasa', 'Umi', 'Yulan', 'Zero']
+'Tian Lang', 'Tsubasa', 'Umi', 'Yulan', 'Zero', 'Apophis', 'Barbarossa', 'Frost Bot', 'Functional Dash',
+'Haboela', 'Obstacle Removal', 'Plunder', 'Robarg', 'Scylla', 'Self Explosive', 'Sobek', 'Standard Operation',
+'Wandering Aberrant', 'Wind Blade']

@@ -24,7 +24,7 @@ async def home_button_func(interaction: discord.Interaction):
 
     simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
     skin_url = f"[Skins Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
-
+    
     em.description=f"""
                     Weapon: {simulacra['weapon']['name']}
                     Rarity: {simulacra['rarity']}
@@ -38,10 +38,11 @@ async def home_button_func(interaction: discord.Interaction):
 
                     {skin_url} 
                     """
-    em.url = f'https://toweroffantasy.info/simulacra/'+ em.title.replace('[CN]', '').replace(' ', '-').lower()
-
     em.clear_fields()
+
     for region, voiceActor in simulacra['voiceActors'].items():
+        if voiceActor == '':
+            continue
         em.add_field(name=region.upper(), value=voiceActor, inline=True)
 
     return em    
@@ -66,12 +67,22 @@ async def weapon_button_func(interaction: discord.Interaction):
     simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
     weapon = simulacra['weapon']
 
+    recommendedPairings = f"Recommended Pairings: *{' - '.join(weapon['recommendedPairings']).title()}*" if len(weapon['recommendedPairings']) != 0 else ''
+    analysisVideo = f"[Analysis Video]({weapon['analysisVideoSrc']})" if 'analysisVideoSrc' in weapon else ''
+    abilitiesVideo = f"[Abilities Video]({weapon['abilitiesVideoSrc']})" if 'abilitiesVideoSrc' in weapon else ''
+
+
     em.clear_fields()
     em.description = f'''
-                      Name: {weapon['name']} {emojis_1[weapon['element']]} {emojis_1[weapon['type']]}
+                      **{weapon['name']}** {emojis_1[weapon['element']]} {emojis_1[weapon['type']]}
                       Shatter: *{weapon['shatter']['value']} **{weapon['shatter']['tier']}***
                       Charge: *{weapon['charge']['value']} **{weapon['charge']['tier']}***
                       Base stats: *{" - ".join(weapon['baseStats']).title()}*
+
+                      {recommendedPairings}
+                      
+                      {abilitiesVideo}
+                      {analysisVideo}
                       '''
     
     for i in weapon['weaponEffects']:

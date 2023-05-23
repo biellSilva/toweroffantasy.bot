@@ -48,6 +48,8 @@ class Simulacra(commands.Cog):
         em.url = f'https://toweroffantasy.info/simulacra/{url_name}'
 
         for region, voiceActor in simulacra['voiceActors'].items():
+            if voiceActor == '':
+                continue
             em.add_field(name=region.upper(), value=voiceActor, inline=True)
 
         await interaction.edit_original_response(embed=em, view=MainView())
