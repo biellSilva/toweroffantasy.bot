@@ -38,4 +38,4 @@ class Dumbot(commands.Bot):
 
 bot = Dumbot()
 
-bot.run(token=dotenv.get_key(dotenv_path=dotenv.find_dotenv(), key_to_get='token'))
+bot.run(token=dotenv.get_key(dotenv_path=dotenv.find_dotenv(), key_to_get='test_token'))

@@ -66,7 +66,6 @@ async def weapon_button_func(interaction: discord.Interaction):
     simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
     weapon = simulacra['weapon']
 
-    recommendedPairings = f"Recommended Pairings: *{' - '.join(weapon['recommendedPairings']).title()}*" if len(weapon['recommendedPairings']) != 0 else ''
     analysisVideo = f"[Analysis Video]({weapon['analysisVideoSrc']})" if 'analysisVideoSrc' in weapon else ''
     abilitiesVideo = f"[Abilities Video]({weapon['abilitiesVideoSrc']})" if 'abilitiesVideoSrc' in weapon else ''
 
@@ -76,11 +75,6 @@ async def weapon_button_func(interaction: discord.Interaction):
                       Shatter: *{weapon['shatter']['value']} **{weapon['shatter']['tier']}***
                       Charge: *{weapon['charge']['value']} **{weapon['charge']['tier']}***
                       Base stats: *{" - ".join(weapon['baseStats']).title()}* '''
-    
-    if recommendedPairings:
-        em.description += f'\n {recommendedPairings} \n'
-    else:
-        em.description += '\n'
     
     for i in [analysisVideo, abilitiesVideo]:
         if 'https' not in i:
@@ -118,5 +112,32 @@ async def rec_matrice_button_func(interaction: discord.Interaction):
 
     for i in weapon['recommendedMatrices']:
         em.add_field(name=f'{i["pieces"]}x {i["name"]}', value=i['description'], inline=False)
+
+    return em
+
+
+async def meta_button_func(interaction: discord.Interaction):
+    em = interaction.message.embeds[0]
+
+    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
+    weapon = simulacra['weapon']
+
+    em.clear_fields()
+
+    desc = ''
+    for name in weapon['recommendedPairings']:
+        name : str
+        url_name = name.replace(' ','-').lower()
+        desc += f'\n[{name.capitalize()}](https://toweroffantasy.info/simulacra/{url_name})'
+    
+    em.add_field(name='Recommended Pairings', value=desc, inline=False)
+
+    desc = ''
+    for matrix in weapon['recommendedMatrices']:
+        matrix: dict
+        url_name = matrix['name'].replace(' ', '-').lower()
+        desc += f'\n**{matrix["pieces"]}x [{matrix["name"]}](https://toweroffantasy.info/matrices/{url_name})**\n'
+
+    em.add_field(name='Recommended Matrices', value=desc, inline=False)
 
     return em
