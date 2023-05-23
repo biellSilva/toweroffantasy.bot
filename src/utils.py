@@ -13,9 +13,8 @@ def ping_db():
 
 def check_name(name: str):
     for _ in names:
-        if name.replace('[CN]', '').split(' ')[0].lower() in _.lower():
-            return _
-        
+        if name.split(' ')[0].lower() in _.lower():
+            return _ 
     return False
 
 
@@ -71,22 +70,25 @@ async def weapon_button_func(interaction: discord.Interaction):
     analysisVideo = f"[Analysis Video]({weapon['analysisVideoSrc']})" if 'analysisVideoSrc' in weapon else ''
     abilitiesVideo = f"[Abilities Video]({weapon['abilitiesVideoSrc']})" if 'abilitiesVideoSrc' in weapon else ''
 
-
     em.clear_fields()
     em.description = f'''
                       **{weapon['name']}** {emojis_1[weapon['element']]} {emojis_1[weapon['type']]}
                       Shatter: *{weapon['shatter']['value']} **{weapon['shatter']['tier']}***
                       Charge: *{weapon['charge']['value']} **{weapon['charge']['tier']}***
-                      Base stats: *{" - ".join(weapon['baseStats']).title()}*
-
-                      {recommendedPairings}
-                      
-                      {abilitiesVideo}
-                      {analysisVideo}
-                      '''
+                      Base stats: *{" - ".join(weapon['baseStats']).title()}* '''
     
-    for i in weapon['weaponEffects']:
-        em.add_field(name=i['title'], value=i['description'], inline=False)
-
+    if recommendedPairings:
+        em.description += f'\n {recommendedPairings} \n'
+    else:
+        em.description += '\n'
+    
+    for i in [analysisVideo, abilitiesVideo]:
+        if i == '':
+            continue
+        em.description += f'\n{i}'
+    
+    if 'weaponEffects' in weapon:
+        for i in weapon['weaponEffects']:
+            em.add_field(name=i['title'], value=i['description'], inline=False)
 
     return em
