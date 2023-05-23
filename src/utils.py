@@ -83,7 +83,7 @@ async def weapon_button_func(interaction: discord.Interaction):
         em.description += '\n'
     
     for i in [analysisVideo, abilitiesVideo]:
-        if i == '':
+        if 'https' not in i:
             continue
         em.description += f'\n{i}'
     

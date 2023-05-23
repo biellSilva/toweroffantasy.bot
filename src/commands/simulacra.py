@@ -29,10 +29,9 @@ class Simulacra(commands.Cog):
 
         skin_url = f"[Skins Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
 
-        em = discord.Embed(color=no_bar, title=simulacra['name'] if 'chinaOnly' not in simulacra else f'{simulacra["name"]} [CN]',
+        em = discord.Embed(color=no_bar, 
+                           title=f'{simulacra["name"]} {simulacra["rarity"]}' if 'chinaOnly' not in simulacra else f'{simulacra["name"]} {simulacra["rarity"]} [CN]',
                            description=f"""
-                           Weapon: {simulacra['weapon']['name']}
-                           Rarity: {simulacra['rarity']}
                            CN Name: {simulacra['cnName'].capitalize()}
 
                            Gender: {simulacra['gender']}
