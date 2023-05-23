@@ -92,3 +92,31 @@ async def weapon_button_func(interaction: discord.Interaction):
             em.add_field(name=i['title'], value=i['description'], inline=False)
 
     return em
+
+
+async def advanc_button_func(interaction: discord.Interaction):
+    em = interaction.message.embeds[0]
+
+    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
+    weapon = simulacra['weapon']
+
+    em.clear_fields()
+
+    for ind, advanc in enumerate(weapon['advancements']):
+        em.add_field(name=f'{ind+1} 🟊', value=advanc, inline=False)
+    
+    return em
+
+
+async def rec_matrice_button_func(interaction: discord.Interaction):
+    em = interaction.message.embeds[0]
+
+    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
+    weapon = simulacra['weapon']
+
+    em.clear_fields()
+
+    for i in weapon['recommendedMatrices']:
+        em.add_field(name=f'{i["pieces"]}x {i["name"]}', value=i['description'], inline=False)
+
+    return em
