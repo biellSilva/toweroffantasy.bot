@@ -4,8 +4,8 @@ import requests
 from discord.ext import commands
 from discord import app_commands
 
-from src.config import no_bar, simulacra_collection
-from src.utils import check_name
+from src.config import no_bar, simulacra_collection, base_url_dict
+from src.utils import check_name, check_url
 from src.views.views import MainView
 
 
@@ -44,18 +44,11 @@ class Simulacra(commands.Cog):
                            {skin_url} 
                            """)
         
-        url_name = name.replace(' ', '-').lower()
-        em.url = f'https://toweroffantasy.info/simulacra/{url_name}'
+        em.url = base_url_dict['simulacra_url'] + simulacra['name'].replace(' ', '-').lower()
 
-        for name in [simulacra['name'], simulacra['cnName']]:
-            base_url = 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/UI/huanxing/lihui/'
-            re_1 = requests.get(f'{base_url}{name}.webp')
-            re_2 = requests.get(f'{base_url}{name.lower()}.webp')
-
-            if re_1.status_code == 200:
-                em.set_thumbnail(url=str(re_1.url))
-            if re_2.status_code == 200:
-                em.set_thumbnail(url=str(re_2.url))
+        thumb_url = await check_url('simulacra', names=(simulacra['name'], simulacra['cnName']))
+        if thumb_url:
+            em.set_thumbnail(url=thumb_url)
 
         for region, voiceActor in simulacra['voiceActors'].items():
             if voiceActor == '':

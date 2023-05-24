@@ -51,3 +51,14 @@ names = ['Alyss', 'Annabella', 'Bai Ling', 'Baiyuekui', 'Claudia', 'Cobalt-B', '
 'Tian Lang', 'Tsubasa', 'Umi', 'Yulan', 'Zero', 'Apophis', 'Barbarossa', 'Frost Bot', 'Functional Dash',
 'Haboela', 'Obstacle Removal', 'Plunder', 'Robarg', 'Scylla', 'Self Explosive', 'Sobek', 'Standard Operation',
 'Wandering Aberrant', 'Wind Blade']
+
+
+## URL
+base_url_dict = {
+    'simulacra_url': 'https://toweroffantasy.info/simulacra/',
+    'matrice_url' : 'https://toweroffantasy.info/matrices/',
+    
+    'simulacra' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/UI/huanxing/lihui',
+    'weapon' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/Icon/weapon/Icon',
+    'matrice' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/Icon/yizhi/512'
+}

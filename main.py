@@ -33,9 +33,9 @@ class Dumbot(commands.Bot):
         await self.wait_until_ready()
         await self.change_presence(activity=discord.Activity(
             type=discord.ActivityType.listening,
-            name=f'v1.0.1'))
+            name=f'v1.1.0'))
 
 
 bot = Dumbot()
 
-bot.run(token=dotenv.get_key(dotenv_path=dotenv.find_dotenv(), key_to_get='test_token'))
+bot.run(token=dotenv.get_key(dotenv_path=dotenv.find_dotenv(), key_to_get='token'))

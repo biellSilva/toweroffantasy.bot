@@ -3,7 +3,7 @@ import aiohttp
 
 from typing import Literal
 
-from src.config import db_client, simulacra_collection, emojis_1, names
+from src.config import db_client, simulacra_collection, emojis_1, names, base_url_dict
 
 
 def ping_db():
@@ -21,14 +21,32 @@ def check_name(name: str):
     return False
 
 
-async def check_url(src: Literal['simulacra', 'weapon', 'matrice'], **names):
+async def check_url(src: Literal['simulacra', 'weapon', 'matrice'], names):
     async with aiohttp.ClientSession() as cs:
+        base_url = base_url_dict[src]
+
+        if src == 'weapon':
+            async with cs.get(f'{base_url}/{names}.webp') as res:
+                if res.status == 200:
+                    return res.url
+                
         if src == 'simulacra':
-            base_url = 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/UI/huanxing/lihui/'
             for name in names:
-                async with cs.get(base_url+name+'.webp') as res:
+                async with cs.get(f'{base_url}/{name}.webp') as res:
                     if res.status == 200:
                         return res.url
+                        
+                async with cs.get(f'{base_url}/{name.lower()}.webp') as res:
+                    if res.status == 200:
+                        return res.url
+        
+        if src == 'matrice':
+            name = names.replace('256', '512')
+            async with cs.get(f'{base_url}/{name}.webp') as res:
+                if res.status == 200:
+                    return res.url
+    
+    return False
 
 
 
@@ -49,7 +67,10 @@ async def home_button_func(interaction: discord.Interaction):
 
                     {skin_url} 
                     """
-
+    
+    thumb_url = await check_url(src='simulacra', names=(simulacra['name'], simulacra['cnName']))
+    if thumb_url:
+        em.set_thumbnail(url=thumb_url)
 
     em.clear_fields()
 
@@ -83,9 +104,9 @@ async def weapon_button_func(interaction: discord.Interaction):
     analysisVideo = f"[Analysis Video]({weapon['analysisVideoSrc']})" if 'analysisVideoSrc' in weapon else ''
     abilitiesVideo = f"[Abilities Video]({weapon['abilitiesVideoSrc']})" if 'abilitiesVideoSrc' in weapon else ''
 
-
-    em.set_thumbnail(url=f'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/Icon/weapon/Icon/{weapon["imgSrc"]}.webp')
-
+    thumb_url = await check_url(src='weapon', names=weapon['imgSrc'])
+    if thumb_url:
+        em.set_thumbnail(url=thumb_url)
 
     em.clear_fields()
     em.description = f'''
@@ -146,7 +167,7 @@ async def meta_button_func(interaction: discord.Interaction):
     for name in weapon['recommendedPairings']:
         name : str
         url_name = name.replace(' ','-').lower()
-        desc += f'\n[{name.capitalize()}](https://toweroffantasy.info/simulacra/{url_name})'
+        desc += f'\n[{name.capitalize()}]({base_url_dict["simulacra_url"]}{url_name})'
     
     em.add_field(name='Recommended Pairings', value=desc, inline=False)
 
@@ -154,7 +175,7 @@ async def meta_button_func(interaction: discord.Interaction):
     for matrix in weapon['recommendedMatrices']:
         matrix: dict
         url_name = matrix['name'].replace(' ', '-').lower()
-        desc += f'\n**{matrix["pieces"]}x [{matrix["name"]}](https://toweroffantasy.info/matrices/{url_name})**\n'
+        desc += f'\n**{matrix["pieces"]}x [{matrix["name"]}]({base_url_dict["matrice_url"]}{url_name})**'
 
     em.add_field(name='Recommended Matrices', value=desc, inline=False)
 
