@@ -33,7 +33,7 @@ class Dumbot(commands.Bot):
         await self.wait_until_ready()
         await self.change_presence(activity=discord.Activity(
             type=discord.ActivityType.listening,
-            name=f'v1.1.0'))
+            name=f'v1.1.1'))
 
 
 bot = Dumbot()
