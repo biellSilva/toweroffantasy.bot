@@ -43,8 +43,13 @@ async def check_url(src: Literal['simulacra', 'weapon', 'matrice'], names):
                         return res.url
         
         if src == 'matrice':
+            name = names
+            async with cs.get(f'{base_url[1]}/{name}.webp') as res:
+                if res.status == 200:
+                    return res.url
+                
             name = names.replace('256', '512')
-            async with cs.get(f'{base_url}/{name}.webp') as res:
+            async with cs.get(f'{base_url[0]}/{name}.webp') as res:
                 if res.status == 200:
                     return res.url
     
