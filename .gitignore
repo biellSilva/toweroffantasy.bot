@@ -1,5 +1,6 @@
 
 sync_data.py
+src/database
 *.json
 .discloudignore
 discloud.config
