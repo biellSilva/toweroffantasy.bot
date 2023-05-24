@@ -32,6 +32,8 @@ async def check_url(src: Literal['simulacra', 'weapon', 'matrice'], names):
                 
         if src == 'simulacra':
             for name in names:
+                if name.lower() == 'gnonno':
+                    name = 'gunonno'
                 async with cs.get(f'{base_url}/{name}.webp') as res:
                     if res.status == 200:
                         return res.url
@@ -56,17 +58,15 @@ async def home_button_func(interaction: discord.Interaction):
     simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
     skin_url = f"[Skins Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
     
-    em.description=f"""
-                    CN Name: {simulacra['cnName'].capitalize()}
+    em.description=(f"CN Name: {simulacra['cnName'].capitalize()}\n\n"
 
-                    Gender: {simulacra['gender']}
-                    Height: {simulacra['height']}
-                    Birthday: {simulacra['birthday']}
-                    Birthplace: {simulacra['birthplace']}
-                    Horoscope: {simulacra['horoscope']}
+                    f"Gender: {simulacra['gender']}\n"
+                    f"Height: {simulacra['height']}\n"
+                    f"Birthday: {simulacra['birthday']}\n"
+                    f"Birthplace: {simulacra['birthplace']}\n"
+                    f"Horoscope: {simulacra['horoscope']}\n\n"
 
-                    {skin_url} 
-                    """
+                    f"{skin_url}" )
     
     thumb_url = await check_url(src='simulacra', names=(simulacra['name'], simulacra['cnName']))
     if thumb_url:
@@ -109,11 +109,12 @@ async def weapon_button_func(interaction: discord.Interaction):
         em.set_thumbnail(url=thumb_url)
 
     em.clear_fields()
-    em.description = f'''
-                      **{weapon['name']}** {emojis_1[weapon['element']]} {emojis_1[weapon['type']]}
-                      Shatter: *{weapon['shatter']['value']} **{weapon['shatter']['tier']}***
-                      Charge: *{weapon['charge']['value']} **{weapon['charge']['tier']}***
-                      Base stats: *{" - ".join(weapon['baseStats']).title()}* '''
+    em.description = (
+                      f"**{weapon['name']}** {emojis_1[weapon['element']]} {emojis_1[weapon['type']]}\n"
+                      f"Shatter: *{weapon['shatter']['value']} **{weapon['shatter']['tier']}***\n"
+                      f"Charge: *{weapon['charge']['value']} **{weapon['charge']['tier']}***\n"
+                      f"Base stats: *{' - '.join(weapon['baseStats']).title()}*\n"
+                      )
     
     for i in [analysisVideo, abilitiesVideo]:
         if 'https' not in i:
@@ -142,6 +143,9 @@ async def advanc_button_func(interaction: discord.Interaction):
 
 
 async def rec_matrice_button_func(interaction: discord.Interaction):
+
+    ''' CHANGED TO META FUNCTION '''
+
     em = interaction.message.embeds[0]
 
     simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
@@ -169,7 +173,8 @@ async def meta_button_func(interaction: discord.Interaction):
         url_name = name.replace(' ','-').lower()
         desc += f'\n[{name.capitalize()}]({base_url_dict["simulacra_url"]}{url_name})'
     
-    em.add_field(name='Recommended Pairings', value=desc, inline=False)
+    if not desc.isspace():
+        em.add_field(name='Recommended Pairings', value=desc, inline=False)
 
     desc = ''
     for matrix in weapon['recommendedMatrices']:
@@ -177,6 +182,7 @@ async def meta_button_func(interaction: discord.Interaction):
         url_name = matrix['name'].replace(' ', '-').lower()
         desc += f'\n**{matrix["pieces"]}x [{matrix["name"]}]({base_url_dict["matrice_url"]}{url_name})**'
 
-    em.add_field(name='Recommended Matrices', value=desc, inline=False)
+    if not desc.isspace():
+        em.add_field(name='Recommended Matrices', value=desc, inline=False)
 
     return em

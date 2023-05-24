@@ -31,17 +31,15 @@ class Simulacra(commands.Cog):
 
         em = discord.Embed(color=no_bar, 
                            title=f'{simulacra["name"]} {simulacra["rarity"]}' if 'chinaOnly' not in simulacra else f'{simulacra["name"]} {simulacra["rarity"]} [CN]',
-                           description=f"""
-                           CN Name: {simulacra['cnName'].capitalize()}
+                           description= f"CN Name: {simulacra['cnName'].capitalize()}\n\n"
 
-                           Gender: {simulacra['gender']}
-                           Height: {simulacra['height']}
-                           Birthday: {simulacra['birthday']}
-                           Birthplace: {simulacra['birthplace']}
-                           Horoscope: {simulacra['horoscope']}
+                                        f"Gender: {simulacra['gender']}\n"
+                                        f"Height: {simulacra['height']}\n"
+                                        f"Birthday: {simulacra['birthday']}\n"
+                                        f"Birthplace: {simulacra['birthplace']}\n"
+                                        f"Horoscope: {simulacra['horoscope']}\n\n"
 
-                           {skin_url} 
-                           """)
+                                        f"{skin_url}" )
         
         em.url = base_url_dict['simulacra_url'] + simulacra['name'].replace(' ', '-').lower()
 
