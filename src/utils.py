@@ -176,7 +176,7 @@ async def meta_button_func(interaction: discord.Interaction):
     for name in weapon['recommendedPairings']:
         name : str
         url_name = name.replace(' ','-').lower()
-        desc += f'\n[{name.capitalize()}]({base_url_dict["simulacra_url"]}{url_name})'
+        desc += f'\n**[{name.capitalize()}]({base_url_dict["simulacra_url"]}{url_name})**'
     
     if not desc.isspace():
         em.add_field(name='Recommended Pairings', value=desc, inline=False)
@@ -185,9 +185,25 @@ async def meta_button_func(interaction: discord.Interaction):
     for matrix in weapon['recommendedMatrices']:
         matrix: dict
         url_name = matrix['name'].replace(' ', '-').lower()
-        desc += f'\n**{matrix["pieces"]}x [{matrix["name"]}]({base_url_dict["matrice_url"]}{url_name})**'
+        desc += f'\n{matrix["pieces"]}x **[{matrix["name"]}]({base_url_dict["matrice_url"]}{url_name})**'
 
     if not desc.isspace():
         em.add_field(name='Recommended Matrices', value=desc, inline=False)
 
+    return em
+
+
+async def abilities_button_func(interaction: discord.Interaction):
+    em = interaction.message.embeds[0]
+
+    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
+    weapon = simulacra['weapon']
+
+    em.clear_fields()
+
+    for abilitie in weapon['abilities']:
+        if abilitie['type'] in ('skill', 'discharge'):
+            em.add_field(name=f"{abilitie['name'].title()} {abilitie['type'].capitalize()}", 
+                         value=abilitie['description'])
+            
     return em
