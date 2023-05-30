@@ -3,7 +3,7 @@ import aiohttp
 
 from typing import Literal
 
-from src.config import db_client, simulacra_collection, emojis_1, names, base_url_dict
+from src.config import db_client, simulacra_collection, matrice_collection, emojis_1, names, base_url_dict
 
 
 def ping_db():
@@ -97,6 +97,23 @@ async def trait_button_func(interaction: discord.Interaction):
     for trait in simulacra['traits']:
         em.add_field(name=f'Affinity {trait["affinity"]}', value=trait['description'], inline=False)
 
+    return em
+
+
+async def matrice_button_func(interaction: discord.Interaction):
+    em = interaction.message.embeds[0]
+
+    matrice = matrice_collection.find_one({'name': check_name(em.title)})
+
+    em.clear_fields()
+
+    for set in matrice['sets']:
+        em.add_field(name=f'{set["pieces"]}x', value=set["description"], inline=False)
+
+    thumb_url = await check_url(src='matrice', names=matrice['imgSrc'])
+    if thumb_url:
+        em.set_thumbnail(url=thumb_url)
+    
     return em
 
 
@@ -201,9 +218,29 @@ async def abilities_button_func(interaction: discord.Interaction):
 
     em.clear_fields()
 
+    em.description = ''
+
     for abilitie in weapon['abilities']:
-        if abilitie['type'] in ('skill', 'discharge'):
-            em.add_field(name=f"{abilitie['name'].title()} [{abilitie['type'].capitalize()}]", 
-                         value=abilitie['description'], inline=False)
+        if 'skill' in abilitie['type']:
+            em.description += (f"**{abilitie['name'].title()}** *[ {abilitie['type'].capitalize()} ]*\n"
+                             f"{abilitie['description']}\n\n")
+            
+    return em
+
+
+async def discharge_button_func(interaction: discord.Interaction):
+    em = interaction.message.embeds[0]
+
+    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
+    weapon = simulacra['weapon']
+
+    em.clear_fields()
+
+    em.description = ''
+
+    for abilitie in weapon['abilities']:
+        if 'discharge' in abilitie['type']:
+            em.description += (f"**{abilitie['name'].title()}** *[ {abilitie['type'].capitalize()} ]*\n"
+                             f"{abilitie['description']}\n\n")
             
     return em

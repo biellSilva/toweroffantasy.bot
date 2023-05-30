@@ -3,7 +3,7 @@ import dotenv
 import os
 
 from discord.ext import commands
-from asyncio import sleep
+
 
 class Dumbot(commands.Bot):
 
@@ -31,20 +31,11 @@ class Dumbot(commands.Bot):
 
     async def wait_until_ready_tasks(self):
         await self.wait_until_ready()
-        while not self.is_closed():
-            await self.change_presence(activity=discord.Activity(
+        await self.change_presence(activity=discord.Activity(
                 type=discord.ActivityType.listening,
-                name='v1.2.1')
-                )
-            
-            sleep(500)
-
-            await self.change_presence(activity=discord.Activity(
-                type=discord.ActivityType.listening,
-                name='added: abilities button')
+                name='v1.2.13')
                 )
 
-            sleep(500)
 
 bot = Dumbot()
 
