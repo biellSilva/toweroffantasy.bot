@@ -203,7 +203,7 @@ async def abilities_button_func(interaction: discord.Interaction):
 
     for abilitie in weapon['abilities']:
         if abilitie['type'] in ('skill', 'discharge'):
-            em.add_field(name=f"{abilitie['name'].title()} {abilitie['type'].capitalize()}", 
-                         value=abilitie['description'])
+            em.add_field(name=f"{abilitie['name'].title()} [{abilitie['type'].capitalize()}]", 
+                         value=abilitie['description'], inline=False)
             
     return em
