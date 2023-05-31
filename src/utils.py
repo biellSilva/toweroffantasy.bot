@@ -222,8 +222,8 @@ async def abilities_button_func(interaction: discord.Interaction):
 
     for abilitie in weapon['abilities']:
         if 'skill' in abilitie['type']:
-            em.description += (f"**{abilitie['name'].title()}** *[ {abilitie['type'].capitalize()} ]*\n"
-                             f"{abilitie['description']}\n\n")
+            em.description += (f"\n**{abilitie['name'].title()}** *[ {abilitie['type'].capitalize()} ]*\n"
+                             f"{abilitie['description']}\n")
             
     return em
 
@@ -240,7 +240,7 @@ async def discharge_button_func(interaction: discord.Interaction):
 
     for abilitie in weapon['abilities']:
         if 'discharge' in abilitie['type']:
-            em.description += (f"**{abilitie['name'].title()}** *[ {abilitie['type'].capitalize()} ]*\n"
-                             f"{abilitie['description']}\n\n")
+            em.description += (f"\n**{abilitie['name'].title()}** *[ {abilitie['type'].capitalize()} ]*\n"
+                             f"{abilitie['description']}\n")
             
     return em
