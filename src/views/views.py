@@ -1,6 +1,6 @@
 import discord
 
-from src.utils import trait_button_func, home_button_func, weapon_button_func, advanc_button_func, rec_matrice_button_func, meta_button_func, abilities_button_func, discharge_button_func, matrice_button_func
+from src.utils import trait_button_func, home_button_func, weapon_button_func, advanc_button_func, meta_button_func, abilities_button_func, discharge_button_func, matrice_button_func
 
 
 class MainView(discord.ui.View):
@@ -55,7 +55,6 @@ class TraitView(discord.ui.View):
         await interaction.response.defer()
         em = await matrice_button_func(interaction)
         await interaction.message.edit(embeds=[em], attachments=[], view=MatriceView())
-
 
 
 class MatriceView(discord.ui.View):

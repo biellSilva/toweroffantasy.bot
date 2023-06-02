@@ -1,17 +1,3 @@
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-from dotenv import get_key, find_dotenv
-
-##  MONGO DB CONNECTION
-user = get_key(dotenv_path=find_dotenv(), key_to_get='db_user')
-pw = get_key(dotenv_path=find_dotenv(), key_to_get='db_pass')
-uri = get_key(dotenv_path=find_dotenv(), key_to_get='db_uri')
-
-db_client = MongoClient(uri.replace('<username>', user).replace('<password>', pw), server_api=ServerApi('1'))
-
-glob = db_client.glob # global database
-matrice_collection = glob.matrice
-simulacra_collection = glob.simulacra
 
 
 ##  COLORS
@@ -55,10 +41,12 @@ names = ['Alyss', 'Annabella', 'Bai Ling', 'Baiyuekui', 'Claudia', 'Cobalt-B', '
 
 ## URL
 base_url_dict = {
-    'simulacra_url': 'https://toweroffantasy.info/simulacra/',
-    'matrice_url' : 'https://toweroffantasy.info/matrices/',
+    'simulacra_home': 'https://toweroffantasy.info/simulacra/',
+    'matrice_home' : 'https://toweroffantasy.info/matrices/',
     
-    'simulacra' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/UI/huanxing/lihui',
-    'weapon' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/Icon/weapon/Icon',
-    'matrice' : ('https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/Icon/yizhi/512', 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/Icon/yizhi/256')
+    'simulacra_image' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/UI/huanxing/lihui',
+    'weapons_image' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/Icon/weapon/Icon',
+    'matrices_image' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/Icon/yizhi/256',
+
+    'data_json' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/',
 }

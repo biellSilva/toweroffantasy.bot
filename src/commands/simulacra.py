@@ -3,8 +3,8 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from src.config import no_bar, simulacra_collection, base_url_dict
-from src.utils import check_name, check_url
+from src.config import no_bar, base_url_dict
+from src.utils import check_name, get_data
 from src.views.views import MainView
 
 
@@ -13,25 +13,27 @@ class Simulacra(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name='simulacra')
+    @app_commands.command(name='simulacras')
     @app_commands.describe(name='Simulacra name')
     async def simulacra(self, interaction: discord.Interaction, name: str):
 
-        '''Simulacra command'''
+        '''
+        Simulacra (aka Mimics) are the player's representation of the characters found in Tower of Fantasy.
+        '''
 
         await interaction.response.defer()
 
-        simulacra = simulacra_collection.find_one(filter={'name': check_name(name)})
+        simulacra = await get_data(name=check_name(name), data='simulacra', src='json')
 
-        if simulacra == None:
+        if not simulacra:
             await interaction.edit_original_response(embed=discord.Embed(color=no_bar, description=f'couldn\'t find: {name}'))
             return
 
-        skin_url = f"[Skins Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
+        skin_url = f"[Skin Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
 
         em = discord.Embed(color=no_bar, 
                            title=f'{simulacra["name"]} {simulacra["rarity"]}' if 'chinaOnly' not in simulacra else f'{simulacra["name"]} {simulacra["rarity"]} [CN]',
-                           description= f"CN Name: {simulacra['cnName'].capitalize()}\n\n"
+                           description= f"CN Name: {simulacra['cnName'].capitalize()}\n"
 
                                         f"Gender: {simulacra['gender']}\n"
                                         f"Height: {simulacra['height']}\n"
@@ -41,9 +43,9 @@ class Simulacra(commands.Cog):
 
                                         f"{skin_url}" )
         
-        em.url = base_url_dict['simulacra_url'] + simulacra['name'].replace(' ', '-').lower()
+        em.url = base_url_dict['simulacra_home'] + simulacra['name'].replace(' ', '-').lower()
 
-        thumb_url = await check_url('simulacra', names=(simulacra['name'], simulacra['cnName']))
+        thumb_url = await get_data(name=(simulacra['name'], simulacra['cnName']), data='simulacra', src='image')
         if thumb_url:
             em.set_thumbnail(url=thumb_url)
 

@@ -3,8 +3,8 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from src.config import matrice_collection, no_bar, base_url_dict
-from src.utils import check_name, check_url
+from src.config import no_bar, base_url_dict
+from src.utils import check_name, get_data
 
 
 class Matrices(commands.Cog):
@@ -18,11 +18,13 @@ class Matrices(commands.Cog):
     @app_commands.describe(name='Matrice name')
     async def matrices(self, interaction: discord.Interaction, name: str):
 
-        '''Matrice command'''
+        '''
+        Matrices (aka Chips) are items that can be attached to weapon slots.
+        '''
 
         await interaction.response.defer()
 
-        matrice = matrice_collection.find_one({'name': check_name(name)})
+        matrice = await get_data(name=check_name(name), data='matrices', src='json')
 
         if not matrice:
             await interaction.edit_original_response(embed=discord.Embed(color=no_bar, 
@@ -32,7 +34,7 @@ class Matrices(commands.Cog):
         em = discord.Embed(color=no_bar, 
                            title=f'{matrice["name"]} {matrice["rarity"]}' if 'chinaOnly' not in matrice else f'{matrice["name"]} {matrice["rarity"]} [CN]')
         
-        em.url = base_url_dict['matrice_url'] + matrice['name'].replace(' ', '-').lower()
+        em.url = base_url_dict['matrice_home'] + matrice['name'].replace(' ', '-').lower()
 
         for set in matrice['sets']:
             em.add_field(name=f'{set["pieces"]}x', value=set["description"], inline=False)

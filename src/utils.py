@@ -1,70 +1,65 @@
 import discord
 import aiohttp
+import json
 
 from typing import Literal
 
-from src.config import db_client, simulacra_collection, matrice_collection, emojis_1, names, base_url_dict
+from src.config import emojis_1, names, base_url_dict
 
-
-def ping_db():
-    try:
-        db_client.glob.command('ping')
-        return 'Connected'
-    except Exception:
-        return False
 
 
 def check_name(name: str):
     for _ in names:
         if name.split(' ')[0].lower() in _.lower():
-            return _ 
+            return str(_) 
     return False
 
 
-async def check_url(src: Literal['simulacra', 'weapon', 'matrice'], names):
+async def get_data(name, data: Literal['simulacra', 'weapons', 'matrices'], src: Literal['json', 'image']):
+
+    '''
+    for `simulacra` and `weapons` if `src == 'image'`, `name` need to be a tuple with Global Name and CN Name 
+
+    for `matrices` if `src == 'image'`, `name` need to be `matrice['imgScr']`
+    '''
+
     async with aiohttp.ClientSession() as cs:
-        base_url = base_url_dict[src]
-
-        if src == 'weapon':
-            async with cs.get(f'{base_url}/{names}.webp') as res:
-                if res.status == 200:
-                    return res.url
-                
-        if src == 'simulacra':
-            for name in names:
-                if name.lower() == 'gnonno':
-                    name = 'gunonno'
-                async with cs.get(f'{base_url}/{name}.webp') as res:
+        if src == 'json':
+            name = check_name(name).replace(' ', '-').lower()
+            if name:
+                async with cs.get(f'{base_url_dict["data_json"]}/{data}/{name}.json') as res:
                     if res.status == 200:
-                        return res.url
+                        data = await res.read()
+                        return json.loads(s=data)
+                
+        if src == 'image':
+            if data == 'simulacra':
+                for image_name in name:
+                    if image_name.lower() == 'gnonno':
+                        image_name = 'gunonno'
+
+                    async with cs.get(f'{base_url_dict[f"{data}_{src}"]}/{image_name}.webp') as res:
+                        if res.status == 200:
+                            return res.url
                         
-                async with cs.get(f'{base_url}/{name.lower()}.webp') as res:
+                    async with cs.get(f'{base_url_dict[f"{data}_{src}"]}/{image_name.lower()}.webp') as res:
+                        if res.status == 200:
+                            return res.url
+            else:
+                async with cs.get(f'{base_url_dict[f"{data}_{src}"]}/{name}.webp') as res:
                     if res.status == 200:
                         return res.url
-        
-        if src == 'matrice':
-            name = names
-            async with cs.get(f'{base_url[1]}/{name}.webp') as res:
-                if res.status == 200:
-                    return res.url
                 
-            name = names.replace('256', '512')
-            async with cs.get(f'{base_url[0]}/{name}.webp') as res:
-                if res.status == 200:
-                    return res.url
-    
     return False
-
 
 
 async def home_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
 
-    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
-    skin_url = f"[Skins Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
+    simulacra = await get_data(name=em.title, data='simulacra', src='json')
+    skin_url = f"[Skin Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
     
-    em.description=(f"CN Name: {simulacra['cnName'].capitalize()}\n\n"
-
+    em.description=(f"CN Name: {simulacra['cnName'].capitalize()}\n"
                     f"Gender: {simulacra['gender']}\n"
                     f"Height: {simulacra['height']}\n"
                     f"Birthday: {simulacra['birthday']}\n"
@@ -73,7 +68,7 @@ async def home_button_func(interaction: discord.Interaction):
 
                     f"{skin_url}" )
     
-    thumb_url = await check_url(src='simulacra', names=(simulacra['name'], simulacra['cnName']))
+    thumb_url = await get_data(name=(simulacra['name'], simulacra['cnName']), data='simulacra', src='image')
     if thumb_url:
         em.set_thumbnail(url=thumb_url)
 
@@ -90,7 +85,7 @@ async def home_button_func(interaction: discord.Interaction):
 async def trait_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
 
-    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
+    simulacra = await get_data(name=em.title, data='simulacra', src='json')
 
     em.description = ''
     em.clear_fields()
@@ -103,14 +98,14 @@ async def trait_button_func(interaction: discord.Interaction):
 async def matrice_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
 
-    matrice = matrice_collection.find_one({'name': check_name(em.title)})
+    matrice = await get_data(name=em.title, data='matrices', src='json')
 
     em.clear_fields()
 
     for set in matrice['sets']:
         em.add_field(name=f'{set["pieces"]}x', value=set["description"], inline=False)
 
-    thumb_url = await check_url(src='matrice', names=matrice['imgSrc'])
+    thumb_url = await get_data(name=matrice['imgSrc'], data='matrices', src='image')
     if thumb_url:
         em.set_thumbnail(url=thumb_url)
     
@@ -120,13 +115,12 @@ async def matrice_button_func(interaction: discord.Interaction):
 async def weapon_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
 
-    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
-    weapon = simulacra['weapon']
+    weapon = await get_data(name=em.title, data='weapons', src='json')
 
     analysisVideo = f"[Analysis Video]({weapon['analysisVideoSrc']})" if 'analysisVideoSrc' in weapon else ''
     abilitiesVideo = f"[Abilities Video]({weapon['abilitiesVideoSrc']})" if 'abilitiesVideoSrc' in weapon else ''
 
-    thumb_url = await check_url(src='weapon', names=weapon['imgSrc'])
+    thumb_url = await get_data(name=weapon['imgSrc'], data='weapons', src='image')
     if thumb_url:
         em.set_thumbnail(url=thumb_url)
 
@@ -144,8 +138,8 @@ async def weapon_button_func(interaction: discord.Interaction):
         em.description += f'\n{i}'
     
     if 'weaponEffects' in weapon:
-        for i in weapon['weaponEffects']:
-            em.add_field(name=i['title'], value=i['description'], inline=False)
+        for effect in weapon['weaponEffects']:
+            em.add_field(name=effect['title'], value=effect['description'], inline=False)
 
     return em
 
@@ -153,8 +147,7 @@ async def weapon_button_func(interaction: discord.Interaction):
 async def advanc_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
 
-    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
-    weapon = simulacra['weapon']
+    weapon = await get_data(name=em.title, data='weapons', src='json')
 
     em.clear_fields()
 
@@ -164,28 +157,11 @@ async def advanc_button_func(interaction: discord.Interaction):
     return em
 
 
-async def rec_matrice_button_func(interaction: discord.Interaction):
-
-    ''' CHANGED TO META FUNCTION '''
-
-    em = interaction.message.embeds[0]
-
-    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
-    weapon = simulacra['weapon']
-
-    em.clear_fields()
-
-    for i in weapon['recommendedMatrices']:
-        em.add_field(name=f'{i["pieces"]}x {i["name"]}', value=i['description'], inline=False)
-
-    return em
-
 
 async def meta_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
 
-    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
-    weapon = simulacra['weapon']
+    weapon = await get_data(name=em.title, data='weapons', src='json')
 
     em.clear_fields()
 
@@ -193,7 +169,7 @@ async def meta_button_func(interaction: discord.Interaction):
     for name in weapon['recommendedPairings']:
         name : str
         url_name = name.replace(' ','-').lower()
-        desc += f'\n**[{name.capitalize()}]({base_url_dict["simulacra_url"]}{url_name})**'
+        desc += f'\n**[{name.capitalize()}]({base_url_dict["simulacra_home"]}{url_name})**'
     
     if not desc.isspace():
         em.add_field(name='Recommended Pairings', value=desc, inline=False)
@@ -202,7 +178,7 @@ async def meta_button_func(interaction: discord.Interaction):
     for matrix in weapon['recommendedMatrices']:
         matrix: dict
         url_name = matrix['name'].replace(' ', '-').lower()
-        desc += f'\n{matrix["pieces"]}x **[{matrix["name"]}]({base_url_dict["matrice_url"]}{url_name})**'
+        desc += f'\n{matrix["pieces"]}x **[{matrix["name"]}]({base_url_dict["matrice_home"]}{url_name})**'
 
     if not desc.isspace():
         em.add_field(name='Recommended Matrices', value=desc, inline=False)
@@ -213,8 +189,7 @@ async def meta_button_func(interaction: discord.Interaction):
 async def abilities_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
 
-    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
-    weapon = simulacra['weapon']
+    weapon = await get_data(name=em.title, data='weapons', src='json')
 
     em.clear_fields()
 
@@ -231,8 +206,7 @@ async def abilities_button_func(interaction: discord.Interaction):
 async def discharge_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
 
-    simulacra = simulacra_collection.find_one({'name': check_name(em.title)})
-    weapon = simulacra['weapon']
+    weapon = await get_data(name=em.title, data='weapons', src='json')
 
     em.clear_fields()
 
