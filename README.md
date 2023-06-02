@@ -1,9 +1,26 @@
 # Tower of Fantasy Info Unofficial Discord Bot
 
-[invite link](https://discord.com/api/oauth2/authorize?client_id=1098749007154643035&permissions=412317183040&scope=bot)
-				
-        
-Initially created by biell, special thanks to [toweroffantasy.info](https://toweroffantasy.info) who accepted my request to be able to use site data to build the bot and to everyone who contributed with ideas and encountered problems during the time using it.
+
+Initially created by [biellSilva](https://github.com/biellSilva), with the intention of making it easier for Discord users to search for [Tower of Fantasy](https://www.toweroffantasy-global.com) in-game information 
+
+Special thanks to [toweroffantasy.info](https://toweroffantasy.info) who accepted my request to be able to use site data to build the bot and to everyone who contributed with ideas and encountered problems during the time using it.
+
+
+<!-----------------------------------[Start of Invite Button]----------------------------------------->
+
+<div align = center>
+
+<br>
+	
+[<kbd> <br> Bot Invite <br> </kbd>][KBD]
+
+</div>
+
+[KBD]: https://discord.com/api/oauth2/authorize?client_id=1098749007154643035&permissions=412317183040&scope=bot
+
+<!-----------------------------------[End of Invite Button]----------------------------------------->
+
+
 
 
 ### Permissions Required
@@ -23,11 +40,10 @@ Initially created by biell, special thanks to [toweroffantasy.info](https://towe
 | `/simulacras` | simulacra, trait, matrice, weapon, advancements, skills, weapon and matrices combination |
 | `/matrices` | matrices |
 
-
 ### How to block/allow it to respond in certains channels
 bot needs permission to **view**, **send message**, **files**, **links** and **external emoji** in the channel to work properly, if you want to *block* or *allow* a specific channel, use the **integrations panel** to modify where the command will be visible
 
-
+### 
 
 ## Libs/Packages Used
 - [Discord.py](https://discordpy.readthedocs.io/en/stable/)
