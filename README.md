@@ -23,7 +23,7 @@ Thanks to the [toweroffantasy.info](https://toweroffantasy.info) staff who accep
 
 ## Libs/Packages Used
 - [Discord.py](https://discordpy.readthedocs.io/en/stable/)
-- ~~Pymongo (Mongo DB)~~
+- [~~Pymongo (Mongo DB)~~](https://pymongo.readthedocs.io/en/stable/)
 
 
 ### Commands
