@@ -34,8 +34,7 @@ Thanks to the [toweroffantasy.info](https://toweroffantasy.info) staff who accep
 
 
 ### How to block/allow it to respond in certains channels
-bot needs permission to **view**, **send message**, **files**, **links** and **external emoji** in the channel to work properly
-if you want to *block* or *allow* a specific channel, use the **integrations panel** to modify where the command will be visible
+bot needs permission to **view**, **send message**, **files**, **links** and **external emoji** in the channel to work properly, if you want to *block* or *allow* a specific channel, use the **integrations panel** to modify where the command will be visible
 
 
 ## Relevant changes
