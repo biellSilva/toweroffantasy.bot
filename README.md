@@ -3,13 +3,14 @@
 [invite link](https://discord.com/api/oauth2/authorize?client_id=1098749007154643035&permissions=412317183040&scope=bot)
 
 
-Created by [biellsilva](https://github.com/biellSilva)
-- discord: biell#5534
+Created by biell. 
+[Github](https://github.com/biellSilva)
+discord: biell#5534
 
 Thanks to the [toweroffantasy.info](https://toweroffantasy.info) staff who accepted my request to be able to use the website data to create the bot and everyone who contributed ideas and found problems in the code.
 
 
-## Permissions Required
+### Permissions Required
 - Read Messages
 - Send Messages
 - Send Messages in Threads
@@ -19,12 +20,6 @@ Thanks to the [toweroffantasy.info](https://toweroffantasy.info) staff who accep
 - Add Reactions
 - Use External Emojis
 - Use External Stickers
-
-
-## Libs/Packages Used
-- [Discord.py](https://discordpy.readthedocs.io/en/stable/)
-- [~~Pymongo (Mongo DB)~~](https://pymongo.readthedocs.io/en/stable/)
-
 
 ### Commands
 | Name  | Contains |
@@ -37,8 +32,28 @@ Thanks to the [toweroffantasy.info](https://toweroffantasy.info) staff who accep
 bot needs permission to **view**, **send message**, **files**, **links** and **external emoji** in the channel to work properly, if you want to *block* or *allow* a specific channel, use the **integrations panel** to modify where the command will be visible
 
 
+
+## Libs/Packages Used
+- [Discord.py](https://discordpy.readthedocs.io/en/stable/)
+- [~~Pymongo (Mongo DB)~~](https://pymongo.readthedocs.io/en/stable/)
+
+
 ## Relevant changes
 | Date  | Note | Version |
 |--------|---------|---------|
 |May 23, 2023 | Bot initial stage | v1.0.0
 | June 02, 2023 | MongoDB was removed | v1.3.0
+
+
+## Development checklist
+- [x] Inital Commit
+- [x] Add Simulacras
+- [x] Add Weapons
+- [x] Add Matrices
+- [x] Add Weapon Skill and Discharge
+- [ ] Add Weapon Normal Attack
+- [ ] Add Weapon Dodge Attack
+- [ ] Add Smart Servants
+- [ ] Add Relics
+- [ ] Add Mounts
+- [ ] Add Foods
