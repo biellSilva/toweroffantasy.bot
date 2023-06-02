@@ -4,7 +4,7 @@
 
 
 Created by [biellsilva](https://github.com/biellSilva)
-discord: biell#5534
+- discord: biell#5534
 
 Thanks to the [toweroffantasy.info](https://toweroffantasy.info) staff who accepted my request to be able to use the website data to create the bot and everyone who contributed ideas and found problems in the code.
 
