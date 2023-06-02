@@ -152,7 +152,7 @@ async def advanc_button_func(interaction: discord.Interaction):
     em.clear_fields()
 
     for ind, advanc in enumerate(weapon['advancements']):
-        em.add_field(name=f'{ind+1} \⭐', value=advanc, inline=False)
+        em.add_field(name=f'{ind+1} ★', value=advanc, inline=False)
     
     return em
 
