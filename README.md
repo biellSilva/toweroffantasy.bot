@@ -3,9 +3,9 @@
 [invite link](https://discord.com/api/oauth2/authorize?client_id=1098749007154643035&permissions=412317183040&scope=bot)
 
 
-Created by biell. 
-[Github](https://github.com/biellSilva)
-discord: biell#5534
+Created by biell
+> [Github](https://github.com/biellSilva)
+> discord: biell#5534
 
 Thanks to the [toweroffantasy.info](https://toweroffantasy.info) staff who accepted my request to be able to use the website data to create the bot and everyone who contributed ideas and found problems in the code.
 
