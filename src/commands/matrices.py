@@ -39,7 +39,7 @@ class Matrices(commands.Cog):
         for set in matrice['sets']:
             em.add_field(name=f'{set["pieces"]}x', value=set["description"], inline=False)
 
-        thumb_url = await check_url(src='matrice', names=matrice['imgSrc'])
+        thumb_url = await get_data(name=matrice['imgSrc'], data='matrices', src='image')
         if thumb_url:
             em.set_thumbnail(url=thumb_url)
 
