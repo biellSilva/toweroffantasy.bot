@@ -27,8 +27,8 @@ Thanks to the [toweroffantasy.info](https://toweroffantasy.info) staff who accep
 
 
 ## Relevant changes
-May 23, 2023: Bot initial stage     v1.0.0
-June 02, 2023: MongoDB was removed  v1.3.0
+- May 23, 2023: Bot initial stage     v1.0.0
+- June 02, 2023: MongoDB was removed  v1.3.0
 
 
 ### Commands
