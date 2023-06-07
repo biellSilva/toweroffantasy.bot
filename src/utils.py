@@ -26,10 +26,10 @@ async def get_data(name, data: Literal['simulacra', 'weapons', 'matrices'], src:
     async with aiohttp.ClientSession() as cs:
         if src == 'json':
             name = check_name(name).replace(' ', '-').lower()
-            if name:
-                async with cs.get(f'{base_url_dict["data_json"]}/{data}/{name}.json') as res:
-                    if res.status == 200:
-                        return json.loads(s=await res.read())
+            
+            async with cs.get(f'{base_url_dict["data_json"]}/{data}/{name}.json') as res:
+                if res.status == 200:
+                    return json.loads(s=await res.read())
                 
         if src == 'image':
             if data == 'simulacra':
@@ -49,7 +49,7 @@ async def get_data(name, data: Literal['simulacra', 'weapons', 'matrices'], src:
                     if res.status == 200:
                         return res.url
                 
-    return False
+    return None
 
 
 async def home_button_func(interaction: discord.Interaction):
