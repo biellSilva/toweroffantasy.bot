@@ -58,15 +58,18 @@ class AppErrorHandler(commands.Cog):
             print(file=stderr)
             print_exception(type(err), err, err.__traceback__, file=stderr)
 
-        if interaction.response.is_done():
+        if em.description != '' and interaction.response.is_done():
             return await interaction.edit_original_response(embed=em)
-        else:
+        elif em.description != '' and not interaction.response.is_done():
             return await interaction.response.send_message(embed=em, ephemeral=True)
 
+        else:
+            print(file=stderr)
+            print_exception(type(err), err, err.__traceback__, file=stderr)
 
-        txt_err = ''.join(traceback.format_exception(type(err), err, err.__traceback__))
+            txt_err = ''.join(traceback.format_exception(type(err), err, err.__traceback__))
 
-        await self.bot.application.owner.send(f'```{txt_err}```')
+            await self.bot.application.owner.send(f'```{txt_err}```')
 
 
 async def setup(bot):
