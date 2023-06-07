@@ -12,7 +12,7 @@ def check_name(name: str):
     for _ in names:
         if name.split(' ')[0].lower() in _.lower():
             return str(_) 
-    return False
+    return None
 
 
 async def get_data(name, data: Literal['simulacra', 'weapons', 'matrices'], src: Literal['json', 'image']):
@@ -25,11 +25,14 @@ async def get_data(name, data: Literal['simulacra', 'weapons', 'matrices'], src:
 
     async with aiohttp.ClientSession() as cs:
         if src == 'json':
-            name = check_name(name).replace(' ', '-').lower()
-            
-            async with cs.get(f'{base_url_dict["data_json"]}/{data}/{name}.json') as res:
-                if res.status == 200:
-                    return json.loads(s=await res.read())
+            name = check_name(name)
+
+            if name: 
+                name = name.replace(' ', '-').lower()
+
+                async with cs.get(f'{base_url_dict["data_json"]}/{data}/{name}.json') as res:
+                    if res.status == 200:
+                        return json.loads(s=await res.read())
                 
         if src == 'image':
             if data == 'simulacra':
