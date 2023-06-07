@@ -55,6 +55,7 @@ bot needs permission to **view**, **send message**, **files**, **links** and **e
 |--------|---------|---------|
 |May 23, 2023 | Bot initial stage | v1.0.0
 | June 02, 2023 | MongoDB was removed | v1.3.0
+| June 07, 2023 | Added error handlers | v1.4.0
 
 
 ## Development checklist

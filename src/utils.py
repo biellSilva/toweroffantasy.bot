@@ -12,6 +12,7 @@ def check_name(name: str):
     for _ in names:
         if name.split(' ')[0].lower() in _.lower():
             return str(_) 
+
     return None
 
 

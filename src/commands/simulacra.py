@@ -15,6 +15,13 @@ class Simulacra(commands.Cog):
 
     @app_commands.command(name='simulacras')
     @app_commands.describe(name='Simulacra name')
+    @app_commands.checks.bot_has_permissions(send_messages = True, 
+                                             view_channel = True, 
+                                             external_emojis = True, 
+                                             embed_links = True, 
+                                             send_messages_in_threads = True, 
+                                             attach_files = True)
+    @app_commands.checks.cooldown(1, 30, key=lambda i: i.user.id)
     async def simulacra(self, interaction: discord.Interaction, name: str):
 
         '''
@@ -24,10 +31,6 @@ class Simulacra(commands.Cog):
         await interaction.response.defer()
 
         simulacra = await get_data(name=name, data='simulacra', src='json')
-
-        if not simulacra:
-            await interaction.edit_original_response(embed=discord.Embed(color=no_bar, description=f'couldn\'t find: {name}'))
-            return
 
         skin_url = f"[Skin Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
 

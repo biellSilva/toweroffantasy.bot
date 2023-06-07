@@ -16,6 +16,13 @@ class Matrices(commands.Cog):
 
     @app_commands.command(name='matrices')
     @app_commands.describe(name='Matrice name')
+    @app_commands.checks.bot_has_permissions(send_messages = True, 
+                                             view_channel = True, 
+                                             external_emojis = True, 
+                                             embed_links = True, 
+                                             send_messages_in_threads = True, 
+                                             attach_files = True)
+    @app_commands.checks.cooldown(1, 30, key=lambda i: i.user.id)
     async def matrices(self, interaction: discord.Interaction, name: str):
 
         '''
@@ -26,11 +33,6 @@ class Matrices(commands.Cog):
 
         matrice = await get_data(name=name, data='matrices', src='json')
 
-        if not matrice:
-            await interaction.edit_original_response(embed=discord.Embed(color=no_bar, 
-                                                                         description=f'Couldn\'t find {name}'))
-            return
-        
         em = discord.Embed(color=no_bar, 
                            title=f'{matrice["name"]} {matrice["rarity"]}' if 'chinaOnly' not in matrice else f'{matrice["name"]} {matrice["rarity"]} [CN]')
         
