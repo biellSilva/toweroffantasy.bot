@@ -52,15 +52,14 @@ class AppErrorHandler(commands.Cog):
             if isinstance(err, app_commands.CommandOnCooldown):
                 em.description = f'Command on Cooldown, try in <t:{int(time() + err.retry_after)}:R>'
 
+            print(file=stderr)
+            print_exception(type(err), err, err.__traceback__, file=stderr)
 
             if interaction.response.is_done():
                 return await interaction.edit_original_response(embed=em)
             else:
                 return await interaction.response.send_message(embed=em, ephemeral=True)
 
-
-        print(file=stderr)
-        print_exception(type(err), err, err.__traceback__, file=stderr)
 
         txt_err = ''.join(traceback.format_exception(type(err), err, err.__traceback__))
 
