@@ -29,8 +29,7 @@ async def get_data(name, data: Literal['simulacra', 'weapons', 'matrices'], src:
             if name:
                 async with cs.get(f'{base_url_dict["data_json"]}/{data}/{name}.json') as res:
                     if res.status == 200:
-                        data = await res.read()
-                        return json.loads(s=data)
+                        return json.loads(s=await res.read())
                 
         if src == 'image':
             if data == 'simulacra':

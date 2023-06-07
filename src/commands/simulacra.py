@@ -23,7 +23,7 @@ class Simulacra(commands.Cog):
 
         await interaction.response.defer()
 
-        simulacra = await get_data(name=check_name(name), data='simulacra', src='json')
+        simulacra = await get_data(name=name, data='simulacra', src='json')
 
         if not simulacra:
             await interaction.edit_original_response(embed=discord.Embed(color=no_bar, description=f'couldn\'t find: {name}'))

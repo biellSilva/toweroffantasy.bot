@@ -24,7 +24,7 @@ class Matrices(commands.Cog):
 
         await interaction.response.defer()
 
-        matrice = await get_data(name=check_name(name), data='matrices', src='json')
+        matrice = await get_data(name=name, data='matrices', src='json')
 
         if not matrice:
             await interaction.edit_original_response(embed=discord.Embed(color=no_bar, 
