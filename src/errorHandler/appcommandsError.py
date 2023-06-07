@@ -29,36 +29,38 @@ class AppErrorHandler(commands.Cog):
     @commands.Cog.listener()
     async def on_app_command_error(self, interaction: discord.Interaction, err):
 
-        if not interaction.user.id == self.bot.application.owner.id:
+        em = discord.Embed(color=no_bar,
+                        description='')
 
-            em = discord.Embed(color=no_bar,
-                            description='')
+        show = False
+        
+        if isinstance(err, app_commands.CommandInvokeError):
+            err = err.original
+
+        if isinstance(err, app_commands.MissingPermissions):
+            em.description='Missing permission' + '\n'.join(err.args)
+
+        if isinstance(err, app_commands.MissingRole):
+            em.description=f'Missing role {interaction.guild.get_role(int(err.missing_role)).mention}'
+        
+        if isinstance(err, app_commands.BotMissingPermissions):
+            em.description='\n'.join(err.args)
             
-            if isinstance(err, app_commands.CommandInvokeError):
-                err = err.original
+        if isinstance(err, (AttributeError, TypeError)):
+            em.description = 'Couldn\'t find'
+            show = True
 
-            if isinstance(err, app_commands.MissingPermissions):
-                em.description='Missing permission' + '\n'.join(err.args)
+        if isinstance(err, app_commands.CommandOnCooldown):
+            em.description = f'Command on Cooldown, try in <t:{int(time() + err.retry_after)}:R>'
 
-            if isinstance(err, app_commands.MissingRole):
-                em.description=f'Missing role {interaction.guild.get_role(int(err.missing_role)).mention}'
-            
-            if isinstance(err, app_commands.BotMissingPermissions):
-                em.description='\n'.join(err.args)
-                
-            if isinstance(err, (AttributeError, TypeError)):
-                em.description = 'Couldn\'t find'
-
-            if isinstance(err, app_commands.CommandOnCooldown):
-                em.description = f'Command on Cooldown, try in <t:{int(time() + err.retry_after)}:R>'
-
+        if show:
             print(file=stderr)
             print_exception(type(err), err, err.__traceback__, file=stderr)
 
-            if interaction.response.is_done():
-                return await interaction.edit_original_response(embed=em)
-            else:
-                return await interaction.response.send_message(embed=em, ephemeral=True)
+        if interaction.response.is_done():
+            return await interaction.edit_original_response(embed=em)
+        else:
+            return await interaction.response.send_message(embed=em, ephemeral=True)
 
 
         txt_err = ''.join(traceback.format_exception(type(err), err, err.__traceback__))
