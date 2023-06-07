@@ -51,7 +51,8 @@ class AppErrorHandler(commands.Cog):
             show = True
 
         if isinstance(err, app_commands.CommandOnCooldown):
-            em.description = f'Command on Cooldown, try in <t:{int(time() + err.retry_after)}:R>'
+            em.description = (f'Command on Cooldown\n' 
+                              f'<t:{int(time() + err.retry_after)}:R>')
 
         if show:
             print(file=stderr)
