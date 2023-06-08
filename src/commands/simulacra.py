@@ -3,9 +3,9 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from src.config import no_bar, base_url_dict
-from src.utils import check_name, get_data
-from src.views.views import MainView
+from config import no_bar, base_url_dict
+from utils import get_data
+from views.simulacra_views import MainView
 
 
 class Simulacra(commands.Cog):
