@@ -72,16 +72,3 @@ bot needs permission to **view**, **send message**, **files**, **links** and **e
 - [ ] Add Mounts
 - [ ] Add Foods
 
-
-<!-----------------------------------[Start of Discord Guild Panel]----------------------------------------->
-
-<div align = center>
-
-<br>
-	
-<iframe src="https://discord.com/widget?id=1093303506984771749&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-
-</div>
-
-
-<!-----------------------------------[End of Discord Guild Panel]----------------------------------------->

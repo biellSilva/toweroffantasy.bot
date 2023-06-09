@@ -8,7 +8,11 @@ from discord.ext import commands
 class Dumbot(commands.Bot):
 
     def __init__(self):
-        super().__init__(command_prefix='t!', intents=discord.Intents.all(), case_insensitive=True, strip_after_prefix=True)
+        super().__init__(command_prefix = 't!', 
+                         intents = discord.Intents.all(), 
+                         case_insensitive = True, 
+                         strip_after_prefix = True,
+                         help_command = None)
     
 
     async def on_ready(self):
@@ -33,7 +37,7 @@ class Dumbot(commands.Bot):
         await self.wait_until_ready()
         await self.change_presence(activity=discord.Activity(
                 type=discord.ActivityType.listening,
-                name='v1.5.2')
+                name='v1.5.3')
                 )
 
 
