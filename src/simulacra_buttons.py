@@ -172,7 +172,7 @@ async def discharge_button_func(interaction: discord.Interaction):
     return em
 
 
-async def weapon_attack_button_func(interaction: discord.Interaction):
+async def weapon_normal_attack_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
 
     weapon = await get_data(name=em.title, data='weapons', src='json')
@@ -183,12 +183,64 @@ async def weapon_attack_button_func(interaction: discord.Interaction):
 
     for abilitie in weapon['abilities']:
         if 'normal' in abilitie['type']:
+            if 'Jump' not in abilitie['input']:
+                
+                input_ = '' if 'input' not in abilitie else f"*[ {' - '.join(abilitie['input']).title()} ]*"
 
-            em.description += (f"\n\n**{abilitie['name'].title()}** *[ {' - '.join(abilitie['input']).capitalize()} ]*\n"
-                               f"{abilitie['description']}")
+                em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
+                                   f"{abilitie['description']}\n")
+                
+                if 'breakdown' in abilitie:
+                    em.description+= '**Breakdown:**\n'
+                    em.description+= '\n'.join(abilitie['breakdown'])
+
+    return em
+
+
+async def weapon_jump_attack_button_func(interaction: discord.Interaction):
+    em = interaction.message.embeds[0]
+
+    weapon = await get_data(name=em.title, data='weapons', src='json')
+
+    em.clear_fields()
+
+    em.description = ''
+
+    for abilitie in weapon['abilities']:
+        if 'normal' in abilitie['type']:
+            if 'Jump' in abilitie['input']:
+
+                input_ = '' if 'input' not in abilitie else f"*[ {' - '.join(abilitie['input']).title()} ]*"
+
+                em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
+                                f"{abilitie['description']}\n")
+                
+                if 'breakdown' in abilitie:
+                    em.description+= '**Breakdown:**\n'
+                    em.description+= '\n'.join(abilitie['breakdown'])
+
+    return em
+
+
+async def weapon_dodge_attack_button_func(interaction: discord.Interaction):
+    em = interaction.message.embeds[0]
+
+    weapon = await get_data(name=em.title, data='weapons', src='json')
+
+    em.clear_fields()
+
+    em.description = ''
+
+    for abilitie in weapon['abilities']:
+        if 'dodge' in abilitie['type']:
+
+            input_ = '' if 'input' not in abilitie else f"*[ {' - '.join(abilitie['input']).title()} ]*"
+
+            em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
+                            f"{abilitie['description']}\n")
             
             if 'breakdown' in abilitie:
-                em.description+= '\n**Breakdown:**'
+                em.description+= '**Breakdown:**\n'
                 em.description+= '\n'.join(abilitie['breakdown'])
 
     return em

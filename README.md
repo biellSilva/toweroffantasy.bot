@@ -51,11 +51,12 @@ bot needs permission to **view**, **send message**, **files**, **links** and **e
 
 
 ## Relevant changes
-| Date  | Note | Version |
+| Date  | Note | Bot Version |
 |--------|---------|---------|
-|May 23, 2023 | Bot initial stage | v1.0.0
+| May 23, 2023 | Bot initial stage | v1.0.0
 | June 02, 2023 | MongoDB was removed | v1.3.0
 | June 07, 2023 | Added error handlers | v1.4.0
+| June 09, 2023 | Added Attack Buttons | v1.5.0
 
 
 ## Development checklist
@@ -64,9 +65,23 @@ bot needs permission to **view**, **send message**, **files**, **links** and **e
 - [x] Add Weapons
 - [x] Add Matrices
 - [x] Add Weapon Skill and Discharge
-- [ ] Add Weapon Normal Attack
-- [ ] Add Weapon Dodge Attack
+- [x] Add Weapon Normal Attack
+- [x] Add Weapon Dodge Attack
 - [ ] Add Smart Servants
 - [ ] Add Relics
 - [ ] Add Mounts
 - [ ] Add Foods
+
+
+<!-----------------------------------[Start of Discord Guild Panel]----------------------------------------->
+
+<div align = center>
+
+<br>
+	
+<iframe src="https://discord.com/widget?id=1093303506984771749&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+
+</div>
+
+
+<!-----------------------------------[End of Discord Guild Panel]----------------------------------------->
