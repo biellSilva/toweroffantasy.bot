@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord import app_commands
 
 from src.config import no_bar, base_url_dict
-from src.utils import check_name, get_data
+from src.utils import get_data
 
 
 class Matrices(commands.Cog):
@@ -38,8 +38,8 @@ class Matrices(commands.Cog):
         
         em.url = base_url_dict['matrice_home'] + matrice['name'].replace(' ', '-').lower()
 
-        for set in matrice['sets']:
-            em.add_field(name=f'{set["pieces"]}x', value=set["description"], inline=False)
+        for set_ in matrice['sets']:
+            em.add_field(name=f'{set_["pieces"]}x', value=set_["description"], inline=False)
 
         thumb_url = await get_data(name=matrice['imgSrc'], data='matrices', src='image')
         if thumb_url:

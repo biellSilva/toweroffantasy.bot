@@ -32,10 +32,16 @@ class Owner(commands.Cog):
         async with ctx.typing():
             em = discord.Embed(color=no_bar,
                                title=f'{self.bot.user}',
-                               description=f'Status {self.bot.status} \n'
-                                           f'Latency {round(self.bot.latency * 1000)}ms \n'
-                                           f'Working on {len(self.bot.guilds)} guilds \n')
+                               description=f'Status: **{self.bot.status}** \n'
+                                           f'Latency: **{round(self.bot.latency * 1000)}ms** \n')
             
+            # for future communication if needed
+            x = ''
+            for guild in self.bot.guilds:
+                x += f'{guild.name} - {guild.owner}\n'
+                
+            em.add_field(name='Guilds', value=x)
+
             await ctx.send(embed=em)
 
 

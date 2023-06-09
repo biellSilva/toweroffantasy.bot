@@ -37,8 +37,9 @@ Special thanks to [toweroffantasy.info](https://toweroffantasy.info) who accepte
 ### Commands
 | Name  | Contains |
 |--------|---------|
-| `/simulacras` | simulacra, trait, matrice, weapon, advancements, skills, weapon and matrices combination |
-| `/matrices` | matrices |
+| `/simulacras` | simulacra, trait, matrice, weapon, advancements, skills, weapon and matrices combination information |
+| `/matrices` | matrices information |
+| `/relics` | relics information |
 
 ### How to block/allow it to respond in certains channels
 bot needs permission to **view**, **send message**, **files**, **links** and **external emoji** in the channel to work properly, if you want to *block* or *allow* a specific channel, use the **integrations panel** to modify where the command will be visible
@@ -57,6 +58,7 @@ bot needs permission to **view**, **send message**, **files**, **links** and **e
 | June 02, 2023 | MongoDB was removed | v1.3.0
 | June 07, 2023 | Added error handlers | v1.4.0
 | June 09, 2023 | Added Attack Buttons | v1.5.0
+| June 09, 2023 | Added Relics command | v1.6.0
 
 
 ## Development checklist
@@ -67,8 +69,8 @@ bot needs permission to **view**, **send message**, **files**, **links** and **e
 - [x] Add Weapon Skill and Discharge
 - [x] Add Weapon Normal Attack
 - [x] Add Weapon Dodge Attack
+- [x] Add Relics
 - [ ] Add Smart Servants
-- [ ] Add Relics
 - [ ] Add Mounts
 - [ ] Add Foods
 

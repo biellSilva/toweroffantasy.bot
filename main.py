@@ -3,6 +3,7 @@ import dotenv
 import os
 
 from discord.ext import commands
+from asyncio import sleep
 
 
 class Dumbot(commands.Bot):
@@ -26,7 +27,7 @@ class Dumbot(commands.Bot):
         self.task = self.loop.create_task(self.wait_until_ready_tasks())
 
         for folder in os.listdir('./src'):
-            if not folder.endswith('.py') and folder.lower() not in ('database', 'views'):
+            if not folder.endswith('.py') and folder.lower() not in ('views'):
                 for filename in os.listdir(f'./src/{folder}'):
                     if filename.endswith('.py'):
                         await self.load_extension(f'src.{folder}.{filename[:-3]}')
@@ -36,9 +37,9 @@ class Dumbot(commands.Bot):
     async def wait_until_ready_tasks(self):
         await self.wait_until_ready()
         await self.change_presence(activity=discord.Activity(
-                type=discord.ActivityType.listening,
-                name='v1.5.4')
-                )
+                    type=discord.ActivityType.listening,
+                    name='v1.6.2')
+                    )
 
 
 bot = Dumbot()

@@ -3,15 +3,47 @@ import json
 
 from typing import Literal
 
-from src.config import names, base_url_dict
+from src.config import matrices_names, base_url_dict, relics_names
 
 
 def check_name(name: str):
-    for _ in names:
-        if name.split(' ')[0].lower() in _.lower():
-            return str(_) 
+    for correct_name in matrices_names:
+        if name.split(' ')[0].lower() in correct_name.lower():
+            return correct_name.replace(' ', '-').lower()
+    
+    raise NameError(name)
 
-    return None
+
+async def get_relic(name: str):
+
+    async with aiohttp.ClientSession() as cs:
+        if 'overdrive' in name.lower():
+            name = 'booster shot'
+
+        url_name = name.replace(' ', '-').lower()
+
+        async with cs.get(f'{base_url_dict["data_json"]}/relics/{url_name}.json') as res:
+            if res.status == 200:
+                return json.loads(s=await res.read())
+            
+        for correct_name in relics_names:
+            if len(name.split()) >= 2:
+                for name_split in name.split():
+                    if name_split.lower() in correct_name.lower() and next(name_split.lower()) in correct_name.lower():
+                        url_name = correct_name.replace(' ', '-').lower()
+
+                        async with cs.get(f'{base_url_dict["data_json"]}/relics/{url_name}.json') as res:
+                            if res.status == 200:
+                                return json.loads(s=await res.read())
+                            
+                    if name_split.lower() in correct_name.lower() or next(name_split.lower()) in correct_name.lower():
+                        url_name = correct_name.replace(' ', '-').lower()
+
+                        async with cs.get(f'{base_url_dict["data_json"]}/relics/{url_name}.json') as res:
+                            if res.status == 200:
+                                return json.loads(s=await res.read())
+    
+    raise NameError(name)
 
 
 async def get_data(name, data: Literal['simulacra', 'weapons', 'matrices'], src: Literal['json', 'image']):
@@ -25,10 +57,7 @@ async def get_data(name, data: Literal['simulacra', 'weapons', 'matrices'], src:
     async with aiohttp.ClientSession() as cs:
         if src == 'json':
             name = check_name(name)
-
-            if name: 
-                name = name.replace(' ', '-').lower()
-
+            if name:
                 async with cs.get(f'{base_url_dict["data_json"]}/{data}/{name}.json') as res:
                     if res.status == 200:
                         return json.loads(s=await res.read())

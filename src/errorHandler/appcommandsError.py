@@ -3,7 +3,6 @@ import traceback
 
 from discord.ext import commands
 from discord import app_commands
-from discord.app_commands import AppCommandError
 
 from traceback import print_exception
 from sys import stderr
@@ -31,8 +30,6 @@ class AppErrorHandler(commands.Cog):
 
         em = discord.Embed(color=no_bar,
                         description='')
-
-        show = False
         
         if isinstance(err, app_commands.CommandInvokeError):
             err = err.original
@@ -46,22 +43,17 @@ class AppErrorHandler(commands.Cog):
         if isinstance(err, app_commands.BotMissingPermissions):
             em.description='\n'.join(err.args)
             
-        if isinstance(err, (AttributeError, TypeError)):
+        if isinstance(err, NameError):
             em.description = 'Couldn\'t find'
-            show = True
 
         if isinstance(err, app_commands.CommandOnCooldown):
-            em.description = (f'Command on Cooldown\n' 
+            em.description = (f'Command on cooldown\n' 
                               f'<t:{int(time() + err.retry_after)}:R>')
 
-        if show:
-            print(file=stderr)
-            print_exception(type(err), err, err.__traceback__, file=stderr)
-
         if em.description != '' and interaction.response.is_done():
-            return await interaction.edit_original_response(embed=em)
+            await interaction.edit_original_response(embed=em)
         elif em.description != '' and not interaction.response.is_done():
-            return await interaction.response.send_message(embed=em, ephemeral=True)
+            await interaction.response.send_message(embed=em, ephemeral=True)
 
         else:
             print(file=stderr)

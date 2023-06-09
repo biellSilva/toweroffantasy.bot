@@ -1,8 +1,8 @@
 import discord
 
-from src.simulacra_buttons import trait_button_func, home_button_func, weapon_button_func, advanc_button_func, meta_button_func
-from src.simulacra_buttons import abilities_button_func, discharge_button_func, matrice_button_func, weapon_normal_attack_button_func
-from src.simulacra_buttons import weapon_jump_attack_button_func, weapon_dodge_attack_button_func
+from src.views.simulacra_buttons import trait_button_func, home_button_func, weapon_button_func, advanc_button_func, meta_button_func
+from src.views.simulacra_buttons import abilities_button_func, discharge_button_func, matrice_button_func, weapon_normal_attack_button_func
+from src.views.simulacra_buttons import weapon_jump_attack_button_func, weapon_dodge_attack_button_func
 
 
 class MainView(discord.ui.View):

@@ -4,7 +4,6 @@ from src.config import emojis_1, base_url_dict
 from src.utils import get_data
 
 
-
 async def home_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
 
