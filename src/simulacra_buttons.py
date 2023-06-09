@@ -123,7 +123,7 @@ async def meta_button_func(interaction: discord.Interaction):
         url_name = name.replace(' ','-').lower()
         desc += f'\n**[{name.capitalize()}]({base_url_dict["simulacra_home"]}{url_name})**'
     
-    if not desc.isspace():
+    if desc != '':
         em.add_field(name='Recommended Pairings', value=desc, inline=False)
 
     desc = ''
@@ -132,7 +132,7 @@ async def meta_button_func(interaction: discord.Interaction):
         url_name = matrix['name'].replace(' ', '-').lower()
         desc += f'\n{matrix["pieces"]}x **[{matrix["name"]}]({base_url_dict["matrice_home"]}{url_name})**'
 
-    if not desc.isspace():
+    if desc != '':
         em.add_field(name='Recommended Matrices', value=desc, inline=False)
 
     return em
