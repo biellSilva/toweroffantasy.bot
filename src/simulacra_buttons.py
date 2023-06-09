@@ -185,7 +185,7 @@ async def weapon_normal_attack_button_func(interaction: discord.Interaction):
         if 'normal' in abilitie['type']:
             if 'Jump' not in abilitie['input']:
                 
-                input_ = '' if 'input' not in abilitie else f"*[ {' - '.join(abilitie['input']).title()} ]*"
+                input_ = '' if 'input' not in abilitie or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input']).title()} ]*"
 
                 em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
                                    f"{abilitie['description']}\n")
@@ -210,7 +210,7 @@ async def weapon_jump_attack_button_func(interaction: discord.Interaction):
         if 'normal' in abilitie['type']:
             if 'Jump' in abilitie['input']:
 
-                input_ = '' if 'input' not in abilitie else f"*[ {' - '.join(abilitie['input']).title()} ]*"
+                input_ = '' if 'input' not in abilitie or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input']).title()} ]*"
 
                 em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
                                 f"{abilitie['description']}\n")
@@ -234,7 +234,7 @@ async def weapon_dodge_attack_button_func(interaction: discord.Interaction):
     for abilitie in weapon['abilities']:
         if 'dodge' in abilitie['type']:
 
-            input_ = '' if 'input' not in abilitie else f"*[ {' - '.join(abilitie['input']).title()} ]*"
+            input_ = '' if 'input' not in abilitie or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input']).title()} ]*"
 
             em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
                             f"{abilitie['description']}\n")
