@@ -28,7 +28,7 @@ class Owner(commands.Cog):
 
     @commands.command(name='check')
     @commands.is_owner()
-    async def bot_check(self, ctx: commands.Context):
+    async def check_bot(self, ctx: commands.Context):
         async with ctx.typing():
             em = discord.Embed(color=no_bar,
                                title=f'{self.bot.user}',
