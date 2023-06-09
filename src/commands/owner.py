@@ -33,7 +33,7 @@ class Owner(commands.Cog):
             em = discord.Embed(color=no_bar,
                                title=f'{self.bot.user}',
                                description=f'Status {self.bot.status} \n'
-                                           f'Latency {round(self.latency * 1000)}ms \n'
+                                           f'Latency {round(self.bot.latency * 1000)}ms \n'
                                            f'Working on {len(self.bot.guilds)} guilds \n')
             
             await ctx.send(embed=em)
