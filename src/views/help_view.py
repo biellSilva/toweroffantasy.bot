@@ -12,7 +12,7 @@ class NamesView(discord.ui.View):
         em = interaction.message.embeds[0]
 
         em.title = 'Simulacras'
-        em.description = ', '.join(simulacras_names).title()
+        em.description = ', '.join(simulacras_names)
 
         await interaction.message.edit(embeds=[em], attachments=[], view=NamesView())
 
@@ -23,7 +23,7 @@ class NamesView(discord.ui.View):
         em = interaction.message.embeds[0]
 
         em.title = 'Matrices'
-        em.description = ', '.join(matrices_names).title()
+        em.description = ', '.join(matrices_names)
 
         await interaction.message.edit(embeds=[em], attachments=[], view=NamesView())
     
@@ -34,6 +34,6 @@ class NamesView(discord.ui.View):
         em = interaction.message.embeds[0]
 
         em.title = 'Relics'
-        em.description = ', '.join(relics_names).title()
+        em.description = ', '.join(relics_names)
 
         await interaction.message.edit(embeds=[em], attachments=[], view=NamesView())
