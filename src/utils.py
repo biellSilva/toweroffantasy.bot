@@ -32,12 +32,12 @@ async def get_relic(name: str):
     raise NameError(name)
 
 
-async def get_data(name, data: Literal['simulacra', 'weapons', 'matrices'], src: Literal['json', 'image']):
+async def get_data(name, data: Literal['simulacra', 'weapons', 'matrices', 'relics'], src: Literal['json', 'image']):
 
     '''
     for `simulacra` and `weapons` if `src == 'image'`, `name` need to be a tuple with Global Name and CN Name 
 
-    for `matrices` if `src == 'image'`, `name` need to be `matrice['imgScr']`
+    for `matrices` and `relics` if `src == 'image'`, `name` need to be `item['imgScr']`
     '''
 
     async with aiohttp.ClientSession() as cs:

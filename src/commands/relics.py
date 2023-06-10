@@ -38,7 +38,7 @@ class Relics(commands.Cog):
 
         relic = await get_relic(name=name)
 
-        CN_tag = '' if 'chinaOnly' not in relic or relic['chinaOnly'] == False else '[CN]'
+        CN_tag = '' if 'chinaOnly' not in relic or not relic['chinaOnly'] else '[CN]'
 
         em = discord.Embed(color=no_bar, 
                            title=f'{relic["name"]} {relic["rarity"]} {CN_tag}',
