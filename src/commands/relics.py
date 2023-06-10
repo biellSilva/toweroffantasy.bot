@@ -44,7 +44,7 @@ class Relics(commands.Cog):
                            title=f'{relic["name"]} {relic["rarity"]} {CN_tag}',
                            description=relic['description'])
         
-        em.url = base_url_dict['relic_home'] + check_relic(name)
+        em.url = base_url_dict['relics_home'] + check_relic(name)
         
         thumb_url = await get_data(name=relic['imgSrc'], data='relics', src='image')
         if thumb_url:
