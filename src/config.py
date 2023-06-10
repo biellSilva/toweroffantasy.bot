@@ -48,7 +48,7 @@ simulacras_names = ['Alyss', 'Annabella', 'Lin', 'Bai Ling', 'Baiyuekui', 'Claud
 relics_names = ['Alternate Destiny', 'Booster Shot','Chosen Dice', 'Colossus Arm', 'Confinement',
                 'Couant', 'Cybernetic Arm', 'Drone', 'Hologram Projector', 'Hoverboard', 'Hovering Cannon',
                 'Jetboard', 'Jetpack', 'Lava Bomb', 'Magnetic Pulse', 'Magnetic Storm', 'Mini Pelican',
-                'Missile Barrage', "Ocean's Heart", 'Omnium Handcannon', 'Omnium Shield', 'Quantum Cloak', 'Spacetime Rift',
+                'Missile Barrage', "Oceans Heart", 'Omnium Handcannon', 'Omnium Shield', 'Quantum Cloak', 'Spacetime Rift',
                 'Type II Couant', 'Type V Armor']
 
 
