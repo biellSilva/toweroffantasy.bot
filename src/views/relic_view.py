@@ -12,7 +12,7 @@ class RelicView(discord.ui.View):
         em = interaction.message.embeds[0]
         name = em.title.replace("'", '').replace('[CN]', '').split()[:-1]
 
-        relic = await get_data(name=''.join(name), data='relics', src='json')
+        relic = await get_data(name=' '.join(name), data='relics', src='json')
 
         em.description = relic['description']
 
@@ -25,7 +25,7 @@ class RelicView(discord.ui.View):
         em = interaction.message.embeds[0]
         name = em.title.replace("'", '').replace('[CN]', '').split()[:-1]
 
-        relic = await get_data(name=''.join(name), data='relics', src='json')
+        relic = await get_data(name=' '.join(name), data='relics', src='json')
 
         em.description = ''
 
