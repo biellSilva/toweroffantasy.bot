@@ -5,6 +5,7 @@ from discord import app_commands
 
 from src.config import no_bar, base_url_dict
 from src.utils import check_relic, get_data
+from src.views.relic_view import RelicView
 
 
 class Relics(commands.Cog):
@@ -50,7 +51,7 @@ class Relics(commands.Cog):
         if thumb_url:
             em.set_thumbnail(url=thumb_url)
 
-        await interaction.edit_original_response(embed=em)
+        await interaction.edit_original_response(embed=em, view=RelicView())
     
 async def setup(bot):
     await bot.add_cog(Relics(bot))
