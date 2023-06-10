@@ -23,17 +23,12 @@ class Relics(commands.Cog):
                                              embed_links = True, 
                                              send_messages_in_threads = True, 
                                              attach_files = True)
-    # @app_commands.checks.cooldown(1, 30, key=lambda i: i.user.id)
+    @app_commands.checks.cooldown(1, 30, key=lambda i: i.user.id)
     async def relics(self, interaction: discord.Interaction, name: str):
 
         '''
         Relics (aka Gadgets) are tools that aid the player in exploration or combat.
         '''
-
-        if interaction.user.id != self.bot.application.owner.id:
-            return await interaction.response.send_message(embed=discord.Embed(
-                color=no_bar, description='Sorry, it\'s still in development'
-            ))
 
         await interaction.response.defer()
 
