@@ -57,6 +57,16 @@ async def get_data(name, data: Literal['simulacra', 'weapons', 'matrices', 'reli
                     async with cs.get(f'{base_url_dict[f"{data}_{src}"]}/{image_name.lower()}.webp') as res:
                         if res.status == 200:
                             return res.url
+                        
+            elif data == 'relics':
+                async with cs.get(f'{base_url_dict["relics_bigger"]}/{name}.webp') as res:
+                    if res.status == 200:
+                        return res.url
+                
+                async with cs.get(f'{base_url_dict["relics_lower"]}/{name}.webp') as res:
+                    if res.status == 200:
+                        return res.url
+        
             else:
                 async with cs.get(f'{base_url_dict[f"{data}_{src}"]}/{name}.webp') as res:
                     if res.status == 200:
