@@ -56,6 +56,7 @@ relics_names = ['Alternate Destiny', 'Booster Shot','Chosen Dice', 'Colossus Arm
 base_url_dict = {
     'simulacra_home': 'https://toweroffantasy.info/simulacra/',
     'matrice_home' : 'https://toweroffantasy.info/matrices/',
+    'relics_home' : 'https://toweroffantasy.info/relics/',
     
     'simulacra_image' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/UI/huanxing/lihui',
     'weapons_image' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/Icon/weapon/Icon',

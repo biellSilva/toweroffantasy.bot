@@ -44,6 +44,8 @@ class Relics(commands.Cog):
                            title=f'{relic["name"]} {relic["rarity"]} {CN_tag}',
                            description=relic['description'])
         
+        em.url = base_url_dict['relic_home'] + relic['name'].replace(' ', '-').replace("'", '').lower()
+        
         thumb_url = await get_data(name=relic['imgSrc'], data='relics', src='image')
         if thumb_url:
             em.set_thumbnail(url=thumb_url)

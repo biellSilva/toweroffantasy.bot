@@ -13,21 +13,13 @@ def check_name(name: str):
     
     raise NameError(name)
 
-
-async def get_relic(name: str):
-    async with aiohttp.ClientSession() as cs:
-
-        if 'overdrive' in name.lower():
+def check_relic(name: str):
+    if 'overdrive' in name.lower():
             name = 'booster shot'
  
-        for correct_name in relics_names:
-            if name.lower() in correct_name.lower():
-                url_name = correct_name.replace(' ', '-').lower()
-
-                async with cs.get(f'{base_url_dict["data_json"]}/relics/{url_name}.json') as res:
-                    if res.status == 200:
-                        return json.loads(s=await res.read())
-            
+    for correct_name in relics_names:
+        if name.lower() in correct_name.lower():
+            return correct_name.replace(' ', '-').lower()
     
     raise NameError(name)
 
@@ -42,7 +34,11 @@ async def get_data(name, data: Literal['simulacra', 'weapons', 'matrices', 'reli
 
     async with aiohttp.ClientSession() as cs:
         if src == 'json':
-            name = check_name(name)
+            if data in ('simulacra', 'weapons', 'matrices'):
+                name = check_name(name)
+            else:
+                name = check_relic(name)
+
             if name:
                 async with cs.get(f'{base_url_dict["data_json"]}/{data}/{name}.json') as res:
                     if res.status == 200:
