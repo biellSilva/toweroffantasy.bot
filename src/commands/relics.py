@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord import app_commands
 
 from src.config import no_bar, base_url_dict
-from src.utils import get_relic, get_data
+from src.utils import check_relic, get_data
 
 
 class Relics(commands.Cog):
@@ -36,7 +36,7 @@ class Relics(commands.Cog):
 
         await interaction.response.defer()
 
-        relic = await get_relic(name=name)
+        relic = await get_data(name=name, data='relics', src='json')
 
         CN_tag = '' if 'chinaOnly' not in relic or not relic['chinaOnly'] else '[CN]'
 
@@ -44,7 +44,7 @@ class Relics(commands.Cog):
                            title=f'{relic["name"]} {relic["rarity"]} {CN_tag}',
                            description=relic['description'])
         
-        em.url = base_url_dict['relic_home'] + relic['name'].replace(' ', '-').replace("'", '').lower()
+        em.url = base_url_dict['relic_home'] + check_relic(name)
         
         thumb_url = await get_data(name=relic['imgSrc'], data='relics', src='image')
         if thumb_url:
