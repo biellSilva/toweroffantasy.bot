@@ -31,9 +31,9 @@ class AppErrorHandler(commands.Cog):
 
         # For Data Analysis purposes
 
-        print(f'Command: /{command.name} <{command.parameters}>'
-              f'User: {interaction.user}'
-              f'Guild: {interaction.guild}'
+        print(f'Command: /{command.name}\n'
+              f'User: {interaction.user}\n'
+              f'Guild: {interaction.guild}\n'
               )
 
     @commands.Cog.listener()
