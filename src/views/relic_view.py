@@ -27,7 +27,11 @@ class RelicView(discord.ui.View):
 
         relic = await get_data(name=''.join(name), data='relics', src='json')
 
-        em.description = ''.join(relic['advancements'])
+        em.description = ''
+
+        for star, advanc in enumerate(relic['advancements']):
+            em.description += (f'**{star+1} ★**\n'
+                               f'{advanc}\n\n')
 
         await interaction.message.edit(embeds=[em], attachments=[], view=RelicView())
     
