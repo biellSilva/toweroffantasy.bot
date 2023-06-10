@@ -15,26 +15,19 @@ def check_name(name: str):
 
 
 async def get_relic(name: str):
-
     async with aiohttp.ClientSession() as cs:
-        if 'overdrive' in name.lower() or 'shot' in name.lower():
+
+        if 'overdrive' in name.lower():
             name = 'booster shot'
  
         for correct_name in relics_names:
-            for name_split in name.split():
-                if name_split.lower() in correct_name.lower():
-                    url_name = correct_name.replace(' ', '-').lower()
+            if name.lower() in correct_name.lower():
+                url_name = correct_name.replace(' ', '-').lower()
 
-                    async with cs.get(f'{base_url_dict["data_json"]}/relics/{url_name}.json') as res:
-                        if res.status == 200:
-                            return json.loads(s=await res.read())
-                
-                if name_split.lower() in correct_name.lower() and next(name_split.lower()) in correct_name.lower():
-                    url_name = correct_name.replace(' ', '-').lower()
-
-                    async with cs.get(f'{base_url_dict["data_json"]}/relics/{url_name}.json') as res:
-                        if res.status == 200:
-                            return json.loads(s=await res.read())
+                async with cs.get(f'{base_url_dict["data_json"]}/relics/{url_name}.json') as res:
+                    if res.status == 200:
+                        return json.loads(s=await res.read())
+            
     
     raise NameError(name)
 

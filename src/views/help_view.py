@@ -34,6 +34,6 @@ class NamesView(discord.ui.View):
         em = interaction.message.embeds[0]
 
         em.title = 'Relics'
-        em.description = ', '.join(relics_names)
+        em.description = ', '.join(relics_names).replace('Booster Shot', 'Overdrive Shot')
 
         await interaction.message.edit(embeds=[em], attachments=[], view=NamesView())

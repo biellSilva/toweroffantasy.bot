@@ -38,13 +38,15 @@ class Relics(commands.Cog):
 
         relic = await get_relic(name=name)
 
-        em = discord.Embed(color=no_bar, 
-                           title=f'{relic["name"]}')
-        
+        CN_tag = '' if 'chinaOnly' not in relic or relic['chinaOnly'] == False else '[CN]'
 
-        # thumb_url = await get_data(name=relic['imgSrc'], data='relics', src='image')
-        # if thumb_url:
-        #     em.set_thumbnail(url=thumb_url)
+        em = discord.Embed(color=no_bar, 
+                           title=f'{relic["name"]} {relic["rarity"]} {CN_tag}',
+                           description=relic['description'])
+        
+        thumb_url = await get_data(name=relic['imgSrc'], data='relics', src='image')
+        if thumb_url:
+            em.set_thumbnail(url=thumb_url)
 
         await interaction.edit_original_response(embed=em)
     

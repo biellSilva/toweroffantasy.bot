@@ -45,7 +45,7 @@ simulacras_names = ['Alyss', 'Annabella', 'Lin', 'Bai Ling', 'Baiyuekui', 'Claud
                     'Nemesis', 'Pepper', 'Rubilia', 'Ruby', 'Saki Fuwa', 'Samir', 'Shiro', 'Tian Lang', 
                     'Tsubasa', 'Umi', 'Yulan', 'Zero']
 
-relics_names = ['Alternate Destiny', 'Chosen Dice', 'Colossus Arm', 'Confinement',
+relics_names = ['Alternate Destiny', 'Booster Shot','Chosen Dice', 'Colossus Arm', 'Confinement',
                 'Couant', 'Cybernetic Arm', 'Drone', 'Hologram Projector', 'Hoverboard', 'Hovering Cannon',
                 'Jetboard', 'Jetpack', 'Lava Bomb', 'Magnetic Pulse', 'Magnetic Storm', 'Mini Pelican',
                 'Missile Barrage', "Ocean's Heart", 'Omnium Handcannon', 'Omnium Shield', 'Quantum Cloak', 'Spacetime Rift',
