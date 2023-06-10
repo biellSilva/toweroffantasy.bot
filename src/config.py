@@ -49,7 +49,7 @@ relics_names = ['Alternate Destiny', 'Booster Shot','Chosen Dice', 'Colossus Arm
                 'Couant', 'Cybernetic Arm', 'Drone', 'Hologram Projector', 'Hoverboard', 'Hovering Cannon',
                 'Jetboard', 'Jetpack', 'Lava Bomb', 'Magnetic Pulse', 'Magnetic Storm', 'Mini Pelican',
                 'Missile Barrage', "Oceans Heart", 'Omnium Handcannon', 'Omnium Shield', 'Quantum Cloak', 'Spacetime Rift',
-                'Type II Couant', 'Type V Armor']
+                'Strange Cube', 'Type II Couant', 'Type V Armor']
 
 
 ## URL
