@@ -3,7 +3,6 @@ import dotenv
 import os
 
 from discord.ext import commands
-from asyncio import sleep
 
 
 class Dumbot(commands.Bot):
@@ -38,7 +37,7 @@ class Dumbot(commands.Bot):
         await self.wait_until_ready()
         await self.change_presence(activity=discord.Activity(
                     type=discord.ActivityType.listening,
-                    name='v1.6.2')
+                    name='/help')
                     )
 
 
