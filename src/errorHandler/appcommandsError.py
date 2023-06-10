@@ -7,6 +7,7 @@ from discord import app_commands
 from traceback import print_exception
 from sys import stderr
 from time import time
+from typing import Union
 
 from src.config import no_bar
 
@@ -24,6 +25,16 @@ class AppErrorHandler(commands.Cog):
     def cog_unload(self):
         tree = self.bot.tree
         tree.on_error = self._old_tree_error
+
+    @commands.Cog.listener()
+    async def on_app_command_completion(self, interaction: discord.Interaction, command: Union[app_commands.Command, app_commands.ContextMenu]):
+
+        # For Data Analysis purposes
+
+        print(f'Command: /{command.name} <{command.parameters}>'
+              f'User: {interaction.user}'
+              f'Guild: {interaction.guild}'
+              )
 
     @commands.Cog.listener()
     async def on_app_command_error(self, interaction: discord.Interaction, err):
