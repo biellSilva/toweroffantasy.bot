@@ -39,10 +39,10 @@ class Owner(commands.Cog):
                                description=f'Status: **{self.bot.status}** \n'
                                            f'Latency: **{round(self.bot.latency * 1000)}ms** \n\n'
                                            f'**Git:**\n'
-                                           f'> Limit: {git_api.get("limit")}\n'
-                                           f'> Remain: {git_api.get("remain")}\n'
-                                           f'> Used: {git_api.get("used")}\n'
-                                           f'> Reset: <t:{git_api.get("limit")}:>\n')
+                                           f'> Limit: *{git_api.get("limit")}*\n'
+                                           f'> Remain: *{git_api.get("remaining")}*\n'
+                                           f'> Used: *{git_api.get("used")}*\n'
+                                           f'> Reset: <t:{git_api.get("reset")}:>\n')
             
             # for future communication if needed
             x = ''
