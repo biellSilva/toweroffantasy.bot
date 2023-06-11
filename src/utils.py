@@ -98,14 +98,14 @@ async def get_git_data(
 
         if data_type == 'names':
             lista = []
-            for name, url in data_base[data_folder]:
-                if 'cobalt' not in name:
-                    lista.append(name.replace('-', ' ').title())
-                else:
-                    lista.append(name.title())
+            for data in data_base[data_folder]:
+                for name_i, url in data.items():
+                    if 'cobalt' not in name_i:
+                        lista.append(name_i.replace('-', ' ').title())
+                        continue
+                    lista.append(name_i.title())
 
             return lista
-            
 
 
 async def get_image(name: Union[str, Tuple], data: Literal['simulacra', 'weapons', 'matrices', 'relics']):
@@ -150,13 +150,8 @@ async def get_image(name: Union[str, Tuple], data: Literal['simulacra', 'weapons
 
 # ---------- TEST PURPOSES ---------- #
 async def test_get_git_data():
-    pprint(await get_ratelimit(), indent=2)
-
-    start_time = time()
-    x = await get_git_data(name='echo', data_folder='simulacra', data_type='json')
-    end_time = time()
+    x = await get_git_data(data_folder='simulacra', data_type='names')
     
     pprint(x, indent=2)
     pprint(await get_ratelimit(), indent=2)
-    print(round((end_time - start_time)*1000), 'ms')
 # ---------- TEST PURPOSES ---------- #
