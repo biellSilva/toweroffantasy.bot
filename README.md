@@ -59,6 +59,7 @@ bot needs permission to **view**, **send message**, **files**, **links** and **e
 | June 07, 2023 | Added error handlers | 
 | June 09, 2023 | Added Attack Buttons | 
 | June 09, 2023 | Added Relics command | 
+| June 11, 2023 | Fully Automatic Syncronization with website data |
 
 
 ## Development checklist
