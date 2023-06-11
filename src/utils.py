@@ -1,75 +1,162 @@
 import aiohttp
 import json
 
-from typing import Literal
+from typing import Literal, Optional, Union, Tuple
+from pprint import pprint
+from time import time
 
-from src.config import matrices_names, base_url_dict, relics_names
+from src.config import base_url_dict
 
 
-def check_name(name: str):
-    for correct_name in matrices_names:
-        if name.split(' ')[0].lower() in correct_name.lower():
-            return correct_name.replace(' ', '-').lower()
+data_base = {}
+'''
+exemple of `data_base` after been synced
+
+{
+    'matrices': [   {'alyss': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/matrices/alyss.json'},
+                    {'annabella': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/matrices/annabella.json'}],
+    'relics': [ {'alternate-destiny': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/relics/alternate-destiny.json'},
+                {'booster-shot': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/relics/booster-shot.json'}],
+    'simulacra': [  {'alyss': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/simulacra/alyss.json'},
+                    {'annabella': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/simulacra/annabella.json'}],
+    'weapons': [    {'alyss': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/weapons/alyss.json'},
+                    {'annabella': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/weapons/annabella.json'}]
+}
+'''
+
+async def get_ratelimit() -> dict:
+    '''
+    return a dictionary with the ratelimit from https://api.github.com/rate_limit
+    '''
+    async with aiohttp.ClientSession() as cs:
+        async with cs.get('https://api.github.com/rate_limit') as res:
+            x: dict = await res.json()
+            return x.get('rate')
     
-    raise NameError(name)
 
-def check_relic(name: str):
-    if 'overdrive' in name.lower():
-            name = 'booster shot'
- 
-    for correct_name in relics_names:
-        if name.lower() in correct_name.lower():
-            return correct_name.replace(' ', '-').lower()
-    
-    raise NameError(name)
-
-
-async def get_data(name, data: Literal['simulacra', 'weapons', 'matrices', 'relics'], src: Literal['json', 'image']):
+async def get_git_data(
+        name: Optional[str] = None, 
+        data_folder: Optional[Literal['simulacra', 'matrices', 'weapons', 'relics']] = None,
+        data_type: Optional[Literal['json', 'names']] = 'json',
+        sync: Optional[bool] = False
+    ) -> Union[dict, list]:
 
     '''
-    for `simulacra` and `weapons` if `src == 'image'`, `name` need to be a tuple with Global Name and CN Name 
+    ### Loop through all git data from toweroffantasy.info
 
-    for `matrices` and `relics` if `src == 'image'`, `name` need to be `item['imgScr']`
+    if data_type is `'json'` returns a dictionary
+
+    if is `'names'` returns a list with all names from this folder
+    '''
+    
+    headers = {
+        'User-Agent':'request'
+    }
+
+    if sync or len(data_base) == 0:
+        async with aiohttp.ClientSession(base_url='https://api.github.com', headers=headers) as cs:
+            for folder in ['simulacra', 'matrices', 'weapons', 'relics']:
+                print('starting to sync')
+                async with cs.get(f'/repos/whotookzakum/toweroffantasy.info/contents/src/lib/data/{folder}') as res:
+                    if res.status == 200:
+                        dict_data = json.loads(s=await res.read())
+                        data_base[folder] = []
+                        print(f' - syncing {folder}')
+                        
+                        for data_file in dict_data:
+                            if 'booster-shot' in data_file['name']:
+                                data_base[folder].append({'overdrive-shot' : str(data_file['download_url'])})
+                            else:
+                                data_base[folder].append({str(data_file['name']).removesuffix('.json') : str(data_file['download_url'])})
+
+            print('ended syncing') 
+                            
+    if not sync:
+        if data_type == 'json':
+            async with aiohttp.ClientSession() as cs:
+                for data in data_base[data_folder]:
+                    data : dict
+                    
+                    for i_name, url in data.items():
+                        if name.replace(' ', '-').replace("'", '').lower() == i_name:
+                            async with cs.get(url) as res:
+                                if res.status == 200:
+                                    return json.loads(s=await res.read())
+                                else:
+                                    raise aiohttp.ClientConnectionError(res.status, res.url).add_note('File not found')
+                
+                    for i_name, url in data.items():
+                        if name.replace(' ', '-').replace("'", '').lower() in i_name:
+                            async with cs.get(url) as res:
+                                if res.status == 200:
+                                    return json.loads(s=await res.read())
+                                else:
+                                    raise aiohttp.ClientConnectionError(res.status, res.url).add_note('File not found')
+
+                raise NameError(name, data_folder).add_note(f'Error trying to get {name} in {data_folder}')
+        
+
+        if data_type == 'names':
+            lista = []
+            for name, url in data_base[data_folder]:
+                if 'cobalt' not in name:
+                    lista.append(name.replace('-', ' ').title())
+                else:
+                    lista.append(name.title())
+
+            return lista
+            
+
+
+async def get_image(name: Union[str, Tuple], data: Literal['simulacra', 'weapons', 'matrices', 'relics']):
+
+    '''
+    for `simulacra` and `weapons`, `name` need to be a tuple with Global Name and CN Name 
+
+    for `matrices` and `relics`, `name` need to be `item['imgScr']`
     '''
 
     async with aiohttp.ClientSession() as cs:
-        if src == 'json':
-            if data in ('simulacra', 'weapons', 'matrices'):
-                name = check_name(name)
-            else:
-                name = check_relic(name)
+        if data == 'simulacra':
+            for image_name in name:
+                if image_name.lower() == 'gnonno':
+                    image_name = 'gunonno'
 
-            if name:
-                async with cs.get(f'{base_url_dict["data_json"]}/{data}/{name}.json') as res:
-                    if res.status == 200:
-                        return json.loads(s=await res.read())
-                
-        if src == 'image':
-            if data == 'simulacra':
-                for image_name in name:
-                    if image_name.lower() == 'gnonno':
-                        image_name = 'gunonno'
-
-                    async with cs.get(f'{base_url_dict[f"{data}_{src}"]}/{image_name}.webp') as res:
-                        if res.status == 200:
-                            return res.url
-                        
-                    async with cs.get(f'{base_url_dict[f"{data}_{src}"]}/{image_name.lower()}.webp') as res:
-                        if res.status == 200:
-                            return res.url
-                        
-            elif data == 'relics':
-                async with cs.get(f'{base_url_dict["relics_bigger"]}/{name}.webp') as res:
+                async with cs.get(f'{base_url_dict[f"{data}_image"]}/{image_name}.webp') as res:
                     if res.status == 200:
                         return res.url
-                
-                async with cs.get(f'{base_url_dict["relics_lower"]}/{name}.webp') as res:
+                    
+                async with cs.get(f'{base_url_dict[f"{data}_image"]}/{image_name.lower()}.webp') as res:
                     if res.status == 200:
                         return res.url
-        
-            else:
-                async with cs.get(f'{base_url_dict[f"{data}_{src}"]}/{name}.webp') as res:
-                    if res.status == 200:
-                        return res.url
+                    
+        elif data == 'relics':
+            async with cs.get(f'{base_url_dict["relics_bigger"]}/{name}.webp') as res:
+                if res.status == 200:
+                    return res.url
+            
+            async with cs.get(f'{base_url_dict["relics_lower"]}/{name}.webp') as res:
+                if res.status == 200:
+                    return res.url
+    
+        else:
+            async with cs.get(f'{base_url_dict[f"{data}_image"]}/{name}.webp') as res:
+                if res.status == 200:
+                    return res.url
                 
     return None
+
+
+
+# ---------- TEST PURPOSES ---------- #
+async def test_get_git_data():
+    pprint(await get_ratelimit(), indent=2)
+
+    start_time = time()
+    x = await get_git_data(name='echo', data_folder='simulacra', data_type='json')
+    end_time = time()
+    
+    pprint(x, indent=2)
+    pprint(await get_ratelimit(), indent=2)
+    print(round((end_time - start_time)*1000), 'ms')
+# ---------- TEST PURPOSES ---------- #

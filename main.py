@@ -4,6 +4,8 @@ import os
 
 from discord.ext import commands
 
+from src.utils import get_git_data
+
 
 class Dumbot(commands.Bot):
 
@@ -39,6 +41,7 @@ class Dumbot(commands.Bot):
                     type=discord.ActivityType.listening,
                     name='/help')
                     )
+        await get_git_data(sync=True)
 
 
 bot = Dumbot()

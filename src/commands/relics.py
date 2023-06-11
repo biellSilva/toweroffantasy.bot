@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord import app_commands
 
 from src.config import no_bar, base_url_dict
-from src.utils import check_relic, get_data
+from src.utils import get_git_data, get_image
 from src.views.relic_view import RelicView
 
 
@@ -32,7 +32,8 @@ class Relics(commands.Cog):
 
         await interaction.response.defer()
 
-        relic = await get_data(name=name, data='relics', src='json')
+        relic: dict = await get_git_data(name=name, data_folder='relics', data_type='json')
+        thumb_url = await get_image(name=relic['imgSrc'], data='relics')
 
         CN_tag = '' if 'chinaOnly' not in relic or not relic['chinaOnly'] else '[CN]'
 
@@ -40,9 +41,11 @@ class Relics(commands.Cog):
                            title=f'{relic["name"]} {relic["rarity"]} {CN_tag}',
                            description=relic['description'])
         
-        em.url = base_url_dict['relics_home'] + check_relic(name)
+        if 'overdrive' in relic['name'].lower():
+            em.url = base_url_dict['relics_home'] + 'booster-shot'
+        else:
+            em.url = base_url_dict['relics_home'] + relic['name'].replace(' ', '-').lower()
         
-        thumb_url = await get_data(name=relic['imgSrc'], data='relics', src='image')
         if thumb_url:
             em.set_thumbnail(url=thumb_url)
 

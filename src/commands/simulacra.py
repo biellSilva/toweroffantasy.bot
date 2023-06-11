@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord import app_commands
 
 from src.config import no_bar, base_url_dict
-from src.utils import get_data
+from src.utils import get_git_data, get_image
 from src.views.simulacra_views import MainView
 
 
@@ -30,7 +30,8 @@ class Simulacra(commands.Cog):
 
         await interaction.response.defer()
 
-        simulacra = await get_data(name=name, data='simulacra', src='json')
+        simulacra: dict = await get_git_data(name=name, data_folder='simulacra', data_type='json')
+        thumb_url = await get_image(name=(simulacra['name'], simulacra['cnName']), data='simulacra')
 
         skin_url = f"[Skin Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
 
@@ -48,7 +49,6 @@ class Simulacra(commands.Cog):
         
         em.url = base_url_dict['simulacra_home'] + simulacra['name'].replace(' ', '-').lower()
 
-        thumb_url = await get_data(name=(simulacra['name'], simulacra['cnName']), data='simulacra', src='image')
         if thumb_url:
             em.set_thumbnail(url=thumb_url)
 

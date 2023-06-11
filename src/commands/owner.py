@@ -4,6 +4,7 @@ from discord.ext import commands
 from typing import Optional
 
 from src.config import no_bar
+from src.utils import get_ratelimit
 
 
 class Owner(commands.Cog):
@@ -30,10 +31,18 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def check_bot(self, ctx: commands.Context):
         async with ctx.typing():
+            
+            git_api = await get_ratelimit()
+
             em = discord.Embed(color=no_bar,
                                title=f'{self.bot.user}',
                                description=f'Status: **{self.bot.status}** \n'
-                                           f'Latency: **{round(self.bot.latency * 1000)}ms** \n')
+                                           f'Latency: **{round(self.bot.latency * 1000)}ms** \n\n'
+                                           f'**Git:**\n'
+                                           f'> Limit: {git_api.get("limit")}\n'
+                                           f'> Remain: {git_api.get("remain")}\n'
+                                           f'> Used: {git_api.get("used")}\n'
+                                           f'> Reset: <t:{git_api.get("limit")}:>\n')
             
             # for future communication if needed
             x = ''

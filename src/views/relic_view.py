@@ -1,6 +1,6 @@
 import discord
 
-from src.utils import get_data
+from src.utils import get_git_data
 
 
 class RelicView(discord.ui.View):
@@ -10,9 +10,9 @@ class RelicView(discord.ui.View):
         await interaction.response.defer()
 
         em = interaction.message.embeds[0]
-        name = em.title.replace("'", '').replace('[CN]', '').split()[:-1]
+        name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
 
-        relic = await get_data(name=' '.join(name), data='relics', src='json')
+        relic: dict = await get_git_data(name=name, data_folder='relics', data_type='json')
 
         em.description = relic['description']
 
@@ -23,9 +23,9 @@ class RelicView(discord.ui.View):
         await interaction.response.defer()
         
         em = interaction.message.embeds[0]
-        name = em.title.replace("'", '').replace('[CN]', '').split()[:-1]
+        name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
 
-        relic = await get_data(name=' '.join(name), data='relics', src='json')
+        relic: dict = await get_git_data(name=name, data_folder='relics', data_type='json')
 
         em.description = ''
 

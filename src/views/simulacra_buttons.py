@@ -1,13 +1,16 @@
 import discord
 
 from src.config import emojis_1, base_url_dict
-from src.utils import get_data
+from src.utils import get_git_data, get_image
 
 
 async def home_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
+    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
 
-    simulacra = await get_data(name=em.title, data='simulacra', src='json')
+    simulacra: dict = await get_git_data(name=name, data_folder='simulacra', data_type='json')
+    thumb_url = await get_image(name=(simulacra['name'], simulacra['cnName']), data='simulacra')
+
     skin_url = f"[Skin Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
     
     em.description=(f"CN Name: {simulacra['cnName'].capitalize()}\n"
@@ -19,7 +22,6 @@ async def home_button_func(interaction: discord.Interaction):
 
                     f"{skin_url}" )
     
-    thumb_url = await get_data(name=(simulacra['name'], simulacra['cnName']), data='simulacra', src='image')
     if thumb_url:
         em.set_thumbnail(url=thumb_url)
 
@@ -35,8 +37,9 @@ async def home_button_func(interaction: discord.Interaction):
 
 async def trait_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
+    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
 
-    simulacra = await get_data(name=em.title, data='simulacra', src='json')
+    simulacra: dict = await get_git_data(name=name, data_folder='simulacra', data_type='json')
 
     em.description = ''
     em.clear_fields()
@@ -48,15 +51,16 @@ async def trait_button_func(interaction: discord.Interaction):
 
 async def matrice_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
+    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
 
-    matrice = await get_data(name=em.title, data='matrices', src='json')
+    matrice = await get_git_data(name=name, data_folder='matrices', data_type='json')
+    thumb_url = await get_image(name=matrice['imgSrc'], data='matrices')
 
     em.clear_fields()
 
     for set_ in matrice['sets']:
         em.add_field(name=f'{set_["pieces"]}x', value=set_["description"], inline=False)
 
-    thumb_url = await get_data(name=matrice['imgSrc'], data='matrices', src='image')
     if thumb_url:
         em.set_thumbnail(url=thumb_url)
     
@@ -65,13 +69,14 @@ async def matrice_button_func(interaction: discord.Interaction):
 
 async def weapon_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
+    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
 
-    weapon = await get_data(name=em.title, data='weapons', src='json')
+    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
+    thumb_url = await get_image(name=weapon['imgSrc'], data='weapons')
 
     analysisVideo = f"[Analysis Video]({weapon['analysisVideoSrc']})" if 'analysisVideoSrc' in weapon else ''
     abilitiesVideo = f"[Abilities Video]({weapon['abilitiesVideoSrc']})" if 'abilitiesVideoSrc' in weapon else ''
 
-    thumb_url = await get_data(name=weapon['imgSrc'], data='weapons', src='image')
     if thumb_url:
         em.set_thumbnail(url=thumb_url)
 
@@ -97,8 +102,9 @@ async def weapon_button_func(interaction: discord.Interaction):
 
 async def advanc_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
+    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
 
-    weapon = await get_data(name=em.title, data='weapons', src='json')
+    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
 
     em.clear_fields()
 
@@ -111,8 +117,9 @@ async def advanc_button_func(interaction: discord.Interaction):
 
 async def meta_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
+    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
 
-    weapon = await get_data(name=em.title, data='weapons', src='json')
+    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
 
     em.clear_fields()
 
@@ -139,8 +146,9 @@ async def meta_button_func(interaction: discord.Interaction):
 
 async def abilities_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
+    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
 
-    weapon = await get_data(name=em.title, data='weapons', src='json')
+    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
 
     em.clear_fields()
 
@@ -156,8 +164,9 @@ async def abilities_button_func(interaction: discord.Interaction):
 
 async def discharge_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
+    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
 
-    weapon = await get_data(name=em.title, data='weapons', src='json')
+    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
 
     em.clear_fields()
 
@@ -173,8 +182,9 @@ async def discharge_button_func(interaction: discord.Interaction):
 
 async def weapon_normal_attack_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
+    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
 
-    weapon = await get_data(name=em.title, data='weapons', src='json')
+    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
 
     em.clear_fields()
 
@@ -198,8 +208,9 @@ async def weapon_normal_attack_button_func(interaction: discord.Interaction):
 
 async def weapon_jump_attack_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
+    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
 
-    weapon = await get_data(name=em.title, data='weapons', src='json')
+    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
 
     em.clear_fields()
 
@@ -223,8 +234,9 @@ async def weapon_jump_attack_button_func(interaction: discord.Interaction):
 
 async def weapon_dodge_attack_button_func(interaction: discord.Interaction):
     em = interaction.message.embeds[0]
+    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
 
-    weapon = await get_data(name=em.title, data='weapons', src='json')
+    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
 
     em.clear_fields()
 
