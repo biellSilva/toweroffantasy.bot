@@ -29,27 +29,9 @@ emojis_1 = {
     'altered': '<:altered:1097910892504567829>'
 }
 
-
-## NAMES
-matrices_names = ['Alyss', 'Annabella', 'Lin', 'Bai Ling', 'Baiyuekui', 'Claudia', 'Cobalt-B', 
-                  'Cocoritter', 'Crow', 'Echo', 'Ene', 'Fenrir', 'Fiona', 'Frigg', 'Garnett', 
-                  'Gnonno', 'Hilda', 'Huma', 'Icarus', 'KING', 'Lan', 'Lyra', 'Marc', 'Meryl', 
-                  'Nemesis', 'Pepper', 'Rubilia', 'Ruby', 'Saki Fuwa', 'Samir', 'Shiro', 'Tian Lang', 
-                  'Tsubasa', 'Umi', 'Yulan', 'Zero', 'Apophis', 'Barbarossa', 'Frost Bot', 
-                  'Functional Dash','Haboela', 'Obstacle Removal', 'Plunder', 'Robarg', 'Scylla', 
-                  'Self Explosive', 'Sobek', 'Standard Operation','Wandering Aberrant', 'Wind Blade']
-
-simulacras_names = ['Alyss', 'Annabella', 'Lin', 'Bai Ling', 'Baiyuekui', 'Claudia', 'Cobalt-B', 
-                    'Cocoritter', 'Crow', 'Echo', 'Ene', 'Fenrir', 'Fiona', 'Frigg', 'Garnett', 
-                    'Gnonno', 'Hilda', 'Huma', 'Icarus', 'KING', 'Lan', 'Lyra', 'Marc', 'Meryl', 
-                    'Nemesis', 'Pepper', 'Rubilia', 'Ruby', 'Saki Fuwa', 'Samir', 'Shiro', 'Tian Lang', 
-                    'Tsubasa', 'Umi', 'Yulan', 'Zero']
-
-relics_names = ['Alternate Destiny', 'Booster Shot','Chosen Dice', 'Colossus Arm', 'Confinement',
-                'Couant', 'Cybernetic Arm', 'Drone', 'Hologram Projector', 'Hoverboard', 'Hovering Cannon',
-                'Jetboard', 'Jetpack', 'Lava Bomb', 'Magnetic Pulse', 'Magnetic Storm', 'Mini Pelican',
-                'Missile Barrage', "Oceans Heart", 'Omnium Handcannon', 'Omnium Shield', 'Quantum Cloak', 'Spacetime Rift',
-                'Strange Cube', 'Type II Couant', 'Type V Armor']
+## GUILD
+bot_guild = 1000974290801410138
+feedback_category = 1117793661141393508
 
 
 ## URL
