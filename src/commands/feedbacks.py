@@ -71,14 +71,13 @@ class Feedback(commands.Cog):
         except TimeoutError:
             return await dm_channel.send('timeout expired, submission canceled')
         
-
         bot_guild = self.bot.get_guild(bot_guild)
         feedback_category = bot_guild.get_channel(feedback_category)
         feedback_channel = await feedback_category.create_text_channel(name=response.author, reason='feedback channel')
 
         files_url = '\n'.join([file.url for file in feedback.attachments])
 
-        await feedback_channel.send(content=files_url, embed=em_res)
+        await feedback_channel.send(content=files_url if files_url else None, embed=em_res)
         await response.add_reaction('✅')
 
         
