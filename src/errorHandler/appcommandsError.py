@@ -45,6 +45,9 @@ class AppErrorHandler(commands.Cog):
         if isinstance(err, app_commands.CommandInvokeError):
             err = err.original
 
+        if isinstance(err, app_commands.CommandNotFound):
+            return
+
         if isinstance(err, app_commands.MissingPermissions):
             em.description='Missing permission' + '\n'.join(err.args)
 
@@ -58,21 +61,23 @@ class AppErrorHandler(commands.Cog):
             em.description = 'Couldn\'t find'
 
         if isinstance(err, app_commands.CommandOnCooldown):
-            em.description = (f'Command on cooldown\n' 
-                              f'<t:{int(time() + err.retry_after)}:R>')
+            em.description = f'Command on cooldown\n<t:{int(time() + err.retry_after)}:R>' 
+
+        if isinstance(err, NotImplementedError):
+            em.description = f'Not implemented yet'
+
 
         if em.description != '' and interaction.response.is_done():
             await interaction.edit_original_response(embed=em)
         elif em.description != '' and not interaction.response.is_done():
             await interaction.response.send_message(embed=em, ephemeral=True)
-
         else:
-            print(file=stderr)
-            print_exception(type(err), err, err.__traceback__, file=stderr)
-
             txt_err = ''.join(traceback.format_exception(type(err), err, err.__traceback__))
-
             await self.bot.application.owner.send(f'```{txt_err}```')
+            
+
+        print(file=stderr)
+        print_exception(type(err), err, err.__traceback__, file=stderr)
 
 
 async def setup(bot):
