@@ -40,6 +40,8 @@ Special thanks to [toweroffantasy.info](https://toweroffantasy.info) who accepte
 | `/simulacras` | simulacra, trait, matrice, weapon, advancements, skills, weapon and matrices combination information |
 | `/matrices` | matrices information |
 | `/relics` | relics information |
+| `/help` | some useful information |
+| `/feedback` | used to report bugs, give feedback, etc. |
 
 ### How to block/allow it to respond in certains channels
 bot needs permission to **view**, **send message**, **files**, **links** and **external emoji** in the channel to work properly, if you want to *block* or *allow* a specific channel, use the **integrations panel** to modify where the command will be visible
