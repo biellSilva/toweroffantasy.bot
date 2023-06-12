@@ -16,7 +16,7 @@ class Dumbot(commands.Bot):
                          strip_after_prefix = True,
                          help_command = None)
         
-        self.maintenance = True
+        self.maintenance = False
 
     async def on_ready(self):
         print(f'{"-"*20}\n'
