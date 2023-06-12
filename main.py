@@ -15,7 +15,8 @@ class Dumbot(commands.Bot):
                          case_insensitive = True, 
                          strip_after_prefix = True,
                          help_command = None)
-    
+        
+        self.maintenance = True
 
     async def on_ready(self):
         print(f'{"-"*20}\n'
@@ -26,6 +27,7 @@ class Dumbot(commands.Bot):
 
     async def setup_hook(self):
         self.task = self.loop.create_task(self.wait_until_ready_tasks())
+        await get_git_data(sync=True)
 
         for folder in os.listdir('./src'):
             if not folder.endswith('.py') and folder.lower() not in ('views'):
@@ -37,11 +39,21 @@ class Dumbot(commands.Bot):
 
     async def wait_until_ready_tasks(self):
         await self.wait_until_ready()
-        await self.change_presence(activity=discord.Activity(
-                    type=discord.ActivityType.listening,
-                    name='/help')
-                    )
-        await get_git_data(sync=True)
+
+        if self.maintenance:
+            await self.change_presence(activity=discord.Activity(
+                        type=discord.ActivityType.listening,
+                        name='MAINTENANCE'),
+                        status=discord.Status.dnd
+                        )
+        else:
+            await self.change_presence(activity=discord.Activity(
+                        type=discord.ActivityType.listening,
+                        name='/help'),
+                        status=discord.Status.online
+                        )
+            
+        
 
 
 bot = Dumbot()
