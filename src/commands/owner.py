@@ -4,7 +4,7 @@ from discord.ext import commands
 from typing import Optional
 
 from src.config import no_bar
-from src.utils import get_ratelimit
+from src.utils import get_ratelimit, data_base
 
 
 class Owner(commands.Cog):
@@ -37,19 +37,25 @@ class Owner(commands.Cog):
             em = discord.Embed(color=no_bar,
                                title=f'{self.bot.user}',
                                description=f'Status: **{self.bot.status}** \n'
-                                           f'Latency: **{round(self.bot.latency * 1000)}ms** \n\n'
-                                           f'**Git:**\n'
-                                           f'> Limit: *{git_api.get("limit")}*\n'
-                                           f'> Remain: *{git_api.get("remaining")}*\n'
-                                           f'> Used: *{git_api.get("used")}*\n'
-                                           f'> Reset: <t:{git_api.get("reset")}:>\n')
+                                           f'Latency: **{round(self.bot.latency * 1000)}ms**')
+            
+            em.add_field(name='Git Status', value=(f'> Limit: *{git_api.get("limit")}*\n'
+                                                   f'> Remain: *{git_api.get("remaining")}*\n'
+                                                   f'> Used: *{git_api.get("used")}*\n'
+                                                   f'> Reset: <t:{git_api.get("reset")}:R>\n'), inline=False)
             
             # for future communication if needed
             x = ''
             for guild in self.bot.guilds:
-                x += f'{guild.name} - {guild.owner}\n'
+                x += f'> **{guild.name}:** *{guild.owner}*\n'
                 
-            em.add_field(name='Guilds', value=x)
+            em.add_field(name=f'{len(self.bot.guilds)} Guilds', value=x, inline=False)
+
+            x = ''
+            for data_folder, data_list in data_base.items():
+                x += f'> {data_folder.title()}: {len(data_list)} itens\n' 
+
+            em.add_field(name='Data', value=x, inline=False)
 
             await ctx.send(embed=em)
 
