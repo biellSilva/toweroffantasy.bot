@@ -73,12 +73,14 @@ class AppErrorHandler(commands.Cog):
             await interaction.response.send_message(embed=em, ephemeral=True)
         else:
             txt_err = ''.join(traceback.format_exception(type(err), err, err.__traceback__))
+            txt_err = f'```{txt_err}```'
             if len(txt_err) < 2000:
-                await self.bot.application.owner.send(f'```{txt_err}```')
+                await self.bot.application.owner.send(txt_err)
+            else:
+                await self.bot.application.owner.send(f'```Error\n{err}```')
 
-
-        print(file=stderr)
-        print_exception(type(err), err, err.__traceback__, file=stderr)
+            print(file=stderr)
+            print_exception(type(err), err, err.__traceback__, file=stderr)
 
 
 async def setup(bot):
