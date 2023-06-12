@@ -47,13 +47,13 @@ class Owner(commands.Cog):
             # for future communication if needed
             x = ''
             for guild in self.bot.guilds:
-                x += f'> **{guild.name}:** *{guild.owner}*\n'
+                x += f'> {guild.name}   *{guild.owner}*\n'
                 
             em.add_field(name=f'{len(self.bot.guilds)} Guilds', value=x, inline=False)
 
             x = ''
             for data_folder, data_list in data_base.items():
-                x += f'> {data_folder.title()}: {len(data_list)} itens\n' 
+                x += f'> {data_folder.title()}: *{len(data_list)} itens*\n' 
 
             em.add_field(name='Data', value=x, inline=False)
 
