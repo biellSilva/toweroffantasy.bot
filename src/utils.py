@@ -55,8 +55,8 @@ async def get_git_data(
 
     if sync or len(data_base) == 0:
         async with aiohttp.ClientSession(base_url='https://api.github.com', headers=headers) as cs:
+            print('starting to sync')
             for folder in ['simulacra', 'matrices', 'weapons', 'relics']:
-                print('starting to sync')
                 async with cs.get(f'/repos/whotookzakum/toweroffantasy.info/contents/src/lib/data/{folder}') as res:
                     if res.status == 200:
                         dict_data = json.loads(s=await res.read())
@@ -76,24 +76,24 @@ async def get_git_data(
             async with aiohttp.ClientSession() as cs:
                 for data in data_base[data_folder]:
                     data : dict
+                    if name.replace(' ', '-').replace("'", '').lower() in data:
+                        for i_name, url in data.items():
+                            if name.replace(' ', '-').replace("'", '').lower() == i_name:
+                                async with cs.get(url) as res:
+                                    if res.status == 200:
+                                        return json.loads(s=await res.read())
+                                    else:
+                                        raise aiohttp.ClientConnectionError(res.status, res.url)
                     
-                    for i_name, url in data.items():
-                        if name.replace(' ', '-').replace("'", '').lower() == i_name:
-                            async with cs.get(url) as res:
-                                if res.status == 200:
-                                    return json.loads(s=await res.read())
-                                else:
-                                    raise aiohttp.ClientConnectionError(res.status, res.url).add_note('File not found')
-                
-                    for i_name, url in data.items():
-                        if name.replace(' ', '-').replace("'", '').lower() in i_name:
-                            async with cs.get(url) as res:
-                                if res.status == 200:
-                                    return json.loads(s=await res.read())
-                                else:
-                                    raise aiohttp.ClientConnectionError(res.status, res.url).add_note('File not found')
+                        for i_name, url in data.items():
+                            if name.replace(' ', '-').replace("'", '').lower() in i_name:
+                                async with cs.get(url) as res:
+                                    if res.status == 200:
+                                        return json.loads(s=await res.read())
+                                    else:
+                                        raise aiohttp.ClientConnectionError(res.status, res.url)
 
-                raise NameError(name, data_folder).add_note(f'Error trying to get {name} in {data_folder}')
+                    raise NameError()
         
 
         if data_type == 'names':

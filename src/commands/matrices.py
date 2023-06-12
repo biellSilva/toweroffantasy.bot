@@ -24,7 +24,6 @@ class Matrices(commands.Cog):
                                              attach_files = True)
     @app_commands.checks.cooldown(1, 30, key=lambda i: i.user.id)
     async def matrices(self, interaction: discord.Interaction, name: str):
-
         '''
         Matrices (aka Chips) are items that can be attached to weapon slots.
         '''
