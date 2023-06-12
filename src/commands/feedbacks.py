@@ -24,22 +24,20 @@ class Feedback(commands.Cog):
         Suggestions, bug reports, words of encouragement, feel free to tell me what you need.
         '''
         await interaction.response.defer(ephemeral=True)
-        
-        em = discord.Embed(color=no_bar)
 
         dm_channel = await interaction.user.create_dm()
 
-        em.description=f'Check your dm {dm_channel.jump_url}'
-        await interaction.edit_original_response(embed=em)
+        em_1 = discord.Embed(color=no_bar,
+                             description=f'Check your dm {dm_channel.jump_url}')
 
-        em.title = 'Feedback'
-        em.description = (f'A feedback can be suggestions, bug reports, words of encouragement, whatever you like, feel free to tell me what you need.\n'
+        em = discord.Embed(color=no_bar, title = 'Feedback',
+                           description = (f'A feedback can be suggestions, bug reports, words of encouragement, whatever you like, feel free to tell me what you need.\n'
                           f'Send a message with all you want, it can contains everything you can send in one message\n\n'
-                          f'This interaction has a `waiting cooldown` to be finished: <t:{int(time()+timeout)}:R>')
-        
+                          f'This interaction has a `waiting cooldown` to be finished: <t:{int(time()+timeout)}:R>'))
         em.set_thumbnail(url=self.bot.user.avatar.url)
         
         await dm_channel.send(embed=em)
+        await interaction.edit_original_response(embed=em_1)
 
         def check(message: discord.Message):
             return message.channel == dm_channel

@@ -66,6 +66,10 @@ class AppErrorHandler(commands.Cog):
         if isinstance(err, NotImplementedError):
             em.description = f'Not implemented yet'
 
+        if isinstance(err, discord.Forbidden):
+            if err.code == 50007:
+                em.description = 'I can\'t send DM\'s to you, try allowing to receive DM\'s from here'
+
 
         if em.description != '' and interaction.response.is_done():
             await interaction.edit_original_response(embed=em)
