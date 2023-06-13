@@ -74,26 +74,27 @@ async def get_git_data(
     if not sync:
         if data_type == 'json':
             async with aiohttp.ClientSession() as cs:
-                for data in data_base[data_folder]:
-                    data : dict
-                    if name.replace(' ', '-').replace("'", '').lower() in data:
-                        for i_name, url in data.items():
-                            if name.replace(' ', '-').replace("'", '').lower() == i_name:
-                                async with cs.get(url) as res:
-                                    if res.status == 200:
-                                        return json.loads(s=await res.read())
-                                    else:
-                                        raise aiohttp.ClientConnectionError(res.status, res.url)
-                    
-                        for i_name, url in data.items():
-                            if name.replace(' ', '-').replace("'", '').lower() in i_name:
-                                async with cs.get(url) as res:
-                                    if res.status == 200:
-                                        return json.loads(s=await res.read())
-                                    else:
-                                        raise aiohttp.ClientConnectionError(res.status, res.url)
+                for data in data_base.get(data_folder):                   
+                    for i_name, url in data.items():
+                        if name.replace(' ', '-').replace("'", '').lower() == i_name:
+                            async with cs.get(url) as res:
+                                if res.status == 200:
+                                    return json.loads(s=await res.read())
+                                else:
+                                    raise aiohttp.ClientConnectionError(res.status, res.url)
 
-                    raise NameError()
+
+                for data in data_base.get(data_folder):
+                    for i_name, url in data.items():
+                        if name.replace(' ', '-').replace("'", '').lower() in i_name:
+                            async with cs.get(url) as res:
+                                if res.status == 200:
+                                    return json.loads(s=await res.read())
+                                else:
+                                    raise aiohttp.ClientConnectionError(res.status, res.url)
+                                
+            raise NameError()
+
         
 
         if data_type == 'names':
