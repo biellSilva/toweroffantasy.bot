@@ -2,9 +2,11 @@ import discord
 
 from discord.ext import commands
 from discord import app_commands
+from time import time
 
 from src.config import no_bar
 from src.views.help_view import NamesView
+from src.utils import data_base, get_ratelimit, get_git_data, get_image
 
 
 class Help_command(commands.Cog):
@@ -31,19 +33,34 @@ class Help_command(commands.Cog):
 
         await interaction.response.defer()
 
-        em = discord.Embed(color=no_bar, 
-                           title=f'{self.bot.user.name} Help Panel',
-                           description='')
-        
-        tree = self.bot.tree
-        commands_ = await tree.fetch_commands()
-        
-        for command in commands_:
-            if command.name == 'help':
-                continue
+        git_api = await get_ratelimit()
 
-            em.description += (f"{command.mention}\n"
-                               f"*{command.description}*\n\n")
+        start_data_timer = time()
+        await get_git_data('yulan', 'weapons', data_type='json')
+        get_data_timer = time() - start_data_timer
+
+        start_image_timer = time()
+        await get_image(name=('Yulan', 'yulan'), data='simulacra')
+        get_image_timer = time() - start_image_timer
+
+        em = discord.Embed(color=no_bar,
+                            title=f'{self.bot.user.name} Help',
+                            description=f'Status: **{self.bot.status}** \n'
+                                        f'Latency: **{round(self.bot.latency * 1000)}ms**\n'
+                                        f'Data Latency: **{round(get_data_timer * 1000)}ms**\n'
+                                        f'Image Latency: **{round(get_image_timer * 1000)}ms**\n'
+                                        f'Working on **{len(self.bot.guilds)} Guilds**')
+        
+        em.add_field(name='Git Status', value=(f'> Limit: *{git_api.get("limit")}*\n'
+                                               f'> Remain: *{git_api.get("remaining")}*\n'
+                                               f'> Used: *{git_api.get("used")}*\n'
+                                               f'> Reset: <t:{git_api.get("reset")}:R>\n'), inline=False)
+
+        x = ''
+        for data_folder, data_list in data_base.items():
+            x += f'> {data_folder.title()}: *{len(data_list)} itens*\n' 
+
+        em.add_field(name='Data', value=x, inline=False)
 
         await interaction.edit_original_response(embed=em, view=NamesView())
     
