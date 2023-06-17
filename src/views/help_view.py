@@ -74,7 +74,7 @@ class NamesView(discord.ui.View):
         em.description = ''
         em.clear_fields()
 
-        for data_folder in ('simulacra', 'matrices', 'relics'):
+        for data_folder in ('simulacra', 'matrices', 'relics', 'smart-servants', 'mounts'):
             data_list = await get_git_data(data_folder=data_folder, data_type='names')
             em.add_field(name=data_folder.title(), value='> '+(', '.join(data_list)), inline=False)
 
