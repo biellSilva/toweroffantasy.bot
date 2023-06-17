@@ -3,9 +3,9 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from src.config import no_bar, base_url_dict, emojis_1
+from src.config import no_bar, emojis_1
 from src.utils import get_git_data, get_image
-from src.views.simulacra_views import MainView
+from src.views.servant_view import ServantView
 
 
 class Servants(commands.Cog):
@@ -46,7 +46,7 @@ class Servants(commands.Cog):
         if thumb_url:
             em.set_thumbnail(url=thumb_url)
 
-        await interaction.edit_original_response(embed=em, view=MainView())
+        await interaction.edit_original_response(embed=em, view=ServantView())
 
     
 async def setup(bot):
