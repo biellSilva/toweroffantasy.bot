@@ -12,16 +12,35 @@ data_base = {}
 '''
 exemple of `data_base` after been synced
 
+
+```py
 {
-    'matrices': [   {'alyss': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/matrices/alyss.json'},
-                    {'annabella': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/matrices/annabella.json'}],
-    'relics': [ {'alternate-destiny': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/relics/alternate-destiny.json'},
-                {'booster-shot': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/relics/booster-shot.json'}],
-    'simulacra': [  {'alyss': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/simulacra/alyss.json'},
-                    {'annabella': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/simulacra/annabella.json'}],
-    'weapons': [    {'alyss': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/weapons/alyss.json'},
-                    {'annabella': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/weapons/annabella.json'}]
+    'matrices': [
+        {'alyss': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/matrices/alyss.json'},
+        {'annabella': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/matrices/annabella.json'} ],
+
+    'relics': [
+        {'alternate-destiny': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/relics/alternate-destiny.json'},
+        {'booster-shot': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/relics/booster-shot.json'} ],
+
+    'simulacra': [
+        {'alyss': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/simulacra/alyss.json'},
+        {'annabella': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/simulacra/annabella.json'} ],
+
+    'weapons': [
+        {'alyss': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/weapons/alyss.json'},
+        {'annabella': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/weapons/annabella.json'} ],
+
+    'mounts' : [
+        {'2613': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/mounts/2613.json'},
+        {'aidan-knight': 'https://github.com/whotookzakum/toweroffantasy.info/blob/main/src/lib/data/mounts/aidan-knight.json'} ],
+
+    'smart-servants' : [
+        {'angel-of-nothingness': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/smart-servants/angel-of-nothingness.json'},
+        {'angela': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/smart-servants/angela.json'}
+    ]
 }
+```
 '''
 
 async def get_ratelimit() -> dict:
@@ -36,7 +55,7 @@ async def get_ratelimit() -> dict:
 
 async def get_git_data(
         name: Optional[str] = None, 
-        data_folder: Optional[Literal['simulacra', 'matrices', 'weapons', 'relics']] = None,
+        data_folder: Optional[Literal['simulacra', 'matrices', 'weapons', 'relics', 'smart-servants', 'mounts']] = None,
         data_type: Optional[Literal['json', 'names']] = 'json',
         sync: Optional[bool] = False
     ) -> Union[dict, list]:
@@ -55,8 +74,7 @@ async def get_git_data(
 
     if sync or len(data_base) == 0:
         async with aiohttp.ClientSession(base_url='https://api.github.com', headers=headers) as cs:
-            print('starting to sync')
-            for folder in ['simulacra', 'matrices', 'weapons', 'relics']:
+            for folder in ['simulacra', 'matrices', 'weapons', 'relics', 'smart-servants', 'mounts']:
                 async with cs.get(f'/repos/whotookzakum/toweroffantasy.info/contents/src/lib/data/{folder}') as res:
                     if res.status == 200:
                         dict_data = json.loads(s=await res.read())
@@ -69,8 +87,7 @@ async def get_git_data(
                             else:
                                 data_base[folder].append({str(data_file['name']).removesuffix('.json') : str(data_file['download_url'])})
 
-            print('ended syncing') 
-                            
+
     if not sync:
         if data_type == 'json':
             async with aiohttp.ClientSession() as cs:
@@ -109,7 +126,7 @@ async def get_git_data(
             return lista
 
 
-async def get_image(name: Union[str, Tuple], data: Literal['simulacra', 'weapons', 'matrices', 'relics']):
+async def get_image(name: Union[str, Tuple], data: Literal['simulacra', 'weapons', 'matrices', 'relics', 'smart-servants', 'mounts']):
 
     '''
     for `simulacra` and `weapons`, `name` need to be a tuple with Global Name and CN Name 

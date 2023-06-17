@@ -45,6 +45,8 @@ base_url_dict = {
     'matrices_image' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/Icon/yizhi/256',
     'relics_bigger' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/UI/Artifact/itemicon',
     'relics_lower' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/UI/Artifact/icon',
+    'smart-servants_image' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/UI/PetFight/icon',
+    'mounts_image' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/images/UI/Mount',
 
     'data_json' : 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/',
 }
