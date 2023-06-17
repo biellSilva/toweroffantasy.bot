@@ -43,9 +43,10 @@ class Mounts(commands.Cog):
         for i, part in enumerate(mount['parts']):
             source:str = part['source'].replace('<abbr title=\'China Exclusive\'></abbr>', '**[CN]**').replace('\n\n', '\n')
 
-            regex = re.match(pattern=r'[^)]*', string=source)
+            regex = re.match(pattern=r'/([A-Za-z]+(/[A-Za-z]+)+)', string=source)
+            # reload with \[.*\]\(/([A-Za-z]+(/[A-Za-z]+)+)\.[A-Za-z0-9]+\)
             if regex:
-                source.replace(regex.string, f'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/{regex}')
+                source = source.replace(regex.string, f'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/{regex.string}')
                 print(source)
 
             em.description += f'**Part {i+1}** \n{source}\n'
