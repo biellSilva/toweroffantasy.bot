@@ -37,7 +37,7 @@ class Servants(commands.Cog):
         thumb_url = await get_image(name=servant['imgSrc'], data='smart-servants')
 
         em = discord.Embed(color=no_bar, 
-                           title=f'{servant["name"]} {servant["rarity"]}' if 'chinaOnly' not in servant else f'{servant["name"]} {servant["rarity"]} [CN]',
+                           title=f'{servant["name"]}' if 'chinaOnly' not in servant else f'{servant["name"]} [CN]',
                            description=f"{emojis_1[servant['type']]} {emojis_1[servant['element']]}\n"
                                        f"Attack: **{servant['attack']}** \n"
                                        f"Crit: **{servant['crit']}** \n\n"
