@@ -28,9 +28,6 @@ class Servants(commands.Cog):
         Smart Servants are small robots that aid the player in combat.
         '''
 
-        if interaction.user != self.bot.application.owner:
-            raise NotImplementedError
-
         await interaction.response.defer()
 
         servant: dict = await get_git_data(name=name, data_folder='smart-servants', data_type='json')
