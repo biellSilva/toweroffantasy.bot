@@ -22,6 +22,7 @@ class ServantView(discord.ui.View):
 
         await interaction.message.edit(embeds=[em], attachments=[], view=ServantView())
 
+
     @discord.ui.button(custom_id='servant_advanc', label='Advancements', style=discord.ButtonStyle.grey)
     async def servant_advanc_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
@@ -39,8 +40,9 @@ class ServantView(discord.ui.View):
 
         await interaction.message.edit(embeds=[em], attachments=[], view=ServantView())
 
+
     @discord.ui.button(custom_id='servant_abilit', label='Abilities', style=discord.ButtonStyle.grey)
-    async def servant_advanc_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+    async def servant_abilit_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
         
         em = interaction.message.embeds[0]
