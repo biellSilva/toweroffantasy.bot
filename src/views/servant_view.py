@@ -18,7 +18,7 @@ class ServantView(discord.ui.View):
         em.clear_fields()
 
         for star, advanc in enumerate(servant['advancements']):
-            em.add_field(name=f'{star+1} ★', value=f'{advanc}')
+            em.add_field(name=f'{star+1} ★', value=f'{advanc}', inline=False)
 
         await interaction.message.edit(embeds=[em], attachments=[], view=ServantView())
 
@@ -35,7 +35,7 @@ class ServantView(discord.ui.View):
         em.clear_fields()
 
         for abilit in servant['abilities']:
-            em.add_field(name=abilit['name'], value=abilit['effect'])
+            em.add_field(name=abilit['name'], value=abilit['effect'], inline=False)
 
         await interaction.message.edit(embeds=[em], attachments=[], view=ServantView())
     
