@@ -35,7 +35,10 @@ class Mounts(commands.Cog):
 
         em = discord.Embed(color=no_bar, 
                            title=f'{mount["name"]}' if 'chinaOnly' not in mount else f'{mount["name"]} [CN]',
-                           description='')
+                           description='' if 'type' not in mount else f'Type: **{mount["type"]}**\n\n')
+
+        url_name = mount["name"].replace(' ', '-').lower()
+        em.url = f'https://toweroffantasy.info/mounts/{url_name}'
         
         for i, part in enumerate(mount['parts']):
             source:str = part['source']
@@ -44,9 +47,21 @@ class Mounts(commands.Cog):
             result = result.replace('[', '').replace(']', '').replace('<abbr title=\'China Exclusive\'></abbr>', '**[CN]**').replace('\n\n', '\n')
 
             em.description += f'**Part {i+1}** \n{result}\n'
+
             if "dropRate" in part: 
                 em.description += f"Drop rate {part['dropRate']}\n"
+
+            if 'guide' in part:
+                em.description += f'[Guide]({part["guide"]})\n'
+
+            if 'video' in part:
+                em.description += f'[Video Part]({part["video"]})'
+
             em.description += '\n'
+
+            
+        if 'videoSrc' in part:
+            em.description += f'\n[Video Preview]({part["videoSrc"]})'
 
         if thumb_url:
             em.set_thumbnail(url=thumb_url)
