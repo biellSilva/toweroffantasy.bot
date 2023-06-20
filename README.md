@@ -64,7 +64,7 @@ bot needs permission to **view**, **send message**, **files**, **links** and **e
 | June 09, 2023 | Added Attack Buttons | 
 | June 09, 2023 | Added Relics command | 
 | June 11, 2023 | Fully Automatic Syncronization with website data |
-| Jun 17, 2023 | Added Smart-Servants and Mounts command |
+| June 17, 2023 | Added Smart-Servants and Mounts command |
 
 
 ## Development checklist
