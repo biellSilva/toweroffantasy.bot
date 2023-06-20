@@ -40,6 +40,8 @@ Special thanks to [toweroffantasy.info](https://toweroffantasy.info) who accepte
 | `/simulacras` | simulacra, trait, matrice, weapon, advancements, skills, weapon and matrices combination information |
 | `/matrices` | matrices information |
 | `/relics` | relics information |
+| `/servants` | smart servants information | 
+| `/mounts` | mounts information |
 | `/help` | some useful information |
 | `/feedback` | used to report bugs, give feedback, etc. |
 
@@ -62,6 +64,7 @@ bot needs permission to **view**, **send message**, **files**, **links** and **e
 | June 09, 2023 | Added Attack Buttons | 
 | June 09, 2023 | Added Relics command | 
 | June 11, 2023 | Fully Automatic Syncronization with website data |
+| Jun 17, 2023 | Added Smart-Servants and Mounts command |
 
 
 ## Development checklist
@@ -73,7 +76,7 @@ bot needs permission to **view**, **send message**, **files**, **links** and **e
 - [x] Add Weapon Normal Attack
 - [x] Add Weapon Dodge Attack
 - [x] Add Relics
-- [ ] Add Smart Servants
-- [ ] Add Mounts
+- [x] Add Smart Servants
+- [x] Add Mounts
 - [ ] Add Foods
 
