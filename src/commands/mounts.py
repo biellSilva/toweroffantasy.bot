@@ -55,7 +55,7 @@ class Mounts(commands.Cog):
                 em.description += f'[Guide]({part["guide"]})\n'
 
             if 'video' in part:
-                em.description += f'[Video Part]({part["video"]})'
+                em.description += f'[Video Part]({part["video"]})\n'
 
             em.description += '\n'
 
