@@ -28,9 +28,6 @@ class Mounts(commands.Cog):
         Mounts are vehicles that help you traverse terrain more quickly.
         '''
 
-        if interaction.user != self.bot.application.owner:
-            raise NotImplementedError
-
         await interaction.response.defer()
 
         mount: dict = await get_git_data(name=name, data_folder='mounts', data_type='json')
@@ -41,19 +38,15 @@ class Mounts(commands.Cog):
                            description='')
         
         for i, part in enumerate(mount['parts']):
-            source:str = part['source'].replace('<abbr title=\'China Exclusive\'></abbr>', '**[CN]**').replace('\n\n', '\n')
+            source:str = part['source']
+            regex = r"\(/([A-Za-z]+(/[A-Za-z]+)+)\.[A-Za-z0-9]+\)"
+            result = re.sub(regex, '', source, 0, re.MULTILINE)
+            result = result.replace('[', '').replace(']', '').replace('<abbr title=\'China Exclusive\'></abbr>', '**[CN]**').replace('\n\n', '\n')
 
-            regex = re.match(pattern=r'/([A-Za-z]+(/[A-Za-z]+)+)', string=source)
-            # reload with \[.*\]\(/([A-Za-z]+(/[A-Za-z]+)+)\.[A-Za-z0-9]+\)
-            if regex:
-                source = source.replace(regex.string, f'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/static/{regex.string}')
-                print(source)
-
-            em.description += f'**Part {i+1}** \n{source}\n'
+            em.description += f'**Part {i+1}** \n{result}\n'
             if "dropRate" in part: 
                 em.description += f"Drop rate {part['dropRate']}\n"
             em.description += '\n'
-
 
         if thumb_url:
             em.set_thumbnail(url=thumb_url)
