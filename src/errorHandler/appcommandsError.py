@@ -59,10 +59,14 @@ class AppErrorHandler(commands.Cog):
             em.description='\n'.join(err.args)
             
         if isinstance(err, CouldNotFound):
-            em.description = f'Couldn\'t find anything related to **`{err.name}`** in **`{err.local}`**'
+            em.description = f'Couldn\'t find anything related to **{err.name}**'
+            print(f'Error when searching for {err.name} in {err.local}\n'
+                  f'User: {interaction.user}\n'
+                  f'Guild: {interaction.guild}\n'
+                 )
 
         if isinstance(err, app_commands.CommandOnCooldown):
-            em.description = (f'Command on cooldown **`30 seconds`**\n'
+            em.description = (f'Command on cooldown **`{int(err.cooldown.per)} seconds`**\n'
                               f'Try again <t:{int(time() + err.retry_after)}:R>')
 
         if isinstance(err, NotImplementedError):
@@ -89,5 +93,5 @@ class AppErrorHandler(commands.Cog):
             print_exception(type(err), err, err.__traceback__, file=stderr)
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(AppErrorHandler(bot))
