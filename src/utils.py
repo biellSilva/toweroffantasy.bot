@@ -171,11 +171,10 @@ async def get_image(name: Union[str, Tuple], data: Literal['simulacra', 'weapons
 
 
 class CouldNotFound(Exception):
-    
     '''
     Custom exception called when it coundn't find the requested item in the database
 
-    `return name, local`
+    takes and returns `name` and `local`
     '''
 
     def __init__(self, name: str, local: str):
