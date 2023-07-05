@@ -10,6 +10,7 @@ from time import time
 from typing import Union
 
 from src.config import no_bar
+from src.utils import CouldNotFound
 
 
 class AppErrorHandler(commands.Cog):
@@ -57,11 +58,12 @@ class AppErrorHandler(commands.Cog):
         if isinstance(err, app_commands.BotMissingPermissions):
             em.description='\n'.join(err.args)
             
-        if isinstance(err, NameError):
-            em.description = 'Couldn\'t find'
+        if isinstance(err, CouldNotFound):
+            em.description = f'Couldn\'t find anything related to **`{err.name}`** in **`{err.local}`**'
 
         if isinstance(err, app_commands.CommandOnCooldown):
-            em.description = f'Command on cooldown\n<t:{int(time() + err.retry_after)}:R>' 
+            em.description = (f'Command on cooldown **`30 seconds`**\n'
+                              f'Try again <t:{int(time() + err.retry_after)}:R>')
 
         if isinstance(err, NotImplementedError):
             em.description = f'Not implemented yet'

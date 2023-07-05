@@ -2,8 +2,6 @@ import aiohttp
 import json
 
 from typing import Literal, Optional, Union, Tuple
-from pprint import pprint
-from time import time
 
 from src.config import base_url_dict
 
@@ -114,7 +112,7 @@ async def get_git_data(
                                 else:
                                     raise aiohttp.ClientConnectionError(res.status, res.url)
                                 
-            raise NameError()
+            raise CouldNotFound(name=name, local=data_folder)
 
         
 
@@ -170,10 +168,18 @@ async def get_image(name: Union[str, Tuple], data: Literal['simulacra', 'weapons
 
 
 
-# ---------- TEST PURPOSES ---------- #
-async def test_get_git_data():
-    x = await get_git_data(data_folder='simulacra', data_type='names')
+
+
+class CouldNotFound(Exception):
     
-    pprint(x, indent=2)
-    pprint(await get_ratelimit(), indent=2)
-# ---------- TEST PURPOSES ---------- #
+    '''
+    Custom exception called when it coundn't find the requested item in the database
+
+    `return name, local`
+    '''
+
+    def __init__(self, name: str, local: str):
+        self.name = name
+        self.local = local
+        super().__init__(self.name, self.local)
+
