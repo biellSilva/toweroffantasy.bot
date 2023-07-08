@@ -70,8 +70,8 @@ async def get_git_data(
     }
 
     if sync or len(data_base) == 0:
-        if sync:
-            data_base = {}
+        if sync == True:
+            data_base.clear()
 
         async with aiohttp.ClientSession(base_url='https://api.github.com', headers=headers) as cs:
             for folder in ['simulacra', 'matrices', 'weapons', 'relics', 'smart-servants', 'mounts']:
