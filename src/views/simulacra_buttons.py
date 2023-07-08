@@ -194,7 +194,7 @@ async def weapon_normal_attack_button_func(interaction: discord.Interaction):
         if 'normal' in abilitie['type']:
             if 'Jump' not in abilitie['input']:
                 
-                input_ = '' if 'input' not in abilitie or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input']).title()} ]*"
+                input_ = '' if 'input' not in abilitie or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input']).capitalize()} ]*"
 
                 em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
                                    f"{abilitie['description']}\n")
