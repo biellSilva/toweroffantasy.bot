@@ -89,9 +89,6 @@ async def get_git_data(
     if not sync:
         if data_type == 'json':
 
-            if name.lower() in ('liu', 'liuhuo', 'liu huo'):
-                name = 'garnett'
-
             async with aiohttp.ClientSession() as cs:
                 for data in data_base.get(data_folder):
                     for i_name, url in data.items():
