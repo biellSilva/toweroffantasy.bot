@@ -35,8 +35,7 @@ exemple of `data_base` after been synced
 
     'smart-servants' : [
         {'angel-of-nothingness': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/smart-servants/angel-of-nothingness.json'},
-        {'angela': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/smart-servants/angela.json'}
-    ]
+        {'angela': 'https://raw.githubusercontent.com/whotookzakum/toweroffantasy.info/main/src/lib/data/smart-servants/angela.json'} ]
 }
 ```
 '''
@@ -71,6 +70,9 @@ async def get_git_data(
     }
 
     if sync or len(data_base) == 0:
+        if sync:
+            data_base = {}
+
         async with aiohttp.ClientSession(base_url='https://api.github.com', headers=headers) as cs:
             for folder in ['simulacra', 'matrices', 'weapons', 'relics', 'smart-servants', 'mounts']:
                 async with cs.get(f'/repos/whotookzakum/toweroffantasy.info/contents/src/lib/data/{folder}') as res:

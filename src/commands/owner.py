@@ -4,7 +4,7 @@ from discord.ext import commands
 from typing import Optional
 
 from src.config import no_bar
-from src.utils import get_ratelimit, data_base
+from src.utils import get_ratelimit, data_base, get_git_data
 
 
 class Owner(commands.Cog):
@@ -18,14 +18,32 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def sync(self, ctx: commands.Context, spec: Optional[str]):
         async with ctx.typing():
-            if spec:
-                ctx.bot.tree.clear_commands(guild=ctx.guild)
-                await ctx.bot.tree.sync(guild=ctx.guild)
-                sync = []
-            else:
-                sync = await ctx.bot.tree.sync()
+            if spec == 'clear':
+                ctx.bot.tree.clear_commands()
+                await ctx.bot.tree.sync()
+                await ctx.reply('commands cleared')
+
+            elif spec == 'data':
                 
-            await ctx.reply(f'{len(sync)} commands synced')
+                git_api = await get_ratelimit()
+                if git_api.get("remaining") < 10:
+                    return await ctx.reply(f'remaining git api requests: {git_api.get("remaining")} \n reset: <t:{git_api.get("reset")}:R>')
+                
+                await get_git_data(sync=True)
+                
+                x = ''
+                for data_folder, data_list in data_base.items():
+                    x += f'> {data_folder.title()}: *{len(data_list)} itens*\n' 
+
+                em = discord.Embed(color=discord.Colour.dark_embed())
+                em.add_field(name='Data', value=x, inline=False)
+
+                await ctx.reply(embed=em)
+
+            else:
+                sync = await ctx.bot.tree.sync() 
+                await ctx.reply(f'{len(sync)} commands synced')
+
 
     @commands.command(name='check')
     @commands.is_owner()
