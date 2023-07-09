@@ -21,7 +21,7 @@ class Simulacra(commands.Cog):
                                              embed_links = True, 
                                              send_messages_in_threads = True, 
                                              attach_files = True)
-    @app_commands.checks.cooldown(1, 30, key=lambda i: i.user.id)
+    @app_commands.checks.cooldown(1, 5, key=lambda i: i.user.id)
     async def simulacra(self, interaction: discord.Interaction, name: str):
 
         '''
@@ -34,18 +34,19 @@ class Simulacra(commands.Cog):
         thumb_url = await get_image(name=(simulacra['name'], simulacra['cnName']), data='simulacra')
 
         skin_url = f"[Skin Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
+        china = '' if 'chinaOnly' not in simulacra else '[CN]'
 
         em = discord.Embed(color=no_bar, 
-                           title=f'{simulacra["name"]} {simulacra["rarity"]}' if 'chinaOnly' not in simulacra else f'{simulacra["name"]} {simulacra["rarity"]} [CN]',
+                           title=f'{simulacra["name"]} {simulacra["rarity"]} {china}',
                            description= f"CN Name: {simulacra['cnName'].capitalize()}\n"
-
                                         f"Gender: {simulacra['gender']}\n"
                                         f"Height: {simulacra['height']}\n"
                                         f"Birthday: {simulacra['birthday']}\n"
                                         f"Birthplace: {simulacra['birthplace']}\n"
-                                        f"Horoscope: {simulacra['horoscope']}\n\n"
-
-                                        f"{skin_url}" )
+                                        f"Horoscope: {simulacra['horoscope']}")
+        
+        if skin_url:
+            em.description += f'\n\n{skin_url}'
         
         em.url = base_url_dict['simulacra_home'] + simulacra['name'].replace(' ', '-').lower()
 
