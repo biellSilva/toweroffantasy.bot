@@ -192,13 +192,20 @@ async def weapon_normal_attack_button_func(interaction: discord.Interaction):
 
     for abilitie in weapon['abilities']:
         if 'normal' in abilitie['type']:
-            if 'Jump' not in abilitie['input']:
-                
-                input_ = '' if 'input' not in abilitie or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input']).capitalize()} ]*"
+            if 'input' in abilitie:
+                if 'Jump' not in abilitie['input']:
+                    input_ = '' if 'input' not in abilitie or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input'])} ]*"
 
-                em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
-                                   f"{abilitie['description']}\n")
-                
+                    em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
+                                    f"{abilitie['description']}\n")
+                    
+                    if 'breakdown' in abilitie:
+                        em.description+= '**Breakdown:**\n'
+                        em.description+= '\n'.join(abilitie['breakdown'])
+            else:
+                em.description += (f"\n\n**{abilitie['name']}** \n"
+                                    f"{abilitie['description']}\n")
+                    
                 if 'breakdown' in abilitie:
                     em.description+= '**Breakdown:**\n'
                     em.description+= '\n'.join(abilitie['breakdown'])
@@ -218,17 +225,17 @@ async def weapon_jump_attack_button_func(interaction: discord.Interaction):
 
     for abilitie in weapon['abilities']:
         if 'normal' in abilitie['type']:
-            if 'Jump' in abilitie['input']:
+            if 'input' in abilitie:
+                if 'Jump' in abilitie['input']:
 
-                input_ = '' if 'input' not in abilitie or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input']).title()} ]*"
+                    input_ = '' if 'input' not in abilitie or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input']).title()} ]*"
 
-                em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
-                                f"{abilitie['description']}\n")
-                
-                if 'breakdown' in abilitie:
-                    em.description+= '**Breakdown:**\n'
-                    em.description+= '\n'.join(abilitie['breakdown'])
-
+                    em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
+                                    f"{abilitie['description']}\n")
+                    
+                    if 'breakdown' in abilitie:
+                        em.description+= '**Breakdown:**\n'
+                        em.description+= '\n'.join(abilitie['breakdown'])
     return em
 
 
