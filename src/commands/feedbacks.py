@@ -18,7 +18,6 @@ class Feedback(commands.Cog):
         self.bot = bot
 
     @app_commands.command(name='feedback')
-    @app_commands.checks.cooldown(1, 60, key=lambda i: i.user.id)
     async def feedbacks(self, interaction: discord.Interaction):
         '''
         Suggestions, bug reports, words of encouragement, feel free to tell me what you need.
