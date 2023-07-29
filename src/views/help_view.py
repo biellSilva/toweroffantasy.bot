@@ -17,11 +17,11 @@ class NamesView(discord.ui.View):
         git_api = await get_ratelimit()
 
         start_data_timer = time()
-        await get_git_data('yulan', 'weapons', data_type='json')
+        await get_git_data('yu lan', 'weapons', data_type='json')
         get_data_timer = time() - start_data_timer
 
         start_image_timer = time()
-        await get_image(name=('Yulan', 'yulan'), data='simulacra')
+        await get_image(name=('Yu lan', 'yulan'), data='simulacra')
         get_image_timer = time() - start_image_timer
 
         em = discord.Embed(color=no_bar,
