@@ -79,14 +79,13 @@ async def get_git_data(
                     if res.status == 200:
                         dict_data = json.loads(s=await res.read())
                         data_base[folder] = []
-                        print(f' - syncing {folder}')
-                        
                         for data_file in dict_data:
                             if 'booster-shot' in data_file['name']:
                                 data_base[folder].append({'overdrive-shot' : str(data_file['download_url'])})
                             else:
                                 data_base[folder].append({str(data_file['name']).removesuffix('.json') : str(data_file['download_url'])})
 
+                        print(f' - synced {folder} | {len(data_base[folder])} itens')
 
     if not sync:
         if data_type == 'json':
