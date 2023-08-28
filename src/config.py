@@ -26,7 +26,8 @@ emojis_1 = {
     'ice' : '<:frost:1097910888280895730>',
     'volt' : '<:volt:1097910883155456044>',
     'physical' : '<:physic:1097910885529432164>',
-    'altered': '<:altered:1097910892504567829>'
+    'altered': '<:altered:1097910892504567829>',
+    'physical-flame': '<:phisycal_flame:1145748266055643216>'
 }
 
 ## GUILD
