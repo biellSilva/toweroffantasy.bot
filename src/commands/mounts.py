@@ -21,7 +21,6 @@ class Mounts(commands.Cog):
                                              embed_links = True, 
                                              send_messages_in_threads = True, 
                                              attach_files = True)
-    @app_commands.checks.cooldown(1, 5, key=lambda i: i.user.id)
     async def mounts(self, interaction: discord.Interaction, name: str):
 
         '''
