@@ -45,7 +45,7 @@ class Servants(commands.Cog):
 
     @servant.autocomplete(name='name')
     async def servant_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
-        servants_: list[SmartServant] = await get_names('servant')
+        servants_: list[SmartServant] = await get_names('smart-servants')
         return [
             app_commands.Choice(
                 name=servant.name,
