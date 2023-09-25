@@ -9,8 +9,8 @@ from sys import stderr
 from time import time
 from typing import Union
 
-from src.config import no_bar
 from src.utils import CouldNotFound
+from src.errorHandler.customErrors import DataNotFound
 
 
 class AppErrorHandler(commands.Cog):
@@ -40,8 +40,7 @@ class AppErrorHandler(commands.Cog):
     @commands.Cog.listener()
     async def on_app_command_error(self, interaction: discord.Interaction, err):
 
-        em = discord.Embed(color=no_bar,
-                        description='')
+        em = discord.Embed(color=discord.Colour.dark_red())
         
         if isinstance(err, app_commands.CommandInvokeError):
             err = err.original
@@ -49,37 +48,39 @@ class AppErrorHandler(commands.Cog):
         if isinstance(err, app_commands.CommandNotFound):
             return
 
-        if isinstance(err, app_commands.MissingPermissions):
+        elif isinstance(err, app_commands.MissingPermissions):
             em.description='Missing permission' + '\n'.join(err.args)
 
-        if isinstance(err, app_commands.MissingRole):
+        elif isinstance(err, app_commands.MissingRole):
             em.description=f'Missing role {interaction.guild.get_role(int(err.missing_role)).mention}'
         
-        if isinstance(err, app_commands.BotMissingPermissions):
+        elif isinstance(err, app_commands.BotMissingPermissions):
             em.description='\n'.join(err.args)
+
+        elif isinstance(err, DataNotFound):
+            em.description = err.message
             
-        if isinstance(err, CouldNotFound):
+        elif isinstance(err, CouldNotFound):
             em.description = f'Couldn\'t find anything related to **{err.name}**'
             print(f'Error when searching for {err.name} in {err.local}\n'
                   f'User: {interaction.user}\n'
-                  f'Guild: {interaction.guild}\n'
-                 )
+                  f'Guild: {interaction.guild}\n')
 
-        if isinstance(err, app_commands.CommandOnCooldown):
+        elif isinstance(err, app_commands.CommandOnCooldown):
             em.description = (f'Command on cooldown **`{int(err.cooldown.per)} seconds`**\n'
                               f'Try again <t:{int(time() + err.retry_after)}:R>')
 
-        if isinstance(err, NotImplementedError):
+        elif isinstance(err, NotImplementedError):
             em.description = f'Not implemented yet'
 
-        if isinstance(err, discord.Forbidden):
+        elif isinstance(err, discord.Forbidden):
             if err.code == 50007:
                 em.description = 'I can\'t send DM\'s to you, try allowing to receive DM\'s from here'
 
 
-        if em.description != '' and interaction.response.is_done():
+        if em.description and interaction.response.is_done():
             await interaction.edit_original_response(embed=em)
-        elif em.description != '' and not interaction.response.is_done():
+        elif em.description and not interaction.response.is_done():
             await interaction.response.send_message(embed=em, ephemeral=True)
         else:
             txt_err = ''.join(traceback.format_exception(type(err), err, err.__traceback__))
