@@ -4,8 +4,9 @@ from discord.ext import commands
 from discord import app_commands
 
 from src.config import base_url_dict
-from src.utils import get_git_data, get_image
 from src.views.relic_view import RelicView
+from src.controller.get_data import get_relic, get_names
+from src.models import Relic
 
 
 class Relics(commands.Cog):
@@ -31,24 +32,31 @@ class Relics(commands.Cog):
 
         await interaction.response.defer()
 
-        relic: dict = await get_git_data(name=name, data_folder='relics', data_type='json')
-        thumb_url = await get_image(name=relic['imgSrc'], data='relics')
+        relic = await get_relic(name=name)
 
-        CN_tag = '' if 'chinaOnly' not in relic or not relic['chinaOnly'] else '[CN]'
+        CN_tag = '' if not relic.chinaOnly else '[CN]'
 
         em = discord.Embed(color=discord.Colour.dark_embed(), 
-                           title=f'{relic["name"]} {relic["rarity"]} {CN_tag}',
-                           description=relic['description'])
+                           title=f'{relic.name} {relic.rarity} {CN_tag}',
+                           description=relic.description)
         
-        if 'overdrive' in relic['name'].lower():
+        em.set_thumbnail(url=relic.imgSrc)
+        
+        if 'overdrive' in relic.name.lower():
             em.url = base_url_dict['relics_home'] + 'booster-shot'
         else:
-            em.url = base_url_dict['relics_home'] + relic['name'].replace(' ', '-').lower()
+            em.url = base_url_dict['relics_home'] + relic.name.replace(' ', '-').lower()
         
-        if thumb_url:
-            em.set_thumbnail(url=thumb_url)
-
-        await interaction.edit_original_response(embed=em, view=RelicView())
+        await interaction.edit_original_response(embed=em, view=RelicView(relic=relic))
+    
+    @relics.autocomplete(name='name')
+    async def relics_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
+        relics_: list[Relic] = await get_names('relics')
+        return [
+            app_commands.Choice(
+                name=f'{relic.name} {relic.rarity}' if relic.chinaOnly == False else f'{relic.name} {relic.rarity} [CN]',
+                value=relic.name) 
+            for relic in relics_ if current.lower() in relic.name.lower()][:25]
     
 async def setup(bot: commands.Bot):
     await bot.add_cog(Relics(bot))

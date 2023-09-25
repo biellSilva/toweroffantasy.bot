@@ -3,9 +3,10 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from src.config import EMOJIS
-from src.utils import get_git_data, get_image
 from src.views.servant_view import ServantView
+from src.models import SmartServant
+from src.controller.get_data import get_servant, get_names
+
 
 
 class Servants(commands.Cog):
@@ -29,21 +30,27 @@ class Servants(commands.Cog):
 
         await interaction.response.defer()
 
-        servant: dict = await get_git_data(name=name, data_folder='smart-servants', data_type='json')
-        thumb_url = await get_image(name=servant['imgSrc'], data='smart-servants')
+        servant = await get_servant(name=name)
 
         em = discord.Embed(color=discord.Colour.dark_embed(), 
-                           title=f'{servant["name"]}' if 'chinaOnly' not in servant else f'{servant["name"]} [CN]',
-                           description=f"{EMOJIS[servant['type']]} {EMOJIS[servant['element']]}\n"
-                                       f"Attack: **{servant['attack']}** \n"
-                                       f"Crit: **{servant['crit']}** \n\n"
-                                       f"{servant['description']}")
+                           title=servant.name,
+                           description=f'{servant.type_emoji} {servant.element_emoji}\n'
+                                       f'Attack: **{servant.attack}** \n'
+                                       f'Crit: **{servant.crit}** \n\n'
+                                       f'{servant.description}')
+        
+        em.set_thumbnail(url=servant.imgSrc)
 
-        if thumb_url:
-            em.set_thumbnail(url=thumb_url)
+        await interaction.edit_original_response(embed=em, view=ServantView(servant=servant))
 
-        await interaction.edit_original_response(embed=em, view=ServantView())
-
+    @servant.autocomplete(name='name')
+    async def servant_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
+        servants_: list[SmartServant] = await get_names('servant')
+        return [
+            app_commands.Choice(
+                name=servant.name,
+                value=servant.name)
+            for servant in servants_ if current.lower() in servant.name.lower()][:25]
     
 async def setup(bot: commands.Bot):
     await bot.add_cog(Servants(bot))

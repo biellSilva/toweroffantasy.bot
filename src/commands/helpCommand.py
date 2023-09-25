@@ -2,10 +2,9 @@ import discord
 
 from discord.ext import commands
 from discord import app_commands
-from time import time
 
 from src.views.help_view import NamesView
-from src.utils import data_base, get_ratelimit, get_git_data, get_image
+from src.utils import get_ratelimit
 from src.controller.get_data import get_names
 
 
@@ -48,10 +47,10 @@ class Help_command(commands.Cog):
                                                f'> Reset: <t:{git_api.get("reset")}:R>\n'), inline=False)
 
         x = (f'> Simulacras: *{len(await get_names("simulacras"))} itens*\n'
-             f'> Matrices: *{len(await get_names("matrices"))} itens*')
-        
-        for data_folder, data_list in data_base.items():
-            x += f'> {data_folder.title()}: *{len(data_list)} itens*\n' 
+             f'> Matrices: *{len(await get_names("matrices"))} itens*\n'
+             f'> Relics: *{len(await get_names("relics"))} itens*\n'
+             f'> Mounts: *{len(await get_names("mounts"))} itens*\n'
+             f'> Smart Servants: *{len(await get_names("smart-servants"))} itens*\n')
 
         em.add_field(name='Data', value=x, inline=False)
 
