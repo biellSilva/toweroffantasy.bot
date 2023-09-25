@@ -5,6 +5,7 @@ import os
 from discord.ext import commands
 
 from src.utils import get_git_data
+from src.service.sync_data import update_cache
 
 
 class Dumbot(commands.Bot):
@@ -28,13 +29,17 @@ class Dumbot(commands.Bot):
     async def setup_hook(self):
         self.task = self.loop.create_task(self.wait_until_ready_tasks())
         await get_git_data(sync=True)
+        await update_cache()
 
         for folder in os.listdir('./src'):
             if not folder.endswith('.py') and folder.lower() not in ('views'):
                 for filename in os.listdir(f'./src/{folder}'):
                     if filename.endswith('.py'):
-                        await self.load_extension(f'src.{folder}.{filename[:-3]}')
-                        print(f'{folder}.{filename[:-3]} loaded')
+                        try:
+                            await self.load_extension(f'src.{folder}.{filename[:-3]}')
+                            print(f'{folder}.{filename[:-3]} loaded')
+                        except commands.NoEntryPointError:
+                            continue
 
 
     async def wait_until_ready_tasks(self):
