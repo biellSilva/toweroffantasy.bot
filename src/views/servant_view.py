@@ -1,9 +1,12 @@
 import discord
 
-from src.utils import get_git_data
+from src.models import SmartServant
 
 
 class ServantView(discord.ui.View):
+    def __init__(self, *, timeout: float | None = 180, servant: SmartServant):
+        self.servant = servant
+        super().__init__(timeout=timeout)
 
 
     @discord.ui.button(custom_id='servant_advanc', label='Advancements', style=discord.ButtonStyle.grey)
@@ -11,16 +14,12 @@ class ServantView(discord.ui.View):
         await interaction.response.defer()
         
         em = interaction.message.embeds[0]
-        name = em.title.replace("'", '').replace('[CN]', '').removesuffix(' ')
-        
-        servant: dict = await get_git_data(name=name, data_folder='smart-servants', data_type='json')
-
         em.clear_fields()
 
-        for star, advanc in enumerate(servant['advancements']):
+        for star, advanc in enumerate(self.servant.advancements):
             em.add_field(name=f'{star+1} ★', value=f'{advanc}', inline=False)
 
-        await interaction.message.edit(embeds=[em], attachments=[], view=ServantView())
+        await interaction.message.edit(embed=em)
 
 
     @discord.ui.button(custom_id='servant_abilit', label='Abilities', style=discord.ButtonStyle.grey)
@@ -28,14 +27,10 @@ class ServantView(discord.ui.View):
         await interaction.response.defer()
         
         em = interaction.message.embeds[0]
-        name = em.title.replace("'", '').replace('[CN]', '').removesuffix(' ')
-
-        servant: dict = await get_git_data(name=name, data_folder='smart-servants', data_type='json')
-
         em.clear_fields()
 
-        for abilit in servant['abilities']:
-            em.add_field(name=abilit['name'], value=abilit['effect'], inline=False)
+        for abilit in self.servant.abilities:
+            em.add_field(name=abilit.name, value=abilit.effect, inline=False)
 
-        await interaction.message.edit(embeds=[em], attachments=[], view=ServantView())
+        await interaction.message.edit(embed=em)
     

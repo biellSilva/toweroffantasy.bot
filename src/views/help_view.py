@@ -1,6 +1,6 @@
 import discord
 
-from src.utils import get_ratelimit, data_base
+from src.utils import get_ratelimit
 from src.controller.get_data import get_names
 
 
@@ -26,11 +26,11 @@ class NamesView(discord.ui.View):
                                                f'> Reset: <t:{git_api.get("reset")}:R>\n'), inline=False)
 
         x = (f'> Simulacras: *{len(await get_names("simulacras"))} itens*\n'
-             f'> Matrices: *{len(await get_names("matrices"))} itens*')
+             f'> Matrices: *{len(await get_names("matrices"))} itens*\n'
+             f'> Relics: *{len(await get_names("relics"))} itens*\n'
+             f'> Mounts: *{len(await get_names("mounts"))} itens*\n'
+             f'> Smart Servants: *{len(await get_names("smart-servants"))} itens*\n')
         
-        for data_folder, data_list in data_base.items():
-            x += f'> {data_folder.title()}: *{len(data_list)} itens*\n' 
-
         em.add_field(name='Data', value=x, inline=False)
 
         await interaction.edit_original_response(embed=em, view=NamesView())
