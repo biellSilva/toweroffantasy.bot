@@ -1,18 +1,19 @@
 import aiohttp
 import json
 
-from src.models.matrices import Matrice
-from src.models.simulacra import Simulacra
-from src.config import SIMULACRA_DATA, MATRICES_DATA
+from typing import Literal
+
+from src.models import *
+from src.config import SIMULACRA_DATA, MATRICES_DATA, RELICS_DATA, MOUNTS_DATA, SERVANTS_DATA 
 
 
 async def update_cache():
     async with aiohttp.ClientSession() as cs:
-        for folder in ['simulacra', 'matrices']:
+        for folder in ['simulacra', 'matrices', 'relics', 'mounts', 'smart-servants']:
             async with cs.get(f'https://api.github.com/repos/whotookzakum/toweroffantasy.info/contents/src/lib/data/{folder}', headers={'User-Agent':'request'}) as res:
                 if res.status == 200:
                     dict_data = json.loads(s=await res.read())
-                    print(f'syncing {folder}')
+                    print(f'- Syncing {folder}')
 
                     for data_file in dict_data:
                         url: str = data_file['download_url']
@@ -43,10 +44,26 @@ async def update_cache():
 
                             async with cs.get(url=url) as res:
                                 if res.status == 200:
-                                    matrice_dict = json.loads(s=await res.read())
-
-                            data = Matrice(**matrice_dict)
-                            MATRICES_DATA.update({data.name.lower(): data})
+                                    data = Matrice(**json.loads(s=await res.read()))
+                                    MATRICES_DATA.update({data.name.lower(): data})
                         
-    print(f'simulacras - {len(SIMULACRA_DATA)}\n'
-            f'matrices - {len(MATRICES_DATA)}')
+                        elif folder == 'relics':
+                            async with cs.get(url=url) as res:
+                                if res.status == 200:
+                                    data = Relic(**json.loads(s=await res.read()))
+                                    RELICS_DATA.update({data.name.lower(): data})
+                        
+                        elif folder == 'mounts':
+                            async with cs.get(url=url) as res:
+                                if res.status == 200:
+                                    data = Mount(**json.loads(s=await res.read()))
+                                    MOUNTS_DATA.update({data.name.lower(): data})
+                        
+                        elif folder == 'smart-servants':
+                            async with cs.get(url=url) as res:
+                                if res.status == 200:
+                                    data = SmartServant(**json.loads(s=await res.read()))
+                                    SERVANTS_DATA.update({data.name.lower(): data})
+                    
+                    print(f'- Synced {folder} | {len(dict_data)}')
+                        

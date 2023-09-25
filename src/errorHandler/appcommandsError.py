@@ -9,7 +9,6 @@ from sys import stderr
 from time import time
 from typing import Union
 
-from src.utils import CouldNotFound
 from src.errorHandler.customErrors import DataNotFound
 
 
@@ -59,12 +58,6 @@ class AppErrorHandler(commands.Cog):
 
         elif isinstance(err, DataNotFound):
             em.description = err.message
-            
-        elif isinstance(err, CouldNotFound):
-            em.description = f'Couldn\'t find anything related to **{err.name}**'
-            print(f'Error when searching for {err.name} in {err.local}\n'
-                  f'User: {interaction.user}\n'
-                  f'Guild: {interaction.guild}\n')
 
         elif isinstance(err, app_commands.CommandOnCooldown):
             em.description = (f'Command on cooldown **`{int(err.cooldown.per)} seconds`**\n'

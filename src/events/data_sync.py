@@ -3,7 +3,6 @@ import datetime
 
 from discord.ext import commands, tasks
 
-from src.utils import get_git_data
 from src.service.sync_data import update_cache
 
 
@@ -33,7 +32,6 @@ class EventsCog(commands.Cog):
         reconnect=True)
     async def sync_data(self):
         
-        await get_git_data(sync=True)
         await update_cache()
 
 

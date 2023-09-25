@@ -2,9 +2,9 @@
 from typing import Literal
 
 from src.errorHandler.customErrors import DataNotFound
-from src.config import SIMULACRA_DATA, MATRICES_DATA
+from src.config import SIMULACRA_DATA, MATRICES_DATA, RELICS_DATA, MOUNTS_DATA, SERVANTS_DATA
 
-from src.models.simulacra import Simulacra, Matrice
+from src.models import *
 
 
 
@@ -21,8 +21,33 @@ async def get_matrice(name: str) -> Matrice:
             return data
     raise DataNotFound(name=name)
 
-async def get_names(local: Literal['simulacras', 'matrices']):
+async def get_mount(name: str) -> Mount:
+    for data in list(MOUNTS_DATA.values()):
+        if name.lower() == data.name.lower() or name.replace(' ', '').lower() == data.name.replace(' ', '').lower():
+            return data
+    raise DataNotFound(name=name)
+
+async def get_relic(name: str) -> Relic:
+    for data in list(RELICS_DATA.values()):
+        if name.lower() == data.name.lower() or name.replace(' ', '').lower() == data.name.replace(' ', '').lower():
+            return data
+    raise DataNotFound(name=name)
+
+async def get_servant(name: str) -> SmartServant:
+    for data in list(SERVANTS_DATA.values()):
+        if name.lower() == data.name.lower() or name.replace(' ', '').lower() == data.name.replace(' ', '').lower():
+            return data
+    raise DataNotFound(name=name)
+
+
+async def get_names(local: Literal['simulacras', 'matrices', 'relics', 'mounts', 'smart-servants']):
     if local == 'simulacras':
         return list(SIMULACRA_DATA.values())
-    if local == 'matrices':
+    elif local == 'matrices':
         return list(MATRICES_DATA.values())
+    elif local == 'relics':
+        return list(RELICS_DATA.values())
+    elif local == 'mounts':
+        return list(MOUNTS_DATA.values())
+    elif local == 'smart-servants':
+        return list(SERVANTS_DATA.values())

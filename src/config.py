@@ -2,12 +2,14 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.models.simulacra import Simulacra
-    from src.models.matrices import Matrice
+    from src.models import Simulacra, Matrice, Relic, Mount, SmartServant
 
 
 SIMULACRA_DATA: dict[str, 'Simulacra'] = {}
 MATRICES_DATA: dict[str, 'Matrice'] = {}
+RELICS_DATA: dict[str, 'Relic'] = {}
+MOUNTS_DATA: dict[str, 'Mount'] = {}
+SERVANTS_DATA: dict[str, 'SmartServant'] = {}
 
 ## GUILD
 BOT_GUILD = 1000974290801410138
