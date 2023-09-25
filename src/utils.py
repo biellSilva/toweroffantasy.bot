@@ -74,7 +74,7 @@ async def get_git_data(
             data_base.clear()
 
         async with aiohttp.ClientSession(base_url='https://api.github.com', headers=headers) as cs:
-            for folder in ['simulacra', 'matrices', 'weapons', 'relics', 'smart-servants', 'mounts']:
+            for folder in ['relics', 'smart-servants', 'mounts']:
                 async with cs.get(f'/repos/whotookzakum/toweroffantasy.info/contents/src/lib/data/{folder}') as res:
                     if res.status == 200:
                         dict_data = json.loads(s=await res.read())
