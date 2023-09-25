@@ -9,15 +9,25 @@ async def home_button_func(interaction: discord.Interaction, simulacra: Simulacr
     em = interaction.message.embeds[0]
     em.clear_fields()
 
-    em.description = (f"**CN Name:** {simulacra.cnName.capitalize()}\n"
-                      f"**Gender:** {simulacra.gender}\n"
-                      f"**Height:** {simulacra.height}\n"
-                      f"**Birthday:** {simulacra.birthday}\n"
-                      f"**Birthplace:** {simulacra.birthplace}\n"
-                      f"**Horoscope:** {simulacra.horoscope}")
-    
-    if simulacra.skinsPreviewUrl:
-        em.description += f'\n\n[Skin Preview]({simulacra.skinsPreviewUrl})'
+    em.description = ''
+
+    if simulacra.cnName and simulacra.cnName not in ('', ' ', '???'):
+        em.description += f"**CN Name:** {simulacra.cnName.capitalize()}\n"
+        
+    if simulacra.gender and simulacra.gender not in ('', ' ', '???'):
+        em.description += f"**Gender:** {simulacra.gender}\n"
+
+    if simulacra.height and simulacra.height not in ('', ' ', '???'):
+        em.description += f"**Height:** {simulacra.height}\n"
+
+    if simulacra.birthday and simulacra.birthday not in ('', ' ', '???'):
+        em.description += f"**Birthday:** {simulacra.birthday}\n"
+
+    if simulacra.birthplace and simulacra.birthplace not in ('', ' ', '???'):
+        em.description += f"**Birthplace:** {simulacra.birthplace}\n"
+
+    if simulacra.horoscope and simulacra.horoscope not in ('', ' ', '???'):
+        em.description += f"**Horoscope:** {simulacra.horoscope}"
     
     em.set_thumbnail(url=await simulacra.simulacra_image())
 
@@ -117,7 +127,7 @@ async def abilities_button_func(interaction: discord.Interaction, simulacra: Sim
 
     for abilitie in simulacra.weapon.abilities:
         if 'skill' in abilitie.type:
-            em.description += (f"\n\n**{abilitie.name.title()}** *[ {abilitie.type.capitalize()} ]*\n{abilitie.description}")
+            em.description += f"\n\n**{abilitie.name.title()}** *[ {abilitie.type.capitalize()} ]*\n{abilitie.description}"
             
     return em
 
@@ -128,8 +138,8 @@ async def discharge_button_func(interaction: discord.Interaction, simulacra: Sim
     em.description = ''
 
     for abilitie in simulacra.weapon.abilities:
-        if 'discharge' in abilitie['type']:
-            em.description += (f"\n\n**{abilitie.name.title()}** *[ {abilitie.type.capitalize()} ]*\n{abilitie['description']}")
+        if 'discharge' in abilitie.type:
+            em.description += f"\n\n**{abilitie.name.title()}** *[ {abilitie.type.capitalize()} ]*\n{abilitie.description}"
             
     return em
 
@@ -168,13 +178,13 @@ async def weapon_jump_attack_button_func(interaction: discord.Interaction, simul
 
     for abilitie in simulacra.weapon.abilities:
         if 'normal' in abilitie.type and abilitie.input and 'Jump' in abilitie.input:
-            input_ = '' if not abilitie.input or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input']).title()} ]*"
+            input_ = '' if not abilitie.input or len(abilitie.input) == 0 else f"*[ {' - '.join(abilitie.input).title()} ]*"
 
             em.description += (f"\n\n**{abilitie.name.title()}** {input_}\n{abilitie.description}\n")
             
             if abilitie.breakdown:
                 em.description+= '**Breakdown:**\n'
-                em.description+= '\n'.join(abilitie['breakdown'])
+                em.description+= '\n'.join(abilitie.breakdown)
     return em
 
 
