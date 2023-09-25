@@ -20,7 +20,7 @@ class Simulacra(BaseModel):
     birthday: str 
     horoscope: str 
     skinsPreviewUrl: str = None
-    banners: Banners
+    banners: Banners = None
     traits: list[Traits]
     giftTypes: list[str] 
     bestGifts: list[BestGift]
