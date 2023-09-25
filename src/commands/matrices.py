@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord import app_commands
 
 from src.config import base_url_dict
-from src.controller.get_data import get_matrice
+from src.controller.get_data import get_matrice, get_names
 
 
 class Matrices(commands.Cog):
@@ -43,6 +43,15 @@ class Matrices(commands.Cog):
             em.add_field(name=f'{set_.pieces}x Pieces', value=set_.description, inline=False)
 
         await interaction.edit_original_response(embed=em)
+    
+    @matrices.autocomplete(name='name')
+    async def matrices_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
+        matrices_ = await get_names('matrices')
+        return [
+            app_commands.Choice(
+                name=f'{matrice.name} {matrice.rarity}' if matrice.chinaOnly == False else f'{matrice.name} {matrice.rarity} [CN]',
+                value=matrice.name) 
+            for matrice in matrices_ if current.lower() in matrice.name.lower()][:25]
     
 async def setup(bot: commands.Bot):
     await bot.add_cog(Matrices(bot))

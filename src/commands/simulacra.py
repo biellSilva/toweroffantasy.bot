@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord import app_commands
 from typing import TYPE_CHECKING
 
-from src.controller.get_data import get_simulacra
+from src.controller.get_data import get_simulacra, get_names
 from src.views.simulacra_views import MainView
 from src.config import base_url_dict
 
@@ -40,15 +40,31 @@ class Simulacra(commands.Cog):
 
         em = discord.Embed(color=discord.Colour.dark_embed(), 
                            title=f'{simulacra.name} {simulacra.rarity} {china}',
-                           description= f"**CN Name:** {simulacra.cnName.capitalize()}\n"
-                                        f"**Gender:** {simulacra.gender}\n"
-                                        f"**Height:** {simulacra.height}\n"
-                                        f"**Birthday:** {simulacra.birthday}\n"
-                                        f"**Birthplace:** {simulacra.birthplace}\n"
-                                        f"**Horoscope:** {simulacra.horoscope}")
+                           description='')
+
+        if simulacra.cnName and simulacra.cnName not in ('', ' ', '???'):
+            em.description += f"**CN Name:** {simulacra.cnName.capitalize()}\n"
+            
+        if simulacra.gender and simulacra.gender not in ('', ' ', '???'):
+            em.description += f"**Gender:** {simulacra.gender}\n"
+
+        if simulacra.height and simulacra.height not in ('', ' ', '???'):
+            em.description += f"**Height:** {simulacra.height}\n"
+
+        if simulacra.birthday and simulacra.birthday not in ('', ' ', '???'):
+            em.description += f"**Birthday:** {simulacra.birthday}\n"
+
+        if simulacra.birthplace and simulacra.birthplace not in ('', ' ', '???'):
+            em.description += f"**Birthplace:** {simulacra.birthplace}\n"
+
+        if simulacra.horoscope and simulacra.horoscope not in ('', ' ', '???'):
+            em.description += f"**Horoscope:** {simulacra.horoscope}\n"
+
+        if simulacra.skinsPreviewUrl:
+            em.description += f'\n[Skin Preview]({simulacra.skinsPreviewUrl})'
         
         if simulacra.skinsPreviewUrl:
-            em.description += f'\n\n[Skin Preview]({simulacra.skinsPreviewUrl})'
+            em.description += f'\n[Skin Preview]({simulacra.skinsPreviewUrl})'
         
         em.url = base_url_dict['simulacra_home'] + simulacra.name.replace(' ', '-').lower()
         em.set_thumbnail(url=await simulacra.simulacra_image())
@@ -60,6 +76,14 @@ class Simulacra(commands.Cog):
 
         await interaction.edit_original_response(embed=em, view=MainView(simulacra=simulacra))
 
+    @simulacra.autocomplete(name='name')
+    async def simulacra_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
+        simulacras = await get_names('simulacras')
+        return [
+            app_commands.Choice(
+                name=f'{simu.name} {simu.rarity}' if simu.chinaOnly == False else f'{simu.name} {simu.rarity} [CN]',
+                value=simu.name) 
+            for simu in simulacras if current.lower() in simu.name.lower()][:25]
     
 async def setup(bot: commands.Bot):
     await bot.add_cog(Simulacra(bot))
