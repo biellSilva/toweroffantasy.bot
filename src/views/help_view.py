@@ -3,7 +3,6 @@ import discord
 from time import time
 
 from src.utils import get_git_data, get_ratelimit, get_image ,data_base
-from src.config import no_bar
 
 
 class NamesView(discord.ui.View):
@@ -24,7 +23,7 @@ class NamesView(discord.ui.View):
         await get_image(name=('Yu lan', 'yulan'), data='simulacra')
         get_image_timer = time() - start_image_timer
 
-        em = discord.Embed(color=no_bar,
+        em = discord.Embed(color=discord.Colour.dark_embed(),
                             title=f'{bot.user.name} Help',
                             description=f'Status: **{bot.status}** \n'
                                         f'Latency: **{round(bot.latency * 1000)}ms**\n'
