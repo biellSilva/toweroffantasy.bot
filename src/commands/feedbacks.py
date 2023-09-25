@@ -5,7 +5,7 @@ from discord import app_commands
 from time import time
 from asyncio import TimeoutError
 
-from src.config import no_bar, bot_guild, feedback_category
+from src.config import BOT_GUILD, FEEDBACK_CATEGORY
 
 timeout = 500
 
@@ -26,10 +26,10 @@ class Feedback(commands.Cog):
 
         dm_channel = await interaction.user.create_dm()
 
-        em_1 = discord.Embed(color=no_bar,
+        em_1 = discord.Embed(color=discord.Colour.dark_embed(),
                              description=f'Check your dm {dm_channel.jump_url}')
 
-        em = discord.Embed(color=no_bar, title = 'Feedback',
+        em = discord.Embed(color=discord.Colour.dark_embed(), title = 'Feedback',
                            description = (f'A feedback can be suggestions, bug reports, words of encouragement, whatever you like, feel free to tell me what you need.\n'
                           f'Send a message with all you want, it can contains everything you can send in one message\n\n'
                           f'This interaction has a `waiting cooldown` to be finished: <t:{int(time()+timeout)}:R>'))
@@ -46,7 +46,7 @@ class Feedback(commands.Cog):
         except TimeoutError:
             return await dm_channel.send('timeout expired, feedback canceled')
 
-        em_res = discord.Embed(color=no_bar, 
+        em_res = discord.Embed(color=discord.Colour.dark_embed(), 
                                description=feedback.content)
         
         em_res.set_author(name=f'{feedback.author} - {feedback.author.id}', 
@@ -65,8 +65,8 @@ class Feedback(commands.Cog):
         except TimeoutError:
             return await dm_channel.send('timeout expired, submission canceled')
         
-        guild = self.bot.get_guild(bot_guild)
-        category = guild.get_channel(feedback_category)
+        guild = self.bot.get_guild(BOT_GUILD)
+        category = guild.get_channel(FEEDBACK_CATEGORY)
         feedback_channel = await category.create_text_channel(name=f'feedback n{len(category.channels)+1}')
 
         files_url = '\n'.join([file.url for file in feedback.attachments])
@@ -74,5 +74,5 @@ class Feedback(commands.Cog):
         await feedback_channel.send(content=files_url if files_url else None, embed=em_res)
         await response.add_reaction('✅')
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(Feedback(bot))

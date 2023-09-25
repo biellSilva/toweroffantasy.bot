@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from src.config import no_bar, base_url_dict
+from src.config import base_url_dict
 from src.utils import get_git_data, get_image
 from src.views.relic_view import RelicView
 
@@ -36,7 +36,7 @@ class Relics(commands.Cog):
 
         CN_tag = '' if 'chinaOnly' not in relic or not relic['chinaOnly'] else '[CN]'
 
-        em = discord.Embed(color=no_bar, 
+        em = discord.Embed(color=discord.Colour.dark_embed(), 
                            title=f'{relic["name"]} {relic["rarity"]} {CN_tag}',
                            description=relic['description'])
         
@@ -50,5 +50,5 @@ class Relics(commands.Cog):
 
         await interaction.edit_original_response(embed=em, view=RelicView())
     
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(Relics(bot))

@@ -3,8 +3,8 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from src.config import no_bar, base_url_dict
-from src.utils import get_git_data, get_image
+from src.config import base_url_dict
+from src.controller.get_data import get_matrice
 
 
 class Matrices(commands.Cog):
@@ -29,21 +29,20 @@ class Matrices(commands.Cog):
 
         await interaction.response.defer()
 
-        matrice = await get_git_data(name=name, data_folder='matrices', data_type='json')
-        thumb_url = await get_image(name=matrice['imgSrc'], data='matrices')
+        matrice = await get_matrice(name=name)
 
-        em = discord.Embed(color=no_bar, 
-                           title=f'{matrice["name"]} {matrice["rarity"]}' if 'chinaOnly' not in matrice else f'{matrice["name"]} {matrice["rarity"]} [CN]')
+        china = '[CN]' if matrice.chinaOnly else ''
+
+        em = discord.Embed(color=discord.Colour.dark_embed(), 
+                           title=f'{matrice.name} {matrice.rarity} {china}')
         
-        em.url = base_url_dict['matrice_home'] + matrice['name'].replace(' ', '-').lower()
+        em.url = base_url_dict['matrice_home'] + matrice.name.replace(' ', '-').lower()
+        em.set_thumbnail(url=matrice.imgSrc)
 
-        for set_ in matrice['sets']:
-            em.add_field(name=f'{set_["pieces"]}x', value=set_["description"], inline=False)
-
-        if thumb_url:
-            em.set_thumbnail(url=thumb_url)
+        for set_ in matrice.sets:
+            em.add_field(name=f'{set_.pieces}x Pieces', value=set_.description, inline=False)
 
         await interaction.edit_original_response(embed=em)
     
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(Matrices(bot))

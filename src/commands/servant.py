@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from src.config import no_bar, emojis_1
+from src.config import EMOJIS
 from src.utils import get_git_data, get_image
 from src.views.servant_view import ServantView
 
@@ -32,9 +32,9 @@ class Servants(commands.Cog):
         servant: dict = await get_git_data(name=name, data_folder='smart-servants', data_type='json')
         thumb_url = await get_image(name=servant['imgSrc'], data='smart-servants')
 
-        em = discord.Embed(color=no_bar, 
+        em = discord.Embed(color=discord.Colour.dark_embed(), 
                            title=f'{servant["name"]}' if 'chinaOnly' not in servant else f'{servant["name"]} [CN]',
-                           description=f"{emojis_1[servant['type']]} {emojis_1[servant['element']]}\n"
+                           description=f"{EMOJIS[servant['type']]} {EMOJIS[servant['element']]}\n"
                                        f"Attack: **{servant['attack']}** \n"
                                        f"Crit: **{servant['crit']}** \n\n"
                                        f"{servant['description']}")
@@ -45,5 +45,5 @@ class Servants(commands.Cog):
         await interaction.edit_original_response(embed=em, view=ServantView())
 
     
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(Servants(bot))

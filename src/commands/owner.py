@@ -3,7 +3,6 @@ import discord
 from discord.ext import commands
 from typing import Optional
 
-from src.config import no_bar
 from src.utils import get_ratelimit, data_base, get_git_data
 
 
@@ -52,7 +51,7 @@ class Owner(commands.Cog):
             
             git_api = await get_ratelimit()
 
-            em = discord.Embed(color=no_bar,
+            em = discord.Embed(color=discord.Colour.dark_embed(),
                                title=f'{self.bot.user}',
                                description=f'Status: **{self.bot.status}** \n'
                                            f'Latency: **{round(self.bot.latency * 1000)}ms**')
@@ -79,5 +78,5 @@ class Owner(commands.Cog):
 
 
 
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(Owner(bot))

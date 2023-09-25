@@ -2,10 +2,15 @@ import discord
 
 from discord.ext import commands
 from discord import app_commands
+from typing import TYPE_CHECKING
 
-from src.config import no_bar, base_url_dict
-from src.utils import get_git_data, get_image
+from src.controller.get_data import get_simulacra
 from src.views.simulacra_views import MainView
+from src.config import base_url_dict
+
+if TYPE_CHECKING:
+    from src.models.simulacra import Simulacra
+
 
 
 class Simulacra(commands.Cog):
@@ -29,36 +34,32 @@ class Simulacra(commands.Cog):
 
         await interaction.response.defer()
 
-        simulacra: dict = await get_git_data(name=name, data_folder='simulacra', data_type='json')
-        thumb_url = await get_image(name=(simulacra['name'], simulacra['cnName']), data='simulacra')
+        simulacra = await get_simulacra(name=name)
 
-        skin_url = f"[Skin Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
-        china = '' if 'chinaOnly' not in simulacra else '[CN]'
+        china = '[CN]' if simulacra.chinaOnly else ''
 
-        em = discord.Embed(color=no_bar, 
-                           title=f'{simulacra["name"]} {simulacra["rarity"]} {china}',
-                           description= f"CN Name: {simulacra['cnName'].capitalize()}\n"
-                                        f"Gender: {simulacra['gender']}\n"
-                                        f"Height: {simulacra['height']}\n"
-                                        f"Birthday: {simulacra['birthday']}\n"
-                                        f"Birthplace: {simulacra['birthplace']}\n"
-                                        f"Horoscope: {simulacra['horoscope']}")
+        em = discord.Embed(color=discord.Colour.dark_embed(), 
+                           title=f'{simulacra.name} {simulacra.rarity} {china}',
+                           description= f"**CN Name:** {simulacra.cnName.capitalize()}\n"
+                                        f"**Gender:** {simulacra.gender}\n"
+                                        f"**Height:** {simulacra.height}\n"
+                                        f"**Birthday:** {simulacra.birthday}\n"
+                                        f"**Birthplace:** {simulacra.birthplace}\n"
+                                        f"**Horoscope:** {simulacra.horoscope}")
         
-        if skin_url:
-            em.description += f'\n\n{skin_url}'
+        if simulacra.skinsPreviewUrl:
+            em.description += f'\n\n[Skin Preview]({simulacra.skinsPreviewUrl})'
         
-        em.url = base_url_dict['simulacra_home'] + simulacra['name'].replace(' ', '-').lower()
+        em.url = base_url_dict['simulacra_home'] + simulacra.name.replace(' ', '-').lower()
+        em.set_thumbnail(url=await simulacra.simulacra_image())
 
-        if thumb_url:
-            em.set_thumbnail(url=thumb_url)
-
-        for region, voiceActor in simulacra['voiceActors'].items():
-            if voiceActor == '':
+        for region, voiceActor in simulacra.voiceActors.model_dump().items():
+            if voiceActor == '' or voiceActor == None:
                 continue
             em.add_field(name=region.upper(), value=voiceActor, inline=True)
 
-        await interaction.edit_original_response(embed=em, view=MainView())
+        await interaction.edit_original_response(embed=em, view=MainView(simulacra=simulacra))
 
     
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(Simulacra(bot))

@@ -4,7 +4,6 @@ import re
 from discord.ext import commands
 from discord import app_commands
 
-from src.config import no_bar
 from src.utils import get_git_data, get_image
 
 
@@ -32,7 +31,7 @@ class Mounts(commands.Cog):
         mount: dict = await get_git_data(name=name, data_folder='mounts', data_type='json')
         thumb_url = await get_image(name=mount['imgSrc'], data='mounts')
 
-        em = discord.Embed(color=no_bar, 
+        em = discord.Embed(color=discord.Colour.dark_embed(), 
                            title=f'{mount["name"]}' if 'chinaOnly' not in mount else f'{mount["name"]} [CN]',
                            description='' if 'type' not in mount else f'Type: **{mount["type"]}**\n\n')
 
@@ -68,5 +67,5 @@ class Mounts(commands.Cog):
         await interaction.edit_original_response(embed=em)
 
     
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(Mounts(bot))

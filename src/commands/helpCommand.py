@@ -4,7 +4,6 @@ from discord.ext import commands
 from discord import app_commands
 from time import time
 
-from src.config import no_bar
 from src.views.help_view import NamesView
 from src.utils import data_base, get_ratelimit, get_git_data, get_image
 
@@ -43,7 +42,7 @@ class Help_command(commands.Cog):
         await get_image(name=('Yu lan', 'yulan'), data='simulacra')
         get_image_timer = time() - start_image_timer
 
-        em = discord.Embed(color=no_bar,
+        em = discord.Embed(color=discord.Colour.dark_embed(),
                             title=f'{self.bot.user.name} Help',
                             description=f'Status: **{self.bot.status}** \n'
                                         f'Latency: **{round(self.bot.latency * 1000)}ms**\n'
@@ -64,5 +63,5 @@ class Help_command(commands.Cog):
 
         await interaction.edit_original_response(embed=em, view=NamesView())
     
-async def setup(bot):
+async def setup(bot: commands.Bot):
     await bot.add_cog(Help_command(bot))
