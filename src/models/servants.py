@@ -6,6 +6,7 @@ from src.config import EMOJIS
 
 
 class SmartServant(BaseModel):
+    'Base model for Smart-Servant object'
     name: str
     imgSrc: str
     number: int

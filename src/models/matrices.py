@@ -4,11 +4,13 @@ from pydantic import BaseModel
 
 
 class MatriceSet(BaseModel):
+    'Complementary model for matrice object (matrice sets)'
     pieces: int
     description: str
 
 
 class Matrice(BaseModel):
+    'Base model for matrice object'
     id: int
     name: str
     rarity: str

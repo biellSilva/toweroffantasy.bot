@@ -29,8 +29,8 @@ class Weapon(BaseModel):
 
     @property
     def element_emoji(self):
-        return EMOJIS.get(self.element, None)
+        return EMOJIS.get(self.element, self.element)
 
     @property
     def type_emoji(self):
-        return EMOJIS.get(self.type, None)
+        return EMOJIS.get(self.type, self.type)

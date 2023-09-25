@@ -9,6 +9,7 @@ from .matrices import Matrice
 
 
 class Simulacra(BaseModel):
+    'Base model for simulacra object'
     id: int
     name: str
     cnName: str 
