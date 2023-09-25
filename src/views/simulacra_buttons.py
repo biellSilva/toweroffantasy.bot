@@ -1,264 +1,197 @@
 import discord
 
-from src.config import emojis_1, base_url_dict
-from src.utils import get_git_data, get_image
+from src.config import base_url_dict
+
+from src.models.simulacra import Simulacra
 
 
-async def home_button_func(interaction: discord.Interaction):
+async def home_button_func(interaction: discord.Interaction, simulacra: Simulacra):
     em = interaction.message.embeds[0]
-    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
-
-    simulacra: dict = await get_git_data(name=name, data_folder='simulacra', data_type='json')
-    thumb_url = await get_image(name=(simulacra['name'], simulacra['cnName']), data='simulacra')
-
-    skin_url = f"[Skin Preview]({simulacra['skinsPreviewUrl']})" if 'skinsPreviewUrl' in simulacra else ''
-    
-    em.description=(f"CN Name: {simulacra['cnName'].capitalize()}\n"
-                    f"Gender: {simulacra['gender']}\n"
-                    f"Height: {simulacra['height']}\n"
-                    f"Birthday: {simulacra['birthday']}\n"
-                    f"Birthplace: {simulacra['birthplace']}\n"
-                    f"Horoscope: {simulacra['horoscope']}\n\n"
-
-                    f"{skin_url}" )
-    
-    if thumb_url:
-        em.set_thumbnail(url=thumb_url)
-
     em.clear_fields()
 
-    for region, voiceActor in simulacra['voiceActors'].items():
-        if voiceActor == '':
+    em.description = (f"**CN Name:** {simulacra.cnName.capitalize()}\n"
+                      f"**Gender:** {simulacra.gender}\n"
+                      f"**Height:** {simulacra.height}\n"
+                      f"**Birthday:** {simulacra.birthday}\n"
+                      f"**Birthplace:** {simulacra.birthplace}\n"
+                      f"**Horoscope:** {simulacra.horoscope}")
+    
+    if simulacra.skinsPreviewUrl:
+        em.description += f'\n\n[Skin Preview]({simulacra.skinsPreviewUrl})'
+    
+    em.set_thumbnail(url=await simulacra.simulacra_image())
+
+    for region, voiceActor in simulacra.voiceActors.model_dump().items():
+        if voiceActor == '' or voiceActor == None:
             continue
         em.add_field(name=region.upper(), value=voiceActor, inline=True)
 
     return em    
     
 
-async def trait_button_func(interaction: discord.Interaction):
+async def trait_button_func(interaction: discord.Interaction, simulacra: Simulacra):
     em = interaction.message.embeds[0]
-    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
-
-    simulacra: dict = await get_git_data(name=name, data_folder='simulacra', data_type='json')
-
-    em.description = ''
+    em.description = None
     em.clear_fields()
-    for trait in simulacra['traits']:
-        em.add_field(name=f'Affinity {trait["affinity"]}', value=trait['description'], inline=False)
+
+    for trait in simulacra.traits:
+        em.add_field(name=f'Affinity {trait.affinity}', value=trait.description, inline=False)
 
     return em
 
 
-async def matrice_button_func(interaction: discord.Interaction):
+async def matrice_button_func(interaction: discord.Interaction, simulacra: Simulacra):
     em = interaction.message.embeds[0]
-    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
-
-    matrice = await get_git_data(name=name, data_folder='matrices', data_type='json')
-    thumb_url = await get_image(name=matrice['imgSrc'], data='matrices')
-
     em.clear_fields()
+    em.description = None
 
-    for set_ in matrice['sets']:
-        em.add_field(name=f'{set_["pieces"]}x', value=set_["description"], inline=False)
+    em.set_thumbnail(url=simulacra.matrice.imgSrc)
 
-    if thumb_url:
-        em.set_thumbnail(url=thumb_url)
-    
-    return em
-
-
-async def weapon_button_func(interaction: discord.Interaction):
-    em = interaction.message.embeds[0]
-    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
-
-    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
-    thumb_url = await get_image(name=weapon['imgSrc'], data='weapons')
-
-    analysisVideo = f"[Analysis Video]({weapon['analysisVideoSrc']})" if 'analysisVideoSrc' in weapon else ''
-    abilitiesVideo = f"[Abilities Video]({weapon['abilitiesVideoSrc']})" if 'abilitiesVideoSrc' in weapon else ''
-
-    if thumb_url:
-        em.set_thumbnail(url=thumb_url)
-
-    em.clear_fields()
-    em.description = (
-                      f"**{weapon['name']}** {emojis_1[weapon['element']]} {emojis_1[weapon['type']]}\n"
-                      f"Shatter: *{weapon['shatter']['value']} **{weapon['shatter']['tier']}***\n"
-                      f"Charge: *{weapon['charge']['value']} **{weapon['charge']['tier']}***\n"
-                      f"Base stats: *{' - '.join(weapon['baseStats']).title()}*\n"
-                      )
-    
-    for i in [analysisVideo, abilitiesVideo]:
-        if 'https' not in i:
-            continue
-        em.description += f'\n{i}'
-    
-    if 'weaponEffects' in weapon:
-        for effect in weapon['weaponEffects']:
-            em.add_field(name=effect['title'], value=effect['description'], inline=False)
+    for set_ in simulacra.matrice.sets:
+        em.add_field(name=f'{set_.pieces}x Pieces', value=set_.description, inline=False)
 
     return em
 
 
-async def advanc_button_func(interaction: discord.Interaction):
+async def weapon_button_func(interaction: discord.Interaction, simulacra: Simulacra):
     em = interaction.message.embeds[0]
-    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
-
-    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
-
     em.clear_fields()
 
-    for ind, advanc in enumerate(weapon['advancements']):
-        em.add_field(name=f'{ind+1} ★', value=advanc, inline=False)
+    em.set_thumbnail(url=simulacra.weapon.imgSrc)
+
+    em.description = (f"**{simulacra.weapon.name}** {simulacra.weapon.element_emoji} {simulacra.weapon.type_emoji}\n"
+                      f"Shatter: *{simulacra.weapon.shatter.value} **{simulacra.weapon.shatter.tier}***\n"
+                      f"Charge: *{simulacra.weapon.charge.value} **{simulacra.weapon.charge.tier}***\n"
+                      f"Base stats: *{' - '.join(simulacra.weapon.baseStats).title()}*\n")
+    
+    if simulacra.weapon.analysisVideoSrc:
+        em.description += f'\n[Analysis Video]({simulacra.weapon.analysisVideoSrc})'
+    
+    if simulacra.weapon.abilitiesVideoSrc:
+        em.description += f'\n[Abilities Video]({simulacra.weapon.abilitiesVideoSrc})'
+
+    for effect in simulacra.weapon.weaponEffects:
+        em.add_field(name=effect.title, value=effect.description, inline=False)
+
+    return em
+
+
+async def advanc_button_func(interaction: discord.Interaction, simulacra: Simulacra):
+    em = interaction.message.embeds[0]
+
+    em.clear_fields()
+    em.description = None
+
+    for ind, advanc in enumerate(simulacra.weapon.advancements, start=1):
+        em.add_field(name=f'{ind} ★', value=advanc, inline=False)
     
     return em
 
 
 
-async def meta_button_func(interaction: discord.Interaction):
+async def meta_button_func(interaction: discord.Interaction, simulacra: Simulacra):
     em = interaction.message.embeds[0]
-    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
-
-    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
 
     em.clear_fields()
-
-    desc = ''
-    for name in weapon['recommendedPairings']:
-        name : str
-        url_name = name.replace(' ','-').lower()
-        desc += f'\n**[{name.capitalize()}]({base_url_dict["simulacra_home"]}{url_name})**'
+    em.description = None
     
-    if desc != '':
-        em.add_field(name='Recommended Pairings', value=desc, inline=False)
+    if not len(simulacra.weapon.recommendedPairings) == 0:
+        em.add_field(name='Recommended Pairings', 
+                        value='\n'.join(f'**[{name.capitalize()}]({base_url_dict["simulacra_home"]}{name.replace(" ","-").lower()})**' 
+                                        for name in simulacra.weapon.recommendedPairings), 
+                        inline=False)
 
-    desc = ''
-    for matrix in weapon['recommendedMatrices']:
-        matrix: dict
-        url_name = matrix['name'].replace(' ', '-').lower()
-        desc += f'\n{matrix["pieces"]}x **[{matrix["name"]}]({base_url_dict["matrice_home"]}{url_name})**'
-
-    if desc != '':
-        em.add_field(name='Recommended Matrices', value=desc, inline=False)
+    if not len(simulacra.weapon.recommendedMatrices) == 0:
+        em.add_field(name='Recommended Matrices', 
+                        value='\n'.join(f'**[{matrix.pieces}x {matrix.name.capitalize()}]({base_url_dict["simulacra_home"]}{matrix.name.replace(" ","-").lower()})**' 
+                                        for matrix in simulacra.weapon.recommendedMatrices), 
+                        inline=False)
 
     return em
 
 
-async def abilities_button_func(interaction: discord.Interaction):
+async def abilities_button_func(interaction: discord.Interaction, simulacra: Simulacra):
     em = interaction.message.embeds[0]
-    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
-
-    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
-
     em.clear_fields()
-
     em.description = ''
 
-    for abilitie in weapon['abilities']:
-        if 'skill' in abilitie['type']:
-            em.description += (f"\n\n**{abilitie['name'].title()}** *[ {abilitie['type'].capitalize()} ]*\n"
-                               f"{abilitie['description']}")
+    for abilitie in simulacra.weapon.abilities:
+        if 'skill' in abilitie.type:
+            em.description += (f"\n\n**{abilitie.name.title()}** *[ {abilitie.type.capitalize()} ]*\n{abilitie.description}")
             
     return em
 
 
-async def discharge_button_func(interaction: discord.Interaction):
+async def discharge_button_func(interaction: discord.Interaction, simulacra: Simulacra):
     em = interaction.message.embeds[0]
-    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
-
-    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
-
     em.clear_fields()
-
     em.description = ''
 
-    for abilitie in weapon['abilities']:
+    for abilitie in simulacra.weapon.abilities:
         if 'discharge' in abilitie['type']:
-            em.description += (f"\n\n**{abilitie['name'].title()}** *[ {abilitie['type'].capitalize()} ]*\n"
-                               f"{abilitie['description']}")
+            em.description += (f"\n\n**{abilitie.name.title()}** *[ {abilitie.type.capitalize()} ]*\n{abilitie['description']}")
             
     return em
 
 
-async def weapon_normal_attack_button_func(interaction: discord.Interaction):
+async def weapon_normal_attack_button_func(interaction: discord.Interaction, simulacra: Simulacra):
     em = interaction.message.embeds[0]
-    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
-
-    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
-
     em.clear_fields()
-
     em.description = ''
 
-    for abilitie in weapon['abilities']:
-        if 'normal' in abilitie['type']:
-            if 'input' in abilitie:
-                if 'Jump' not in abilitie['input']:
-                    input_ = '' if 'input' not in abilitie or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input'])} ]*"
+    for abilitie in simulacra.weapon.abilities:
+        if 'normal' in abilitie.type:
+            if abilitie.input and 'Jump' not in abilitie.input:
+                input_ = '' if not abilitie.input or len(abilitie.input) == 0 else f"*[ {' - '.join(abilitie.input)} ]*"
 
-                    em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
-                                    f"{abilitie['description']}\n")
-                    
-                    if 'breakdown' in abilitie:
-                        em.description+= '**Breakdown:**\n'
-                        em.description+= '\n'.join(abilitie['breakdown'])
-            else:
-                em.description += (f"\n\n**{abilitie['name']}** \n"
-                                    f"{abilitie['description']}\n")
+                em.description += (f"\n\n**{abilitie.name.title()}** {input_}\n{abilitie.description}\n")
+                
+                if abilitie.breakdown:
+                    em.description+= '**Breakdown:**\n'
+                    em.description+= '\n'.join(abilitie.breakdown)
+
+            elif not abilitie.input:
+                em.description += (f"\n\n**{abilitie.name}** \n"
+                                    f"{abilitie.description}\n")
                     
                 if 'breakdown' in abilitie:
                     em.description+= '**Breakdown:**\n'
-                    em.description+= '\n'.join(abilitie['breakdown'])
+                    em.description+= '\n'.join(abilitie.breakdown)
 
     return em
 
 
-async def weapon_jump_attack_button_func(interaction: discord.Interaction):
+async def weapon_jump_attack_button_func(interaction: discord.Interaction, simulacra: Simulacra):
     em = interaction.message.embeds[0]
-    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
-
-    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
-
     em.clear_fields()
-
     em.description = ''
 
-    for abilitie in weapon['abilities']:
-        if 'normal' in abilitie['type']:
-            if 'input' in abilitie:
-                if 'Jump' in abilitie['input']:
+    for abilitie in simulacra.weapon.abilities:
+        if 'normal' in abilitie.type and abilitie.input and 'Jump' in abilitie.input:
+            input_ = '' if not abilitie.input or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input']).title()} ]*"
 
-                    input_ = '' if 'input' not in abilitie or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input']).title()} ]*"
-
-                    em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
-                                    f"{abilitie['description']}\n")
-                    
-                    if 'breakdown' in abilitie:
-                        em.description+= '**Breakdown:**\n'
-                        em.description+= '\n'.join(abilitie['breakdown'])
-    return em
-
-
-async def weapon_dodge_attack_button_func(interaction: discord.Interaction):
-    em = interaction.message.embeds[0]
-    name = ' '.join(em.title.replace("'", '').replace('[CN]', '').split()[:-1])
-
-    weapon: dict = await get_git_data(name=name, data_folder='weapons', data_type='json')
-
-    em.clear_fields()
-
-    em.description = ''
-
-    for abilitie in weapon['abilities']:
-        if 'dodge' in abilitie['type']:
-
-            input_ = '' if 'input' not in abilitie or len(abilitie['input']) == 0 else f"*[ {' - '.join(abilitie['input']).title()} ]*"
-
-            em.description += (f"\n\n**{abilitie['name'].title()}** {input_}\n"
-                            f"{abilitie['description']}\n")
+            em.description += (f"\n\n**{abilitie.name.title()}** {input_}\n{abilitie.description}\n")
             
-            if 'breakdown' in abilitie:
+            if abilitie.breakdown:
                 em.description+= '**Breakdown:**\n'
                 em.description+= '\n'.join(abilitie['breakdown'])
+    return em
+
+
+async def weapon_dodge_attack_button_func(interaction: discord.Interaction, simulacra: Simulacra):
+    em = interaction.message.embeds[0]
+    em.clear_fields()
+    em.description = ''
+
+    for abilitie in simulacra.weapon.abilities:
+        if 'dodge' in abilitie.type:
+
+            input_ = '' if not abilitie.input or len(abilitie.input) == 0 else f"*[ {' - '.join(abilitie.input).title()} ]*"
+
+            em.description += (f"\n\n**{abilitie.name.title()}** {input_}\n{abilitie.description}\n")
+            
+            if abilitie.breakdown:
+                em.description+= '**Breakdown:**\n'
+                em.description+= '\n'.join(abilitie.breakdown)
 
     return em
