@@ -65,6 +65,7 @@ bot needs permission to **view**, **send message**, **files**, **links** and **e
 | June 09, 2023 | Added Relics command | 
 | June 11, 2023 | Fully Automatic Syncronization with website data |
 | June 17, 2023 | Added Smart-Servants and Mounts command |
+| Sep 25, 2023 | Added Autocomplete function to Simulacras and Matrices commands |
 
 
 ## Development checklist
