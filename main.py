@@ -4,7 +4,6 @@ import os
 
 from discord.ext import commands
 
-from src.utils import get_git_data
 from src.service.sync_data import update_cache
 
 
@@ -28,7 +27,6 @@ class Dumbot(commands.Bot):
 
     async def setup_hook(self):
         self.task = self.loop.create_task(self.wait_until_ready_tasks())
-        await get_git_data(sync=True)
         await update_cache()
 
         for folder in os.listdir('./src'):
