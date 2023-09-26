@@ -80,8 +80,9 @@ async def weapon_button_func(interaction: discord.Interaction, simulacra: Simula
     if simulacra.weapon.abilitiesVideoSrc:
         em.description += f'\n[Abilities Video]({simulacra.weapon.abilitiesVideoSrc})'
 
-    for effect in simulacra.weapon.weaponEffects:
-        em.add_field(name=effect.title, value=effect.description, inline=False)
+    if simulacra.weapon.weaponEffects:
+        for effect in simulacra.weapon.weaponEffects:
+            em.add_field(name=effect.title, value=effect.description, inline=False)
 
     return em
 
