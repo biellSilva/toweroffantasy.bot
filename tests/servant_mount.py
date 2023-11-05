@@ -1,7 +1,7 @@
 from asyncio import run 
 from pprint import pprint
 
-from src.utils import get_git_data, get_ratelimit
+from tof_bot.utils import get_git_data, get_ratelimit
 
 
 async def rate_test():

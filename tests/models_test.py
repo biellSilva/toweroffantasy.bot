@@ -1,5 +1,5 @@
 import requests
-from src.models import Simulacra, Matrice, Relic, Mount, SmartServant
+from tof_bot.models import Simulacra, Matrice, Relic, Mount, SmartServant
 from pprint import pprint
 from asyncio import run
 

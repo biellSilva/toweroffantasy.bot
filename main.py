@@ -1,13 +1,15 @@
 import discord
 import dotenv
-import os
+import logging
 
 from discord.ext import commands
 
-from src.service.sync_data import update_cache
+from bot import wait_until_ready_tasks, tof_info_cache, load_cogs_by_dir
+
+_log_status = logging.getLogger('tof_info.status')
 
 
-class Dumbot(commands.Bot):
+class TOF_INFO(commands.Bot):
 
     def __init__(self):
         super().__init__(command_prefix = 't!', 
@@ -16,49 +18,17 @@ class Dumbot(commands.Bot):
                          strip_after_prefix = True,
                          help_command = None)
         
-        self.maintenance = False
 
     async def on_ready(self):
-        print(f'{"-"*20}\n'
-              f'{self.user}\n'
-              f'{self.status} - {round(self.latency * 1000)}ms\n'
-              f'{"-"*20}')
-
+        _log_status.info(f'{self.user} - {self.status} - {round(self.latency * 1000)}ms')
 
     async def setup_hook(self):
-        self.task = self.loop.create_task(self.wait_until_ready_tasks())
-        await update_cache()
-
-        for folder in os.listdir('./src'):
-            if not folder.endswith('.py') and folder.lower() not in ('views'):
-                for filename in os.listdir(f'./src/{folder}'):
-                    if filename.endswith('.py'):
-                        try:
-                            await self.load_extension(f'src.{folder}.{filename[:-3]}')
-                            print(f'{folder}.{filename[:-3]} loaded')
-                        except commands.NoEntryPointError:
-                            continue
+        self.loop.create_task(wait_until_ready_tasks(self, maintenance=False))
+        await tof_info_cache()
+        await load_cogs_by_dir(self)
 
 
-    async def wait_until_ready_tasks(self):
-        await self.wait_until_ready()
-
-        if self.maintenance:
-            await self.change_presence(activity=discord.Activity(
-                        type=discord.ActivityType.listening,
-                        name='MAINTENANCE'),
-                        status=discord.Status.dnd
-                        )
-        else:
-            await self.change_presence(activity=discord.Activity(
-                        type=discord.ActivityType.listening,
-                        name='/help'),
-                        status=discord.Status.online
-                        )
-            
-        
-
-
-bot = Dumbot()
-
-bot.run(token=dotenv.get_key(dotenv_path=dotenv.find_dotenv(), key_to_get='token'))
+if __name__ == '__main__':
+    if TOKEN := dotenv.get_key(dotenv_path=dotenv.find_dotenv(), key_to_get='TOKEN'):
+        bot = TOF_INFO()
+        bot.run(token=TOKEN, root_logger=True)
