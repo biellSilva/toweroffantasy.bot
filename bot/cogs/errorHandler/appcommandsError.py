@@ -1,15 +1,16 @@
 import discord
-import traceback
+import logging
 
 from discord.ext import commands
 from discord import app_commands
 
-from traceback import print_exception
-from sys import stderr
 from time import time
-from typing import Union
+from typing import Union, Any
 
-from bot.cogs.errorHandler.customErrors import DataNotFound
+from bot.cogs.errorHandler.customErrors import *
+
+_log_error = logging.getLogger('tof_info.error')
+_log_command = logging.getLogger('tof_info.command')
 
 
 class AppErrorHandler(commands.Cog):
@@ -27,14 +28,12 @@ class AppErrorHandler(commands.Cog):
         tree.on_error = self._old_tree_error
 
     @commands.Cog.listener()
-    async def on_app_command_completion(self, interaction: discord.Interaction, command: Union[app_commands.Command, app_commands.ContextMenu]):
+    async def on_app_command_completion(self, interaction: discord.Interaction, command: Union[app_commands.Command[Any, Any, Any], app_commands.ContextMenu]):
 
-        # For Data Analysis purposes
+        # For debug purposes
 
-        print(f'Command: /{command.name}\n'
-              f'User: {interaction.user}\n'
-              f'Guild: {interaction.guild}\n'
-              )
+        _log_command.debug(f'Command: /{command.qualified_name}\t User: {interaction.user}\t Guild: {interaction.guild}')
+
 
     @commands.Cog.listener()
     async def on_app_command_error(self, interaction: discord.Interaction, err: Exception):
@@ -51,12 +50,15 @@ class AppErrorHandler(commands.Cog):
             em.description='Missing permission' + '\n'.join(err.args)
 
         elif isinstance(err, app_commands.MissingRole):
-            em.description=f'Missing role {interaction.guild.get_role(int(err.missing_role)).mention}'
+            em.description=f'Missing role <@&{err.missing_role}>'
         
         elif isinstance(err, app_commands.BotMissingPermissions):
             em.description='\n'.join(err.args)
 
         elif isinstance(err, DataNotFound):
+            em.description = err.message
+        
+        elif isinstance(err, WrongDatetimeFormat):
             em.description = err.message
 
         elif isinstance(err, app_commands.CommandOnCooldown):
@@ -71,19 +73,24 @@ class AppErrorHandler(commands.Cog):
 
 
         if em.description and interaction.response.is_done():
-            await interaction.edit_original_response(embed=em)
+            await interaction.followup.send(embed=em, ephemeral=True)
+
         elif em.description and not interaction.response.is_done():
             await interaction.response.send_message(embed=em, ephemeral=True)
+
         else:
-            txt_err = ''.join(traceback.format_exception(type(err), err, err.__traceback__))
-            txt_err = f'```{txt_err}```'
-            if len(txt_err) < 2000:
-                await self.bot.application.owner.send(txt_err)
+            _log_error.error(f'Ignoring exception in command {interaction.command} for {interaction.user} in {interaction.guild}', exc_info=err)
+
+            em.description = 'An error has occurred'
+
+            if interaction.response.is_done():
+                await interaction.followup.send(embed=em, ephemeral=True)
             else:
+                await interaction.response.send_message(embed=em, ephemeral=True)
+
+            if self.bot.application:
                 await self.bot.application.owner.send(f'```Error\n{err}```')
 
-            print(file=stderr)
-            print_exception(type(err), err, err.__traceback__, file=stderr)
 
 
 async def setup(bot: commands.Bot):
