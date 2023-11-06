@@ -34,9 +34,8 @@ class HelpCog(commands.Cog):
 
         git_api = await get_ratelimit()
 
-
         em = discord.Embed(color=discord.Colour.dark_embed(),
-                            title=f'{self.bot.user.name} Help',
+                            title=f'{self.bot.user.name} Help' if self.bot.user else 'Help',
                             description=f'Status: **{self.bot.status}** \n'
                                         f'Latency: **{round(self.bot.latency * 1000)}ms**\n'
                                         f'Working on **{len(self.bot.guilds)} Guilds**')
