@@ -7,6 +7,7 @@ discloud
 .vscode
 images
 tests
+bot/archive
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

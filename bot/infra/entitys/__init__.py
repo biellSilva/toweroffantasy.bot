@@ -1,9 +1,17 @@
 
-from .matrices import Matrice
-from .mount import Mount
-from .relics import Relic
-from .simulacra import Simulacra
-from .servants import SmartServant
-from .guilds import Guild
+from .guild import Guild
+from .simulacra import Simulacra, SimulacraSimple, SimulacraV2
+from .matrice import Matrice, MatriceSimple
+from .weapon import Weapon, WeaponSimple
 
-__import__ = [Matrice, Mount, Relic, Simulacra, SmartServant, Guild]
+
+__import__ = [
+    Guild,
+    Simulacra,
+    SimulacraSimple,
+    SimulacraV2,
+    Matrice,
+    MatriceSimple,
+    Weapon,
+    WeaponSimple
+]

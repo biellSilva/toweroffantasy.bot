@@ -4,7 +4,7 @@ import logging
 
 from discord.ext import commands
 
-from bot import wait_until_ready_tasks, tof_info_cache, load_cogs_by_dir
+from bot import wait_until_ready_tasks, load_cogs_by_dir
 
 _log_status = logging.getLogger('tof_info.status')
 
@@ -24,7 +24,6 @@ class TOF_INFO(commands.Bot):
 
     async def setup_hook(self):
         self.loop.create_task(wait_until_ready_tasks(self, maintenance=False))
-        await tof_info_cache()
         await load_cogs_by_dir(self)
 
 

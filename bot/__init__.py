@@ -5,14 +5,8 @@ import discord
 
 from discord.ext import commands
 
-from bot.core.service.sync_data import update_cache
 
 _log_extension = logging.getLogger('tof_info.extension')
-_log_cache = logging.getLogger('tof_info.cache')
-
-async def tof_info_cache():
-    _log_cache.info('Initializing cache')
-    await update_cache()
 
 
 async def load_cogs_by_dir(bot: commands.Bot, dir: str = 'bot/cogs') -> None:
