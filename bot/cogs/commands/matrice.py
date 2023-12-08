@@ -9,8 +9,6 @@ class MatriceCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-
-
     @app_commands.command(name='matrice')
     @app_commands.rename(id='name')
     @app_commands.describe(id='Matrice name')
