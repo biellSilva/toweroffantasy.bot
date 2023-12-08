@@ -13,8 +13,7 @@ S = TypeVar('S', bound=BaseModel)
 M = TypeVar('M', bound=BaseModel)
 
 
-
-class TofAPI(Generic[S, M]):
+class API(Generic[S, M]):
     BASE_URI = 'https://api.toweroffantasy.info'
     def __init__(self, 
                  simple_model: Type[S],
@@ -30,10 +29,10 @@ class TofAPI(Generic[S, M]):
         self.model = model
     
 
-    async def get(self, id: str, locale: Locale) -> M:
+    async def get(self, id: str, locale: Locale, route: str) -> M:
         lang = convert_lang(locale)
         async with aiohttp.ClientSession(self.BASE_URI) as session:
-            async with session.get(f'/{self.route}/{id}?lang={lang}') as res:
+            async with session.get(f'/{route}/{id}?lang={lang}') as res:
                 if res.status == 200:
                     data = await res.json(encoding='utf-8')
                     return self.model(**data)
@@ -46,13 +45,14 @@ class TofAPI(Generic[S, M]):
                     raise Exception(res)
     
 
-    async def get_all(self, locale: Locale) -> list[S]:
+    async def get_all(self, locale: Locale, route: str) -> list[S]:
         lang = convert_lang(locale)
+
         async with aiohttp.ClientSession(self.BASE_URI) as session:
-            async with session.get(f'/{self.route}?lang={lang}') as res:
+            async with session.get(f'/{route}?lang={lang}') as res:
+
                 if res.status == 200:
-                    data = await res.json(encoding='utf-8')
-                    return [self.simple_model(**i) for i in data]
+                    return [self.simple_model(**i) for i in await res.json()]
                 
                 else:
                     res.raise_for_status()

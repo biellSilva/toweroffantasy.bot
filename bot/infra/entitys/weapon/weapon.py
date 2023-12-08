@@ -2,30 +2,49 @@
 from discord import Embed, Colour
 
 from bot.config import EMOJIS, STAR_EMOJI
-from bot.infra.entitys.base import EntityBase
+
+from ..base import EntityBase
+from ..banners import Banner
+
 from .extra import (
     ShatterOrCharge, 
     WeaponEffect, 
     Advancements, 
     Skills,
-    Assets
+    Assets,
+    BaseStats,
+    MetaData
 )
 
 
 class Weapon(EntityBase):
+    simulacrumId: str | None
+    advanceId: str | None
+    # isUpPoolWeapon: bool = False
+
     name: str
-    description: str
     rarity: str
-    type: str 
-    element: str
     assets: Assets
+
+    # Brief: str
+    category: str
+    element: str
+    description: str
+
     shatter: ShatterOrCharge
     charge: ShatterOrCharge
-    advanceID: str | None
-    mats: dict[str, int | None]
+
+    # FashionWeaponInfos: list[FashionWeaponInfo]
+    # RecommendedMatrices: list[MatrixSuit]
+
     weaponEffects: list[WeaponEffect]
-    skills: Skills
-    advancements: list[Advancements]
+
+    weaponAdvancements: list[Advancements] 
+    weaponAttacks: Skills 
+    weaponStats: list[BaseStats]
+
+    meta: MetaData | None
+    banners: list[Banner]
 
     @property
     def embed_title(self):
@@ -36,14 +55,14 @@ class Weapon(EntityBase):
         return EMOJIS.get(self.element, self.element)
     
     @property
-    def emoji_type(self):
-        return EMOJIS.get(self.type, self.type)
+    def emoji_category(self):
+        return EMOJIS.get(self.category, self.category)
     
 
     @property
     def embed_main(self) -> Embed:
         em = Embed(colour=Colour.dark_embed(),
-                   description=f'**{self.embed_title}** {self.emoji_type} {self.emoji_element}\n'
+                   description=f'**{self.embed_title}** {self.emoji_category} {self.emoji_element}\n'
                                f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                                f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n'
                                f'*{self.description}*')
@@ -56,7 +75,7 @@ class Weapon(EntityBase):
     def embed_effects(self) -> Embed:
         em = Embed(colour=Colour.dark_embed())
 
-        em.description = (f'**{self.embed_title}** {self.emoji_type} {self.emoji_element}\n'
+        em.description = (f'**{self.embed_title}** {self.emoji_category} {self.emoji_element}\n'
                           f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                           f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n')
 
@@ -71,13 +90,13 @@ class Weapon(EntityBase):
     def embed_advanc(self) -> Embed:
         em = Embed(colour=Colour.dark_embed())
 
-        em.description = (f'**{self.embed_title}** {self.emoji_type} {self.emoji_element}\n'
+        em.description = (f'**{self.embed_title}** {self.emoji_category} {self.emoji_element}\n'
                           f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                           f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n')
 
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.icon}')
 
-        for i, advanc in enumerate(self.advancements, start=1):
+        for i, advanc in enumerate(self.weaponAdvancements, start=1):
             if advanc.description:
                 em.description += f'**{i} {STAR_EMOJI}**\n{advanc.description}\n\n'
 
@@ -87,13 +106,13 @@ class Weapon(EntityBase):
     def embed_attacks_normals(self) -> Embed:
         em = Embed(colour=Colour.dark_embed())
 
-        em.description = (f'**{self.embed_title}** {self.emoji_type} {self.emoji_element}\n'
+        em.description = (f'**{self.embed_title}** {self.emoji_category} {self.emoji_element}\n'
                           f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                           f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n')
 
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.icon}')
 
-        for skill in self.skills.normals:
+        for skill in self.weaponAttacks.normals:
             em.description += f'**{skill.name}**\n{skill.description}\n\n'
         
         return em
@@ -102,13 +121,13 @@ class Weapon(EntityBase):
     def embed_attacks_dodge(self) -> Embed:
         em = Embed(colour=Colour.dark_embed())
 
-        em.description = (f'**{self.embed_title}** {self.emoji_type} {self.emoji_element}\n'
+        em.description = (f'**{self.embed_title}** {self.emoji_category} {self.emoji_element}\n'
                           f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                           f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n')
 
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.icon}')
 
-        for skill in self.skills.dodge:
+        for skill in self.weaponAttacks.dodge:
             em.description += f'**{skill.name}**\n{skill.description}\n\n'
         
         return em
@@ -117,13 +136,13 @@ class Weapon(EntityBase):
     def embed_attacks_skill(self) -> Embed:
         em = Embed(colour=Colour.dark_embed())
 
-        em.description = (f'**{self.embed_title}** {self.emoji_type} {self.emoji_element}\n'
+        em.description = (f'**{self.embed_title}** {self.emoji_category} {self.emoji_element}\n'
                           f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                           f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n')
 
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.icon}')
 
-        for skill in self.skills.skill:
+        for skill in self.weaponAttacks.skill:
             em.description += f'**{skill.name}**\n{skill.description}\n\n'
         
         return em
@@ -132,13 +151,13 @@ class Weapon(EntityBase):
     def embed_attacks_discharge(self) -> Embed:
         em = Embed(colour=Colour.dark_embed())
 
-        em.description = (f'**{self.embed_title}** {self.emoji_type} {self.emoji_element}\n'
+        em.description = (f'**{self.embed_title}** {self.emoji_category} {self.emoji_element}\n'
                           f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                           f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n')
 
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.icon}')
 
-        for skill in self.skills.discharge:
+        for skill in self.weaponAttacks.discharge:
             em.description += f'**{skill.name}**\n{skill.description}\n\n'
         
         return em

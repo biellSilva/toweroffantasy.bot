@@ -2,9 +2,10 @@ import discord
 
 from discord.ext import commands
 from discord import app_commands
+from unidecode import unidecode
 
 from bot.core.views.simulacra import SimulacraView
-from bot.core.service.api import TofAPI
+from bot.core.service.api import API
 
 from bot.infra.entitys import Simulacra, SimulacraSimple
 
@@ -13,7 +14,7 @@ class SimulacraCog(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.API = TofAPI(
+        self.API = API(
             simple_model=SimulacraSimple,
             model=Simulacra,
             route='simulacra'
@@ -36,19 +37,20 @@ class SimulacraCog(commands.Cog):
 
         await interaction.response.defer()
 
-        simulacra = await self.API.get(id=id, locale=interaction.locale)
+        simulacra = await self.API.get(id=id, locale=interaction.locale, route='simulacra-v2')
 
-        await interaction.edit_original_response(embed=simulacra.embed_main, 
+        await interaction.edit_original_response(embeds=simulacra.embed_main, 
                                                  view=SimulacraView(simulacra=simulacra, 
                                                                     owner=interaction.user))
 
     @simulacra.autocomplete(name='id')
     async def simulacra_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
         return [
-            app_commands.Choice(name=simulacra.name, value=simulacra.id) 
-            for simulacra in await self.API.get_all(locale=interaction.locale) 
-            if current.lower() in simulacra.name.lower()
+            app_commands.Choice(name=f'[{simulacra.rarity}] {simulacra.name}', value=simulacra.id) 
+            for simulacra in await self.API.get_all(locale=interaction.locale, route='simulacra') 
+            if unidecode(current).lower() in unidecode(simulacra.name).lower()
         ][:25]
+    
     
 async def setup(bot: commands.Bot):
     await bot.add_cog(SimulacraCog(bot))

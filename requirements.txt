@@ -4,3 +4,5 @@ pydantic
 motor
 pymongo
 pytz
+unidecode
+fluent.runtime
