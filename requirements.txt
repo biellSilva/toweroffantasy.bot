@@ -2,6 +2,7 @@ discord
 python-dotenv
 pydantic
 motor
+motor-types
 pymongo
 pytz
 unidecode

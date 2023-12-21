@@ -4,9 +4,9 @@ import logging
 
 from discord.ext import commands
 
-from bot import wait_until_ready_tasks, load_cogs_by_dir
+from src import wait_until_ready_tasks, load_cogs_by_dir
 
-_log_status = logging.getLogger('tof_info.status')
+_log_status = logging.getLogger('tof.status')
 
 
 class TOF_INFO(commands.Bot):
