@@ -30,4 +30,4 @@ class TOF_INFO(commands.Bot):
 if __name__ == '__main__':
     if TOKEN := dotenv.get_key(dotenv_path=dotenv.find_dotenv(), key_to_get='TOKEN'):
         bot = TOF_INFO()
-        bot.run(token=TOKEN, root_logger=True)
+        bot.run(token=TOKEN, root_logger=True) 
