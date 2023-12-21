@@ -41,7 +41,7 @@ class Simulacra(EntityBase):
     banners: list[Banner]
 
     weapon: Weapon | None = None
-    matrice: Matrix | None = None
+    matrix: Matrix | None = None
 
     @property
     def website_url(self):
@@ -114,7 +114,7 @@ class Simulacra(EntityBase):
 
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assetsA0.avatar}')
         em.set_image(url=f'https://api.toweroffantasy.info{self.assetsA0.descPainting}')
-        em.set_footer(text='Imitation Info')
+        em.set_footer(text='Info')
 
         if self.gender and self.gender not in ('', ' ', '???'):
             em.description += f"**Gender:** {self.gender}\n"
@@ -204,6 +204,7 @@ class Simulacra(EntityBase):
                          f'*{self.weapon.description}*')
         
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_footer(text='Weapon')
 
         return em
     
@@ -223,6 +224,7 @@ class Simulacra(EntityBase):
                          f'*Stats:* {self.emoji_stats}\n\n')
 
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_footer(text='Effects')
 
         if self.weapon.elementEffect:
             em.description += f'**{self.weapon.elementEffect.title}**\n{self.weapon.elementEffect.description}\n\n'
@@ -251,6 +253,7 @@ class Simulacra(EntityBase):
                          f'*Stats:* {self.emoji_stats}\n\n')
 
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_footer(text='Advancements')
 
         for i, advanc in enumerate(self.weapon.weaponAdvancements, start=1):
             if advanc.description:
@@ -277,6 +280,7 @@ class Simulacra(EntityBase):
                          f'*Stats:* {self.emoji_stats}\n\n')
 
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_footer(text='Normal Attacks')
 
         for skill in self.weapon.weaponAttacks.normals:
             if 'Jump' in skill.operations:
@@ -305,6 +309,7 @@ class Simulacra(EntityBase):
                          f'*Stats:* {self.emoji_stats}\n\n')
 
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_footer(text='Jump Attacks')
 
         for skill in self.weapon.weaponAttacks.normals:
             if 'Jump' not in skill.operations:
@@ -333,6 +338,7 @@ class Simulacra(EntityBase):
                          f'*Stats:* {self.emoji_stats}\n\n')
 
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_footer(text='Dodge Attacks')
 
         for skill in self.weapon.weaponAttacks.dodge:
             em.description += f'**{skill.name}**\n{skill.description}\n\n'
@@ -358,6 +364,7 @@ class Simulacra(EntityBase):
                          f'*Stats:* {self.emoji_stats}\n\n')
 
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_footer(text='Skill')
 
         for skill in self.weapon.weaponAttacks.skill:
             em.description += f'**{skill.name}**\n{skill.description}\n\n'
@@ -383,6 +390,7 @@ class Simulacra(EntityBase):
                          f'*Stats:* {self.emoji_stats}\n\n')
 
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_footer(text='Discharge')
 
         for skill in self.weapon.weaponAttacks.discharge:
             em.description += f'**{skill.name}**\n{skill.description}\n\n'
@@ -390,4 +398,17 @@ class Simulacra(EntityBase):
         if em.description.endswith('\n\n'):
             em.description = em.description.removesuffix('\n\n')
         
+        return em
+    
+
+    @property
+    def embed_matrix_main(self) -> Embed:
+
+        if not self.matrix:
+            raise
+
+        em = self.matrix.embed
+        em.title = self.embed_title
+        
+
         return em

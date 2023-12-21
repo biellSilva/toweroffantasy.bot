@@ -32,10 +32,12 @@ class Matrix(EntityBase):
                    url=self.website_url)
         
         em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.iconLarge}')
-        em.description = f'> **{self.description}**\n\n'
+        em.set_footer(text='Matrix')
+
+        em.description = f'**{self.description}**\n\n'
 
         for set in self.sets:
-            em.description += f'**{set.need}x**\n{set.description}'
+            em.description += f'**{set.need}x**\n{set.description}\n\n'
 
         
         return em

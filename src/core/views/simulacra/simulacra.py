@@ -76,6 +76,22 @@ class SimulacraView(discord.ui.View):
                                                  view=WeaponView(simulacra=self.simulacra, owner=self.owner))
 
 
+    @discord.ui.button(label='Matrix', style=discord.ButtonStyle.grey)
+    async def matrix_button(self, interaction: discord.Interaction, button: discord.ui.Button[discord.ui.View]):
+        if interaction.user != self.owner:
+            return
+        
+        await interaction.response.defer()
+
+        if not self.simulacra.matrix:
+            button.disabled = True
+            await interaction.edit_original_response(view=self)
+            return
+
+        await interaction.edit_original_response(embed=self.simulacra.embed_matrix_main, 
+                                                 view=MatrixView(simulacra=self.simulacra, owner=self.owner))
+
+
 class WeaponView(discord.ui.View):
     def __init__(self, *, timeout: float | None = 180, simulacra: 'Simulacra', owner: Union[discord.User, discord.Member]):
         super().__init__(timeout=timeout)
@@ -251,3 +267,36 @@ class WeaponAttacksView(discord.ui.View):
             return
 
         await interaction.edit_original_response(embed=self.simulacra.embed_attacks_discharge)
+
+
+class MatrixView(discord.ui.View):
+    def __init__(self, *, timeout: float | None = 180, simulacra: 'Simulacra', owner: Union[discord.User, discord.Member]):
+        super().__init__(timeout=timeout)
+        self.owner = owner
+        self.simulacra = simulacra
+    
+    @discord.ui.button(label='Back', style=discord.ButtonStyle.grey)
+    async def main_button(self, interaction: discord.Interaction, button: discord.ui.Button[discord.ui.View]):
+
+        if interaction.user != self.owner:
+            return
+
+        await interaction.response.defer()
+
+        await interaction.edit_original_response(embeds=self.simulacra.embed_main, 
+                                                 view=SimulacraView(simulacra=self.simulacra, owner=self.owner))
+    
+    @discord.ui.button(label='Home', style=discord.ButtonStyle.grey)
+    async def matrice_button(self, interaction: discord.Interaction, button: discord.ui.Button[discord.ui.View]):
+
+        if interaction.user != self.owner:
+            return
+        
+        await interaction.response.defer()
+
+        if not self.simulacra.weapon:
+            button.disabled = True
+            await interaction.edit_original_response(view=self)
+            return
+
+        await interaction.edit_original_response(embed=self.simulacra.embed_matrix_main)
