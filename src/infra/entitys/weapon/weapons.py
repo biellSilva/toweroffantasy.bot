@@ -102,7 +102,7 @@ class Weapon(EntityBase):
 
         for i, advanc in enumerate(self.weaponAdvancements, start=1):
             if advanc.description:
-                em.description += f'{f'{STAR_EMOJI} ' * i}\n{advanc.description}\n\n'
+                em.description += STAR_EMOJI * i + f'\n{advanc.description}\n\n'
 
         return em
     
