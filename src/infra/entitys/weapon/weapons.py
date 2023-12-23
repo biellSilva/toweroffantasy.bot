@@ -12,8 +12,7 @@ from .extra import (
     # FashionWeaponInfo,
     # MatrixSuit,
     WeaponAdvancement,
-    WeaponAttacks,
-    WeaponMats
+    WeaponAttacks
 )
 
 
@@ -71,7 +70,7 @@ class Weapon(EntityBase):
                                f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n'
                                f'*{self.description}*')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.icon}')
+        em.set_thumbnail(url=f'{self.assets.icon}')
 
         return em
     
@@ -83,7 +82,7 @@ class Weapon(EntityBase):
                           f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                           f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.icon}')
+        em.set_thumbnail(url=f'{self.assets.icon}')
 
         for effect in self.weaponEffects:
             em.description += f'**{effect.title}**\n{effect.description}\n\n'
@@ -98,11 +97,11 @@ class Weapon(EntityBase):
                           f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                           f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.icon}')
+        em.set_thumbnail(url=f'{self.assets.icon}')
 
         for i, advanc in enumerate(self.weaponAdvancements, start=1):
             if advanc.description:
-                em.description += STAR_EMOJI * i + f'\n{advanc.description}\n\n'
+                em.description += f'{f'{STAR_EMOJI}' * i}\n{advanc.description}\n\n'
 
         return em
     
@@ -114,7 +113,7 @@ class Weapon(EntityBase):
                           f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                           f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.icon}')
+        em.set_thumbnail(url=f'{self.assets.icon}')
 
         for skill in self.weaponAttacks.normals:
             if 'Jump' not in skill.operations:
@@ -130,7 +129,7 @@ class Weapon(EntityBase):
                           f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                           f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.icon}')
+        em.set_thumbnail(url=f'{self.assets.icon}')
 
         for skill in self.weaponAttacks.normals:
             if 'Jump' in skill.operations:
@@ -146,7 +145,7 @@ class Weapon(EntityBase):
                           f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                           f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.icon}')
+        em.set_thumbnail(url=f'{self.assets.icon}')
 
         for skill in self.weaponAttacks.dodge:
             em.description += f'**{skill.name}**\n{skill.description}\n\n'
@@ -161,7 +160,7 @@ class Weapon(EntityBase):
                           f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                           f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.icon}')
+        em.set_thumbnail(url=f'{self.assets.icon}')
 
         for skill in self.weaponAttacks.skill:
             em.description += f'**{skill.name}**\n{skill.description}\n\n'
@@ -176,7 +175,7 @@ class Weapon(EntityBase):
                           f'*Shatter: {self.shatter.value} **{self.shatter.tier}***\n'
                           f'*Charge: {self.charge.value} **{self.charge.tier}***\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.icon}')
+        em.set_thumbnail(url=f'{self.assets.icon}')
 
         for skill in self.weaponAttacks.discharge:
             em.description += f'**{skill.name}**\n{skill.description}\n\n'

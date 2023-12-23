@@ -80,12 +80,12 @@ class Simulacra(EntityBase):
         
         em.description = ''
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assetsA0.avatar}')
-        em.set_image(url=f'https://api.toweroffantasy.info{self.assetsA0.titlePicture}')
+        em.set_thumbnail(url=f'{self.assetsA0.avatar}')
+        em.set_image(url=f'{self.assetsA0.titlePicture}')
         em.set_footer(text='Main')
 
         if self.id == 'imitation_33':
-            em.set_image(url=f'https://api.toweroffantasy.info{self.assetsA0.painting}')
+            em.set_image(url=f'{self.assetsA0.painting}')
 
         em.description += '\n**Voice Actors**\n'
 
@@ -100,7 +100,7 @@ class Simulacra(EntityBase):
             return [em]
 
         em_a3 = em.copy()
-        em_a3.set_image(url=f'https://api.toweroffantasy.info{self.assetsA3.titlePicture}')
+        em_a3.set_image(url=f'{self.assetsA3.titlePicture}')
 
         return [em, em_a3]
 
@@ -112,8 +112,8 @@ class Simulacra(EntityBase):
         
         em.description = ''
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assetsA0.avatar}')
-        em.set_image(url=f'https://api.toweroffantasy.info{self.assetsA0.descPainting}')
+        em.set_thumbnail(url=f'{self.assetsA0.avatar}')
+        em.set_image(url=f'{self.assetsA0.descPainting}')
         em.set_footer(text='Info')
 
         if self.gender and self.gender not in ('', ' ', '???'):
@@ -142,7 +142,7 @@ class Simulacra(EntityBase):
         
         em.description = ''
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assetsA0.avatar}')
+        em.set_thumbnail(url=f'{self.assetsA0.avatar}')
         em.set_footer(text='Traits')
 
         for trait in self.awakening:
@@ -159,7 +159,7 @@ class Simulacra(EntityBase):
         
         em.description = ''
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assetsA0.avatar}')
+        em.set_thumbnail(url=f'{self.assetsA0.avatar}')
         em.set_footer(text='Banners')
 
         for banner in self.banners:
@@ -203,7 +203,7 @@ class Simulacra(EntityBase):
                          f'*Stats:* {self.emoji_stats}\n\n'
                          f'*{self.weapon.description}*')
         
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_thumbnail(url=f'{self.weapon.assets.icon}')
         em.set_footer(text='Weapon')
 
         return em
@@ -223,7 +223,7 @@ class Simulacra(EntityBase):
                          f'*Charge: {self.weapon.charge.value} **{self.weapon.charge.tier}***\n'
                          f'*Stats:* {self.emoji_stats}\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_thumbnail(url=f'{self.weapon.assets.icon}')
         em.set_footer(text='Effects')
 
         if self.weapon.elementEffect:
@@ -252,7 +252,7 @@ class Simulacra(EntityBase):
                          f'*Charge: {self.weapon.charge.value} **{self.weapon.charge.tier}***\n'
                          f'*Stats:* {self.emoji_stats}\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_thumbnail(url=f'{self.weapon.assets.icon}')
         em.set_footer(text='Advancements')
 
         for i, advanc in enumerate(self.weapon.weaponAdvancements, start=1):
@@ -279,7 +279,7 @@ class Simulacra(EntityBase):
                          f'*Charge: {self.weapon.charge.value} **{self.weapon.charge.tier}***\n'
                          f'*Stats:* {self.emoji_stats}\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_thumbnail(url=f'{self.weapon.assets.icon}')
         em.set_footer(text='Normal Attacks')
 
         for skill in self.weapon.weaponAttacks.normals:
@@ -308,7 +308,7 @@ class Simulacra(EntityBase):
                          f'*Charge: {self.weapon.charge.value} **{self.weapon.charge.tier}***\n'
                          f'*Stats:* {self.emoji_stats}\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_thumbnail(url=f'{self.weapon.assets.icon}')
         em.set_footer(text='Jump Attacks')
 
         for skill in self.weapon.weaponAttacks.normals:
@@ -337,7 +337,7 @@ class Simulacra(EntityBase):
                          f'*Charge: {self.weapon.charge.value} **{self.weapon.charge.tier}***\n'
                          f'*Stats:* {self.emoji_stats}\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_thumbnail(url=f'{self.weapon.assets.icon}')
         em.set_footer(text='Dodge Attacks')
 
         for skill in self.weapon.weaponAttacks.dodge:
@@ -363,7 +363,7 @@ class Simulacra(EntityBase):
                          f'*Charge: {self.weapon.charge.value} **{self.weapon.charge.tier}***\n'
                          f'*Stats:* {self.emoji_stats}\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_thumbnail(url=f'{self.weapon.assets.icon}')
         em.set_footer(text='Skill')
 
         for skill in self.weapon.weaponAttacks.skill:
@@ -389,7 +389,7 @@ class Simulacra(EntityBase):
                          f'*Charge: {self.weapon.charge.value} **{self.weapon.charge.tier}***\n'
                          f'*Stats:* {self.emoji_stats}\n\n')
 
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.weapon.assets.icon}')
+        em.set_thumbnail(url=f'{self.weapon.assets.icon}')
         em.set_footer(text='Discharge')
 
         for skill in self.weapon.weaponAttacks.discharge:

@@ -31,7 +31,7 @@ class Matrix(EntityBase):
                    title=self.embed_title,
                    url=self.website_url)
         
-        em.set_thumbnail(url=f'https://api.toweroffantasy.info{self.assets.iconLarge}')
+        em.set_thumbnail(url=f'{self.assets.iconLarge}')
         em.set_footer(text='Matrix')
 
         em.description = f'**{self.description}**\n\n'
