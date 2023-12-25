@@ -9,7 +9,7 @@ from .extra import MatrixAssets, MatrixSet
 class Matrix(EntityBase):
     name: str
     simulacrumId: str | None
-    type: str
+    # type: str
     description: str
     assets: MatrixAssets
     rarity: str
