@@ -1,8 +1,11 @@
 
 from discord import Embed, Colour
 from discord.utils import format_dt
+from pydantic import BeforeValidator
+from typing import Annotated
 
 from src.config import EMOJIS, STAR_EMOJI
+from src.utils import convert_rarity
 
 from ..base import EntityBase
 from ..banners import Banner
@@ -14,12 +17,12 @@ from ..matrice import Matrix
 
 class SimulacraSimple(EntityBase):
     name: str
-    rarity: str
+    rarity: Annotated[str, BeforeValidator(convert_rarity)]
 
 
 class Simulacra(EntityBase):
     name: str
-    rarity: str
+    rarity: Annotated[str, BeforeValidator(convert_rarity)]
     avatarId: str
     advanceId: str | None 
     weaponId: str | None

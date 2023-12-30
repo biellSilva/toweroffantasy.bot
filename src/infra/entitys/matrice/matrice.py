@@ -1,9 +1,17 @@
 
 from discord import Embed, Colour
+from pydantic import BeforeValidator
+from typing import Annotated
+
+from src.utils import convert_rarity
 
 from ..base import EntityBase
-
 from .extra import MatrixAssets, MatrixSet
+
+
+class MatriceSimple(EntityBase):
+    name: str
+    rarity: Annotated[str, BeforeValidator(convert_rarity)]
 
 
 class Matrix(EntityBase):
@@ -12,7 +20,7 @@ class Matrix(EntityBase):
     # type: str
     description: str
     assets: MatrixAssets
-    rarity: str
+    rarity: Annotated[str, BeforeValidator(convert_rarity)]
     sets: list[MatrixSet]
 
 
@@ -41,10 +49,3 @@ class Matrix(EntityBase):
 
         
         return em
-
-
-
-
-class MatriceSimple(EntityBase):
-    name: str
-    rarity: str

@@ -29,3 +29,12 @@ def convert_lang(locale: Locale) -> str:
         'th': 'th'
     }
     return LANGS.get(locale.value, 'en')
+
+def convert_rarity(rarity: int) -> str:
+    return {
+        1: '',
+        2: 'N',
+        3: 'R',
+        4: 'SR',
+        5: 'SSR',
+    }.get(rarity, '')

@@ -1,7 +1,12 @@
 
 from discord import Colour, Embed
+from pydantic import BeforeValidator
+from typing import Annotated
 
-from ....config import EMOJIS, STAR_EMOJI
+
+from src.config import EMOJIS, STAR_EMOJI
+from src.utils import convert_rarity
+
 from ..base import EntityBase
 from .extra import (
     ShatterOrCharge, 
@@ -22,7 +27,7 @@ class Weapon(EntityBase):
     # isUpPoolWeapon: bool = False
 
     name: str
-    rarity: str
+    rarity: Annotated[str, BeforeValidator(convert_rarity)]
     assets: Assets
 
     # Brief: str
@@ -185,4 +190,4 @@ class Weapon(EntityBase):
 
 class WeaponSimple(EntityBase):
     name: str
-    rarity: str
+    rarity: Annotated[str, BeforeValidator(convert_rarity)]
