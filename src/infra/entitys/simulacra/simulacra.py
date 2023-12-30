@@ -24,6 +24,7 @@ class Simulacra(EntityBase):
     name: str
     rarity: Annotated[str, BeforeValidator(convert_rarity)]
     avatarId: str
+    isReleased: bool
     advanceId: str | None 
     weaponId: str | None
     matrixId: str | None
