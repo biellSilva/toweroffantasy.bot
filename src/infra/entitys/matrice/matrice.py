@@ -27,7 +27,7 @@ class Matrix(EntityBase):
 
     @property
     def website_url(self):
-        return f'https://toweroffantasy.info/matrice/{self.name.replace(" ", "_").lower()}'
+        return f'https://toweroffantasy.info/matrices/{self.name.replace(" ", "_").lower()}'
     
     @property
     def embed_title(self):
