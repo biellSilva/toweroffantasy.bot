@@ -70,8 +70,6 @@ class BaseStats(BaseModel):
     name: str
     icon:str
     value: float 
-    isTag: bool 
-    modifier: str
 
 
 class UpgradeMaterial(BaseModel):
