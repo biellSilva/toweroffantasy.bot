@@ -49,6 +49,8 @@ class SimulacraCog(commands.Cog):
             app_commands.Choice(name=f'[{simulacra.rarity}] {simulacra.name}', value=simulacra.id) 
             for simulacra in await self.API.get_all(locale=interaction.locale, route='simulacra') 
             if unidecode(current).lower() in unidecode(simulacra.name).lower()
+            or simulacra.rarity.lower() == current.lower()
+            or unidecode(current).lower() in simulacra.id.lower()
         ][:25]
     
     

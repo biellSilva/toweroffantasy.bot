@@ -2,6 +2,7 @@ import discord
 
 from discord.ext import commands
 from discord import app_commands
+from unidecode import unidecode
 
 from src.core.service import API
 from src.infra.entitys import MatriceSimple, Matrix
@@ -41,7 +42,9 @@ class MatriceCog(commands.Cog):
         return [
             app_commands.Choice(name=f'[{matrice.rarity}] {matrice.name}', value=matrice.id) 
             for matrice in await self.API.get_all(locale=interaction.locale, route='matrices') 
-            if current.lower() in matrice.name.lower()
+            if unidecode(current).lower() in unidecode(matrice.name).lower() 
+            or matrice.rarity.lower() == current.lower()
+            or unidecode(current).lower() in matrice.id.lower()
         ][:25]
     
 async def setup(bot: commands.Bot):
