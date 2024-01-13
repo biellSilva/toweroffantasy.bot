@@ -5,7 +5,7 @@ from pydantic import BeforeValidator
 from typing import Annotated
 
 from src.config import EMOJIS, STAR_EMOJI
-from src.utils import convert_rarity
+from src.utils import convert_rarity, convert_operations
 
 from ..base import EntityBase
 from ..banners import Banner
@@ -261,7 +261,7 @@ class Simulacra(EntityBase):
 
         for i, advanc in enumerate(self.weapon.weaponAdvancements, start=1):
             if advanc.description:
-                em.description += f'**{f"{STAR_EMOJI}" * i}**\n{advanc.description}\n\n'
+                em.description += f'**{f"{STAR_EMOJI} " * i}**\n{advanc.description}\n\n'
         
         if em.description.endswith('\n\n'):
             em.description = em.description.removesuffix('\n\n')
@@ -290,7 +290,8 @@ class Simulacra(EntityBase):
             if 'Jump' in skill.operations:
                 continue
 
-            em.description += f'**{skill.name}**\n{skill.description}\n\n'
+            operations = f'*[{convert_operations(skill.operations)}]*' if skill.operations else ''
+            em.description += f'**{skill.name}** {operations}\n{skill.description}\n\n'
         
         if em.description.endswith('\n\n'):
             em.description = em.description.removesuffix('\n\n')
@@ -319,7 +320,8 @@ class Simulacra(EntityBase):
             if 'Jump' not in skill.operations:
                 continue
 
-            em.description += f'**{skill.name}**\n{skill.description}\n\n'
+            operations = f'*[{convert_operations(skill.operations)}]*' if skill.operations else ''
+            em.description += f'**{skill.name}** {operations}\n{skill.description}\n\n'
         
         if em.description.endswith('\n\n'):
             em.description = em.description.removesuffix('\n\n')
@@ -345,7 +347,8 @@ class Simulacra(EntityBase):
         em.set_footer(text='Dodge Attacks')
 
         for skill in self.weapon.weaponAttacks.dodge:
-            em.description += f'**{skill.name}**\n{skill.description}\n\n'
+            operations = f'*[{convert_operations(skill.operations)}]*' if skill.operations else ''
+            em.description += f'**{skill.name}** {operations}\n{skill.description}\n\n'
         
         if em.description.endswith('\n\n'):
             em.description = em.description.removesuffix('\n\n')

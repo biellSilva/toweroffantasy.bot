@@ -38,3 +38,33 @@ def convert_rarity(rarity: int) -> str:
         4: 'SR',
         5: 'SSR',
     }.get(rarity, '')
+
+
+def convert_operations(operations: list[str]):
+    counter: list[str] = []
+
+    last_input: str | None = None
+    input_counter: int = 1
+
+    for indx, input_ in enumerate(operations, start=1):
+        if last_input and input_ == last_input:
+            input_counter += 1
+        
+        elif input_ != last_input:
+            if last_input:
+                if input_counter > 1:
+                    counter.append(f'{last_input} {input_counter}x')
+                else:
+                    counter.append(last_input)
+            
+            last_input = input_
+            input_counter = 1
+
+        if last_input and indx == len(operations):
+
+            if input_counter > 1:
+                counter.append(f'{last_input} {input_counter}x')
+            else:
+                counter.append(last_input)
+
+    return ' - '.join(counter)
