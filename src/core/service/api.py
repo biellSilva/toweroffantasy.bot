@@ -21,7 +21,7 @@ class API(Generic[S, M]):
                  route: Literal[
                      'simulacra', 'weapons',
                      'matrice', 'simulacra-v2',
-                     'achievement', 'relic', 
+                     'achievement', 'relics', 
                      'food', 'item', 'outfit'
                     ]) -> None:
         self.route = route
