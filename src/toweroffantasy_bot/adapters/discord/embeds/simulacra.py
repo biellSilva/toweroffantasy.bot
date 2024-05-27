@@ -120,22 +120,29 @@ def fashion_embed(data: "Simulacra") -> list[Embed]:
         embed.description = "No fashion information available"
 
         return [embed]
+    
+    if len(data.fashion) > 1:
 
-    embed.description = "\n\n".join(
-        [
-            (f"**{fashion.name}**\n" f"{fashion.description}\n\n" f"*{fashion.source}*")
-            for fashion in data.fashion
-        ]
-    )
+        embed.description = "\n\n".join(
+            [
+                (f"**{fashion.name}**\n" f"{fashion.description}\n\n" f"*{fashion.source}*")
+                for fashion in data.fashion
+            ]
+        )
 
-    embeds: list[Embed] = [embed]
+        embeds: list[Embed] = [embed]
 
-    for fashion in data.fashion:
-        _fashion_embed = embed.copy()
-        _fashion_embed.set_image(url=fashion.assets.painting)
-        embeds.append(_fashion_embed)
+        for fashion in data.fashion:
+            _fashion_embed = embed.copy()
+            _fashion_embed.set_image(url=fashion.assets.painting)
+            embeds.append(_fashion_embed)
 
-    return embeds
+        return embeds
+    
+    fashion = data.fashion[0]
+    embed.description = f"**{fashion.name}**\n{fashion.description}\n\n*{fashion.source}*"
+    embed.set_image(url=fashion.assets.painting)
+    return [embed]
 
 
 def liked_gifts_embed(data: "Simulacra") -> list[Embed]:
