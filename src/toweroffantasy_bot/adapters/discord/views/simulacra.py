@@ -19,13 +19,13 @@ class SimulacraView(discord.ui.View):
         self.owner = owner
         super().__init__(timeout=timeout)
 
+        self.add_item(SimulacraDropdown(owner=owner, simulacra=simulacra))
+
         if simulacra.weapon:
             self.add_item(SimulacraWeaponButton(owner=owner, simulacra=simulacra))
 
         if simulacra.matrix:
             self.add_item(SimulacraMatrixButton(owner=owner, simulacra=simulacra))
-
-        self.add_item(SimulacraDropdown(owner=owner, simulacra=simulacra))
 
 
 class SimulacraDropdown(discord.ui.Select[Any]):
