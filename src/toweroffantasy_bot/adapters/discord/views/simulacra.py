@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any, Union
 
 import discord
-from toweroffantasy_bot.adapters.discord.embeds import simulacra as embeds
+from adapters.discord.embeds import simulacra as embeds
 
 if TYPE_CHECKING:
     from domain.models.simulacra import Simulacra

@@ -1,4 +1,4 @@
-from toweroffantasy_bot.adapters.discord.embeds.simulacra import profile_embed
+from adapters.discord.embeds.simulacra import profile_embed
 from adapters.discord.views.simulacra import SimulacraView
 from discord import Interaction
 from discord.app_commands import Choice
