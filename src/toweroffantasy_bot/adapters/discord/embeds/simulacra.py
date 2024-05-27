@@ -197,3 +197,30 @@ def banners_embed(data: "Simulacra") -> list[Embed]:
     )
 
     return [embed]
+
+
+def guidebook_embed(data: "Simulacra") -> list[Embed]:
+    if not data.guidebook:
+        embed = Embed(
+        title=data.name_with_rarity,
+        url=f"{config.tof_info_url}/simulacra/{data.id}",
+        colour=Colour.dark_embed(),
+        description="No guidebook information available"
+    )
+        return [embed]
+    
+    
+    embeds: list[Embed] = []
+
+    for guidebook in data.guidebook:
+        _embed = Embed(colour=Colour.dark_embed())
+        _embed.description = f"**{guidebook.title}**\n{guidebook.description}"
+        _embed.set_image(url=guidebook.icon)
+        embeds.append(_embed)
+
+    embeds[0].title = data.name_with_rarity
+    embeds[0].url = f"{config.tof_info_url}/simulacra/{data.id}"
+
+    embeds[-1].set_footer(text="Guidebook")
+
+    return embeds

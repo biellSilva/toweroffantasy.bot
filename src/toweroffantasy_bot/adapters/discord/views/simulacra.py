@@ -44,6 +44,7 @@ class SimulacraDropdown(discord.ui.Select[Any]):
             "voice actors": embeds.voice_actors_embed,
             "fashion": embeds.fashion_embed,
             "banners": embeds.banners_embed,
+            "guidebook": embeds.guidebook_embed,
         }
 
         super().__init__(
