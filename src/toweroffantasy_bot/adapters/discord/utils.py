@@ -44,8 +44,8 @@ async def wait_until_ready_tasks(bot: commands.Bot) -> None:
     logger_client = logging.getLogger("tof.client")
 
     async def being_remade():
-        status = discord.Status.dnd
-        activity_text = "being remade"
+        status = discord.Status.online
+        activity_text = "Waiting v4.0"
         await bot.change_presence(
             status=status, activity=discord.Game(name=activity_text)
         )
