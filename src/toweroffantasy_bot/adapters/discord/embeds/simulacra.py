@@ -197,7 +197,7 @@ def banners_embed(data: "Simulacra") -> list[Embed]:
                 f"{"\n\\- Collab" if banner.isCollab else ""}"
                 f"{"\n\\- Limited only" if banner.isLimitedBannerOnly else ""}"
                 f"{"\n\\- Final rerun" if banner.isFinalBanner else ""}"
-                f"{"\n\\- Launch" if not banner.isRerun else ""}"
+                f"{"\n\\- Release" if not banner.isRerun else ""}"
             )
             for banner in data.banners
         ]
