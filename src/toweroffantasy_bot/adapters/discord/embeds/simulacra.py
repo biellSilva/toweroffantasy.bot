@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 def profile_embed(data: "Simulacra") -> list[Embed]:
     embed = Embed(
         title=data.name_with_rarity,
-        url=f"{config.tof_info_url}/simulacra/{data.id}",
+        url=f"{config.tof_info_url}/simulacra/{data.id}#profile",
         colour=Colour.dark_embed(),
     )
 
@@ -48,7 +48,7 @@ def profile_embed(data: "Simulacra") -> list[Embed]:
 def awakening_embed(data: "Simulacra") -> list[Embed]:
     embed = Embed(
         title=data.name_with_rarity,
-        url=f"{config.tof_info_url}/simulacra/{data.id}",
+        url=f"{config.tof_info_url}/simulacra/{data.id}#awakening",
         colour=Colour.dark_embed(),
     )
 
@@ -83,7 +83,7 @@ def awakening_embed(data: "Simulacra") -> list[Embed]:
 def voice_actors_embed(data: "Simulacra") -> list[Embed]:
     embed = Embed(
         title=data.name_with_rarity,
-        url=f"{config.tof_info_url}/simulacra/{data.id}",
+        url=f"{config.tof_info_url}/simulacra/{data.id}#voice-actors",
         colour=Colour.dark_embed(),
     )
 
@@ -113,42 +113,33 @@ def fashion_embed(data: "Simulacra") -> list[Embed]:
         colour=Colour.dark_embed(),
     )
 
-    # embed.set_thumbnail(url=data.assetsA0.avatar)
-    embed.set_footer(text="Fashion")
-
     if not data.fashion:
         embed.description = "No fashion information available"
-
+        embed.set_footer(text="Fashion")
         return [embed]
-    
-    if len(data.fashion) > 1:
 
-        embed.description = "\n\n".join(
-            [
-                (f"**{fashion.name}**\n" f"{fashion.description}\n\n" f"*{fashion.source}*")
-                for fashion in data.fashion
-            ]
-        )
+    embed.description = f"**{data.fashion[0].name}**\n*{data.fashion[0].source}*\n{data.fashion[0].description}"
+    embed.set_image(url=data.fashion[0].assets.painting)
 
-        embeds: list[Embed] = [embed]
+    embeds: list[Embed] = [embed]
 
-        for fashion in data.fashion:
-            _fashion_embed = embed.copy()
-            _fashion_embed.set_image(url=fashion.assets.painting)
-            embeds.append(_fashion_embed)
+    for fashion in data.fashion[1:]:
+        _embed = Embed(colour=Colour.dark_embed())
 
-        return embeds
-    
-    fashion = data.fashion[0]
-    embed.description = f"**{fashion.name}**\n{fashion.description}\n\n*{fashion.source}*"
-    embed.set_image(url=fashion.assets.painting)
-    return [embed]
+        _embed.description = f"**{fashion.name}**\n*{fashion.source}*\n{fashion.description}"
+        _embed.set_image(url=fashion.assets.painting)
+
+        embeds.append(_embed)
+
+    embeds[-1].set_footer(text="Fashion")
+
+    return embeds
 
 
 def liked_gifts_embed(data: "Simulacra") -> list[Embed]:
     embed = Embed(
         title=data.name_with_rarity,
-        url=f"{config.tof_info_url}/simulacra/{data.id}",
+        url=f"{config.tof_info_url}/simulacra/{data.id}#preferred-gifts",
         colour=Colour.dark_embed(),
     )
 
@@ -168,7 +159,7 @@ def liked_gifts_embed(data: "Simulacra") -> list[Embed]:
 def banners_embed(data: "Simulacra") -> list[Embed]:
     embed = Embed(
         title=data.name_with_rarity,
-        url=f"{config.tof_info_url}/simulacra/{data.id}",
+        url=f"{config.tof_info_url}/simulacra/{data.id}#banners",
         colour=Colour.dark_embed(),
     )
 
@@ -207,27 +198,18 @@ def banners_embed(data: "Simulacra") -> list[Embed]:
 
 
 def guidebook_embed(data: "Simulacra") -> list[Embed]:
-    if not data.guidebook:
-        embed = Embed(
+    embed = Embed(
         title=data.name_with_rarity,
         url=f"{config.tof_info_url}/simulacra/{data.id}",
-        colour=Colour.dark_embed(),
-        description="No guidebook information available"
-    )
+        colour=Colour.dark_embed())
+    
+    embed.set_footer(text="Guidebook")
+
+    if not data.guidebook:
+        embed.description="No guidebook information available"
         return [embed]
     
-    
-    embeds: list[Embed] = []
+    embed.description = f"**{data.guidebook[0].title}**\n{data.guidebook[0].description}"
+    embed.set_image(url=data.guidebook[0].icon)
 
-    for guidebook in data.guidebook:
-        _embed = Embed(colour=Colour.dark_embed())
-        _embed.description = f"**{guidebook.title}**\n{guidebook.description}"
-        _embed.set_image(url=guidebook.icon)
-        embeds.append(_embed)
-
-    embeds[0].title = data.name_with_rarity
-    embeds[0].url = f"{config.tof_info_url}/simulacra/{data.id}"
-
-    embeds[-1].set_footer(text="Guidebook")
-
-    return embeds
+    return [embed]

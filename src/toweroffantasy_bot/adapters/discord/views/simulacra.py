@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Union
+from typing import TYPE_CHECKING, Any, Callable, Union
 
 import discord
 from adapters.discord.embeds import simulacra as embeds
@@ -12,40 +12,44 @@ class SimulacraView(discord.ui.View):
         self,
         *,
         timeout: float | None = 180,
-        simulacra: "Simulacra",
+        data: "Simulacra",
         owner: Union[discord.User, discord.Member],
     ):
-        self.simulacra = simulacra
+        self.data = data
         self.owner = owner
         super().__init__(timeout=timeout)
 
-        self.add_item(SimulacraDropdown(owner=owner, simulacra=simulacra))
+        self.add_item(SimulacraDropdown(owner=owner, data=data))
 
-        if simulacra.weapon:
-            self.add_item(SimulacraWeaponButton(owner=owner, simulacra=simulacra))
+        # if simulacra.weapon:
+        #     self.add_item(SimulacraWeaponButton(owner=owner, simulacra=simulacra))
 
-        if simulacra.matrix:
-            self.add_item(SimulacraMatrixButton(owner=owner, simulacra=simulacra))
+        # if simulacra.matrix:
+        #     self.add_item(SimulacraMatrixButton(owner=owner, simulacra=simulacra))
 
 
 class SimulacraDropdown(discord.ui.Select[Any]):
     def __init__(
         self,
         *,
-        simulacra: "Simulacra",
+        data: "Simulacra",
         owner: Union[discord.User, discord.Member],
     ) -> None:
         self.owner = owner
-        self.simulacra = simulacra
+        self.data = data
 
-        self._options = {
-            "profile": embeds.profile_embed,
-            "awakening": embeds.awakening_embed,
-            "voice actors": embeds.voice_actors_embed,
-            "fashion": embeds.fashion_embed,
-            "banners": embeds.banners_embed,
-            "guidebook": embeds.guidebook_embed,
-        }
+        self._options: dict[str, Callable[..., list[discord.Embed]]] = dict(
+            sorted(
+                {
+                    "profile": embeds.profile_embed,
+                    "awakening": embeds.awakening_embed,
+                    "voice actors": embeds.voice_actors_embed,
+                    "fashion": embeds.fashion_embed,
+                    "banners": embeds.banners_embed,
+                    "guidebook": embeds.guidebook_embed,
+                }.items()
+            )
+        )
 
         super().__init__(
             custom_id="simulacra_dropdown",
@@ -64,39 +68,39 @@ class SimulacraDropdown(discord.ui.Select[Any]):
 
         if self.values[0] in self._options:
             await interaction.edit_original_response(
-                embeds=self._options[self.values[0]](self.simulacra)
+                embeds=self._options[self.values[0]](self.data)
             )
 
 
 class SimulacraWeaponButton(discord.ui.Button[Any]):
     def __init__(
-        self, *, owner: Union[discord.User, discord.Member], simulacra: "Simulacra"
+        self, *, owner: Union[discord.User, discord.Member], data: "Simulacra"
     ) -> None:
         super().__init__(style=discord.ButtonStyle.grey, label="Weapon")
         self.owner = owner
-        self.simulacra = simulacra
+        self.data = data
 
     async def callback(self, interaction: discord.Interaction):
         if interaction.user != self.owner:
             return
 
         await interaction.response.send_message(
-            content=str(self.simulacra.weapon)[:2000], ephemeral=True
+            content=str(self.data.weapon)[:2000], ephemeral=True
         )
 
 
 class SimulacraMatrixButton(discord.ui.Button[Any]):
     def __init__(
-        self, *, owner: Union[discord.User, discord.Member], simulacra: "Simulacra"
+        self, *, owner: Union[discord.User, discord.Member], data: "Simulacra"
     ) -> None:
         super().__init__(style=discord.ButtonStyle.grey, label="Matrix")
         self.owner = owner
-        self.simulacra = simulacra
+        self.data = data
 
     async def callback(self, interaction: discord.Interaction):
         if interaction.user != self.owner:
             return
 
         await interaction.response.send_message(
-            content=str(self.simulacra.matrix)[:2000], ephemeral=True
+            content=str(self.data.matrix)[:2000], ephemeral=True
         )

@@ -18,5 +18,7 @@ class _Settings(BaseSettings):
 
     default_guild_id: int = 1000974290801410138
 
+    star_str: str = "★"
+
 
 config = _Settings()  # type: ignore

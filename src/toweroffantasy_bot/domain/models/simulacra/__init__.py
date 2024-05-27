@@ -4,6 +4,7 @@ from domain.models.base import EntityBase
 from domain.models.guidebook.extra import GuideBookItem
 from domain.models.matrices import Matrix
 from domain.models.weapons import Weapon
+from settings import config
 
 from .extra import Awakening, SimulacraAssets, SimulacraFashion, VoiceActors
 
@@ -18,7 +19,7 @@ class SimulacraSimple(EntityBase):
 
     @property
     def rarity_star(self) -> str:
-        return "★" * self.rarity
+        return config.star_str * self.rarity
 
     @property
     def rarity_string(self) -> str:

@@ -1,6 +1,6 @@
-from pydantic import BaseModel
-
 from adapters.discord.utils import rarity_to_string
+from pydantic import BaseModel
+from settings import config
 
 
 class VoiceActors(BaseModel):
@@ -59,7 +59,7 @@ class SimulacraFashion(BaseModel):
 
     @property
     def rarity_star(self) -> str:
-        return "★" * self.rarity
+        return config.star_str * self.rarity
 
     @property
     def rarity_string(self) -> str:

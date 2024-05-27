@@ -5,6 +5,7 @@ import discord
 from discord.ext import commands
 
 from .emojis import BotEmojis
+from settings import config
 
 
 async def load_cogs(
@@ -19,7 +20,11 @@ async def load_cogs(
             continue
 
         if item.suffix == ".py":
-            cog_name = ".".join(str(item).split("\\")[2:]).removesuffix(".py")
+            logger_extension.debug(f"Loading {str(item)}")
+
+            cog_name = ".".join(str(item).split("\\")[2:]).removesuffix(
+                ".py"
+            ) or ".".join(str(item).split("/")[2:]).removesuffix(".py")
 
             try:
                 await bot.load_extension(cog_name)
@@ -56,7 +61,7 @@ async def wait_until_ready_tasks(bot: commands.Bot) -> None:
 
 
 def rarity_to_stars(rarity: int) -> str:
-    return "★" * rarity
+    return config.star_str * rarity
 
 
 def rarity_to_string(rarity: int) -> str:

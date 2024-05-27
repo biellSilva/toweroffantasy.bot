@@ -4,6 +4,8 @@ from domain.models.banner import Banner
 from domain.models.base import EntityBase
 from domain.models.meta import MetaData
 
+from settings import config
+
 from .extras import (
     BaseStats,
     ShatterOrCharge,
@@ -16,18 +18,39 @@ from .extras import (
 )
 
 
-class Weapon(EntityBase):
+class WeaponSimple(EntityBase):
+    name: str
+    rarity: int
+    category: str
+    element: str
+
+    @property
+    def name_with_rarity(self) -> str:
+        return f"[{self.rarity_string}] {self.name}"
+
+    @property
+    def rarity_star(self) -> str:
+        return config.star_str * self.rarity
+
+    @property
+    def rarity_string(self) -> str:
+        return rarity_to_string(self.rarity)
+
+    @property
+    def emoji_element(self) -> str:
+        return BotEmojis.get_str(self.element)
+
+    @property
+    def emoji_category(self) -> str:
+        return BotEmojis.get_str(self.category)
+
+
+class Weapon(WeaponSimple):
     simulacrumId: str | None
     advanceId: str | None
 
-    name: str
-    version: str | None
-    rarity: int
     assets: WeaponAssets
     limited: bool
-
-    category: str
-    element: str
 
     description: str
 
@@ -48,21 +71,5 @@ class Weapon(EntityBase):
     fashion: list[WeaponFashion]
 
     @property
-    def name_with_rarity(self) -> str:
-        return f"[{self.rarity_string}] {self.name}"
-
-    @property
-    def rarity_star(self) -> str:
-        return "★" * self.rarity
-
-    @property
-    def rarity_string(self) -> str:
-        return rarity_to_string(self.rarity)
-
-    @property
-    def emoji_element(self) -> str:
-        return BotEmojis.get_str(self.element)
-
-    @property
-    def emoji_category(self) -> str:
-        return BotEmojis.get_str(self.category)
+    def stats_emojis(self) -> str:
+        return " ".join([BotEmojis.get_str(stat.id) for stat in self.weaponStats])
