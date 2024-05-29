@@ -45,7 +45,7 @@ async def wait_until_ready_tasks(bot: commands.Bot) -> None:
 
     async def being_remade():
         status = discord.Status.online
-        activity_text = "Waiting v4.0"
+        activity_text = "v4.0 Ready"
         await bot.change_presence(
             status=status, activity=discord.Game(name=activity_text)
         )
