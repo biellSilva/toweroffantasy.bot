@@ -2,10 +2,11 @@ import logging
 from pathlib import Path
 
 import discord
+from discord import Locale
 from discord.ext import commands
+from settings import config
 
 from .emojis import BotEmojis
-from settings import config
 
 
 async def load_cogs(
@@ -83,3 +84,42 @@ def rarity_to_string(rarity: int) -> str:
 
         case _:
             return "N-"
+
+
+def convert_locale(locale: Locale) -> str:
+    match locale:
+        case lang if lang in (
+            Locale.american_english,
+            Locale.british_english,
+        ):
+            return "en"
+
+        case lang if lang in (Locale.brazil_portuguese,):
+            return "pt"
+
+        case lang if lang in (Locale.spain_spanish,):
+            return "es"
+
+        case lang if lang in (Locale.french,):
+            return "fr"
+
+        case lang if lang in (Locale.indonesian,):
+            return "id"
+
+        case lang if lang in (Locale.japanese,):
+            return "ja"
+
+        case lang if lang in (Locale.russian,):
+            return "ru"
+
+        case lang if lang in (Locale.german,):
+            return "de"
+
+        case lang if lang in (Locale.thai,):
+            return "th"
+
+        case lang if lang in (Locale.chinese, Locale.taiwan_chinese):
+            return "zh-cn"
+
+        case _:
+            return "en"

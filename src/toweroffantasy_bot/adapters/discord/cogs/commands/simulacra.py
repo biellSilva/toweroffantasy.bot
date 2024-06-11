@@ -1,49 +1,43 @@
 from adapters.discord.embeds.simulacra import profile_embed
+from adapters.discord.utils import convert_locale
 from adapters.discord.views.simulacra import SimulacraView
-from discord import Interaction
+from discord import Interaction, app_commands
 from discord.app_commands import Choice
 from discord.ext import commands
 from infra.repositories.simulacra import SimulacraRepository
 from unidecode import unidecode
 
 
-class SimulacraCog(commands.Cog):
+class SimulacraCog(
+    commands.GroupCog, group_name="simulacra", description="Simulacra group command"
+):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.repository = SimulacraRepository()
 
-    @commands.hybrid_group(name="simulacra", description="Simulacra group command")
-    async def simulacra_group(self, ctx: commands.Context[commands.Bot]):
-        pass
+    @app_commands.command(name="global", description="Simulacra global command")
+    async def simulacra_global_command(self, interaction: Interaction, id: str):
 
-    @simulacra_group.command(name="global", description="Simulacra global command")
-    @commands.max_concurrency(1, per=commands.BucketType.user)
-    async def simulacra_global_command(
-        self, ctx: commands.Context[commands.Bot], id: str
-    ):
-        if ctx.interaction:
-            await ctx.defer()
+        await interaction.response.defer()
 
-        data = await self.repository.get(id=id, lang="en", version="global")
-
-        await ctx.reply(
-            embeds=profile_embed(data),
-            view=SimulacraView(data=data, owner=ctx.author),
+        data = await self.repository.get(
+            id=id, lang=convert_locale(interaction.locale), version="global"
         )
 
-    @simulacra_group.command(name="china", description="Simulacra china command")
-    @commands.max_concurrency(1, per=commands.BucketType.user)
-    async def simulacra_chinese_command(
-        self, ctx: commands.Context[commands.Bot], id: str
-    ):
-        if ctx.interaction:
-            await ctx.defer()
+        await interaction.edit_original_response(
+            embeds=profile_embed(data),
+            view=SimulacraView(data=data, owner=interaction.user),
+        )
+
+    @app_commands.command(name="china", description="Simulacra china command")
+    async def simulacra_chinese_command(self, interaction: Interaction, id: str):
+        await interaction.response.defer()
 
         data = await self.repository.get(id=id, lang="cn", version="china")
 
-        await ctx.reply(
+        await interaction.edit_original_response(
             embeds=profile_embed(data),
-            view=SimulacraView(data=data, owner=ctx.author),
+            view=SimulacraView(data=data, owner=interaction.user),
         )
 
     @simulacra_global_command.autocomplete(name="id")
@@ -54,7 +48,7 @@ class SimulacraCog(commands.Cog):
         return [
             Choice(name=data.name_with_rarity, value=data.id)
             for data in await self.repository.get_all_simple(
-                lang="en", version="global"
+                lang=convert_locale(interaction.locale), version="global"
             )
             if unidecode(current).lower() in unidecode(data.name).lower()
             or unidecode(current).lower() in data.id.lower()
