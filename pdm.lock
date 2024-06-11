@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:9d828517c88aad1b3ac02f007bda9acdd164dcbf8597993deea110ceb031b925"
+content_hash = "sha256:9240754774c88ac6c4cce3cc32a1bdbf0156bb3cbc701fe5de214477ed14e5d3"
 
 [[package]]
 name = "aiohttp"
@@ -155,30 +155,15 @@ files = [
 ]
 
 [[package]]
-name = "discord"
-version = "2.3.2"
-summary = "A mirror package for discord.py. Please install that instead."
-groups = ["default"]
-dependencies = [
-    "discord-py>=2.3.2",
-]
-files = [
-    {file = "discord-2.3.2-py3-none-any.whl", hash = "sha256:d7959418799dd3b1e896685812d880169c193468b061b3431fa2a4664febd3da"},
-    {file = "discord-2.3.2.tar.gz", hash = "sha256:cc1ee2dbe6df218ca51519af355b97e87309f8230f58c7f34885feb8e8a76145"},
-]
-
-[[package]]
 name = "discord-py"
-version = "2.3.2"
-requires_python = ">=3.8.0"
+version = "2.4.0a5041"
+requires_python = ">=3.8"
+git = "https://github.com/Rapptz/discord.py.git"
+revision = "0e58a927ddbc300a17ef0137d948faa659565313"
 summary = "A Python wrapper for the Discord API"
 groups = ["default"]
 dependencies = [
     "aiohttp<4,>=3.7.4",
-]
-files = [
-    {file = "discord.py-2.3.2-py3-none-any.whl", hash = "sha256:9da4679fc3cb10c64b388284700dc998663e0e57328283bbfcfc2525ec5960a6"},
-    {file = "discord.py-2.3.2.tar.gz", hash = "sha256:4560f70f2eddba7e83370ecebd237ac09fbb4980dc66507482b0c0e5b8f76b9c"},
 ]
 
 [[package]]
