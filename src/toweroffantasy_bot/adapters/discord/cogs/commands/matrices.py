@@ -8,6 +8,8 @@ from infra.repositories.matrices import MatricesRepository
 from unidecode import unidecode
 
 
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 class MatricesCog(
     commands.GroupCog, group_name="matrices", description="Matrices group command"
 ):

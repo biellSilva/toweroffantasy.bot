@@ -8,6 +8,8 @@ from infra.repositories.simulacra import SimulacraRepository
 from unidecode import unidecode
 
 
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 class SimulacraCog(
     commands.GroupCog, group_name="simulacra", description="Simulacra group command"
 ):

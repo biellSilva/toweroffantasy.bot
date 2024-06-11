@@ -9,6 +9,8 @@ from infra.repositories.weapon import WeaponRepository
 from unidecode import unidecode
 
 
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 class WeaponCog(
     commands.GroupCog, group_name="weapon", description="Weapon group command"
 ):
