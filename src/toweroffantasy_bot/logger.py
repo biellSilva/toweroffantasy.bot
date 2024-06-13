@@ -1,6 +1,7 @@
 import logging
 
-from discord.utils import _ColourFormatter, stream_supports_colour
+from discord.utils import _ColourFormatter  # type: ignore
+from discord.utils import stream_supports_colour
 
 
 def setup_logging():
