@@ -1,0 +1,33 @@
+import discord
+from discord import app_commands
+from discord.ext import commands
+
+from src.api.simulacra import SimulacraService
+from src.auto_complete import AutoCompleteHelper
+
+
+class SimulacrumCog(commands.Cog):
+    def __init__(self, bot: commands.Bot) -> None:
+        self.bot = bot
+        self.api = SimulacraService()
+        self.auto_complete = AutoCompleteHelper()
+
+    @app_commands.command(name="simulacrum", description="Get simulacrum information")
+    @app_commands.rename(simulacrum_id="id")
+    @app_commands.describe(simulacrum_id="Simulacrum ID")
+    async def simulacrum_command(
+        self, interaction: discord.Interaction, simulacrum_id: str
+    ) -> None:
+        simulacrum = await self.api.get_id(interaction.locale, simulacrum_id)
+
+        await interaction.response.send_message(content=simulacrum.name)
+
+    @simulacrum_command.autocomplete("simulacrum_id")
+    async def simulacrum_id_autocomplete(
+        self, interaction: discord.Interaction, current: str
+    ) -> list[app_commands.Choice[str]]:
+        return await self.auto_complete.simulacrum_id_autocomplete(interaction, current)
+
+
+async def setup(bot: commands.Bot) -> None:
+    await bot.add_cog(SimulacrumCog(bot=bot))

@@ -5,6 +5,7 @@ from discord.app_commands import Choice
 from unidecode import unidecode
 
 from src.api.matrices import MatricesService
+from src.api.simulacra import SimulacraService
 from src.types import QualityEnum, RarityEnum
 from src.utils import convert_locale, convert_rarity_to_int, split_matrix_name
 
@@ -19,6 +20,7 @@ class AutoCompleteHelper:
 
     def __init__(self) -> None:
         self.matrices = MatricesService()
+        self.simulacra = SimulacraService()
 
     async def matrix_id_autocomplete(
         self, interaction: Interaction, current: str
@@ -69,4 +71,44 @@ class AutoCompleteHelper:
                 value=matrix.id,
             )
             for matrix in data
+        ][:25]
+
+    async def simulacrum_id_autocomplete(
+        self, interaction: Interaction, current: str
+    ) -> list[Choice[str]]:
+        data = sorted(
+            await self.simulacra.get_all_from_cache(
+                lang=convert_locale(interaction.locale)
+            ),
+            key=lambda x: (
+                -convert_rarity_to_int(x.rarity),
+                x.name,
+            ),
+        )
+
+        for char in current.split():
+            if unidecode(char).upper() in RarityEnum:
+                data = list(
+                    filter(
+                        lambda x: unidecode(x.rarity).lower()
+                        == unidecode(char).lower(),
+                        data,
+                    )
+                )
+                continue
+
+            data = list(
+                filter(
+                    lambda x: unidecode(char).lower() in unidecode(x.name).lower(),
+                    data,
+                )
+            )
+
+        return [
+            Choice(
+                name=f"[{data.rarity}] {data.name}",
+                value=data.id,
+            )
+            for data in data
+            if "L1" not in data.id
         ][:25]
