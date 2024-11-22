@@ -13,7 +13,11 @@ async def load_cogs(bot: commands.Bot) -> None:
             if "__pycache__" in file.parts:
                 continue
 
-            if file.is_file() and file.with_suffix(".py"):
+            if (
+                file.is_file()
+                and file.with_suffix(".py")
+                and file.name != "__init__.py"
+            ):
                 cog_path = ".".join(file.parts).removesuffix(".py")
                 cog_short_path = ".".join(file.parts[2:]).removesuffix(".py")
                 _logger.debug(f"Loading extension {cog_path}")
