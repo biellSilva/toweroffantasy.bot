@@ -3,13 +3,21 @@ name = "toweroffantasy.bot"
 version = "0.1.0"
 description = "Default template for PDM package"
 authors = [
-    {name = "Gabriel Nobrega", email = "gabrieltkdnobrega63@gmail.com"},
+    { name = "Gabriel Nobrega", email = "gabrieltkdnobrega63@gmail.com" },
 ]
-dependencies = []
+dependencies = [
+    "discord-py>=2.4.0",
+    "pydantic>=2.10.1",
+    "pydantic-settings>=2.6.1",
+    "python-dotenv>=1.0.1",
+]
 requires-python = "==3.12.*"
 readme = "README.md"
-license = {text = "MIT"}
+license = { text = "MIT" }
 
 
 [tool.pdm]
 distribution = false
+
+[tool.pdm.scripts]
+bot = "python main.py"
