@@ -55,6 +55,7 @@ class EmojisEnum(Enum):
     Thunder = PartialEmoji(name="Thunder", id=1309613095945109545)
     IceThunder = PartialEmoji(name="IceThunder", id=1309613238950035517)
 
+    SuperPower = PartialEmoji(name="SuperPower", id=1309658479967076352)
 
 def _convert_tag_to_markdown(value: str) -> str:
     pattern = r"<shuzhi>(.*?)</>"
