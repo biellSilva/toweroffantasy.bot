@@ -64,8 +64,12 @@ def convert_rarity_to_color(rarity: str) -> Colour:
 
 def convert_to_emoji(value: str) -> str:
     if value in EmojisEnum.__members__:
-        return str(EmojisEnum[value].value)
+        return str(EmojisEnum[value])
     return str(PartialEmoji(name=value, id=None))
+
+
+def get_limited_emoji(limited: bool) -> str:
+    return str(EmojisEnum.BallRed) if limited else str(EmojisEnum.BallsMixed)
 
 
 def split_matrix_name(name: str) -> str:

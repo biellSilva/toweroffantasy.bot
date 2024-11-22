@@ -57,6 +57,15 @@ class EmojisEnum(Enum):
 
     SuperPower = PartialEmoji(name="SuperPower", id=1309658479967076352)
 
+    BallGold = PartialEmoji(name="BallGold", id=1309657766008197150)
+    BallBlack = PartialEmoji(name="BallBlack", id=1309657709477367828)
+    BallRed = PartialEmoji(name="BallRed", id=1309657895578767411)
+    BallsMixed = PartialEmoji(name="BallsMixed", id=1309658158901235712)
+
+    def __str__(self) -> str:
+        return str(self.value)
+
+
 def _convert_tag_to_markdown(value: str) -> str:
     pattern = r"<shuzhi>(.*?)</>"
     return re.sub(pattern, r"**\1**", value)
