@@ -31,7 +31,7 @@ class AutoCompleteHelper:
             ),
             key=lambda x: (
                 -convert_rarity_to_int(x.matrices[0].rarity),
-                split_matrix_name(x.matrices[0].name),
+                unidecode(split_matrix_name(x.matrices[0].name)),
             ),
         )
 
@@ -82,7 +82,7 @@ class AutoCompleteHelper:
             ),
             key=lambda x: (
                 -convert_rarity_to_int(x.rarity),
-                x.name,
+                unidecode(x.name),
             ),
         )
 
