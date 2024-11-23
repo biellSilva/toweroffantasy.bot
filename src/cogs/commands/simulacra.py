@@ -5,6 +5,7 @@ from discord.ext import commands
 from src.api.simulacra import SimulacraService
 from src.auto_complete import AutoCompleteHelper
 from src.embeds.simulacra import SimulacrumEmbeds
+from src.views.simulacra import SimulacraView
 
 
 class SimulacrumCog(commands.Cog):
@@ -23,7 +24,10 @@ class SimulacrumCog(commands.Cog):
 
         controller = SimulacrumEmbeds(imitation)
 
-        await interaction.response.send_message(embeds=controller.imitation_embed())
+        await interaction.response.send_message(
+            embeds=controller.imitation_embed(),
+            view=SimulacraView(owner=interaction.user, controller=controller),
+        )
 
     @simulacrum_command.autocomplete("simulacrum_id")
     async def simulacrum_id_autocomplete(
