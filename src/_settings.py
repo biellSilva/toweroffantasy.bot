@@ -6,7 +6,7 @@ class _Settings(BaseSettings):
 
     DISCORD_CLIENT_ID: str | None = None
     DISCORD_PUBLIC_KEY: str | None = None
-    DISCORD_TOKEN: str
+    DISCORD_BOT_TOKEN: str
 
     WEBSITE_URL: str = "https://toweroffantasy.info"
 

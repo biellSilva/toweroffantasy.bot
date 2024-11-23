@@ -5,4 +5,4 @@ if __name__ == "__main__":
 
     BOT = Bot()
 
-    BOT.run(token=config.DISCORD_TOKEN)
+    BOT.run(token=config.DISCORD_BOT_TOKEN)
