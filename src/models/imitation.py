@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 
+from src._settings import config
 from src.models.base import BackgroundColor
+from src.types import EmojisEnum
 
 
 class _FashionAssets(BaseModel):
@@ -51,6 +53,27 @@ class _ImitationExtras(BaseModel):
 
     voice_actors: _SimulacrumVoiceActors
 
+    @property
+    def to_description(self) -> str:
+        _data = self.model_dump(
+            exclude={
+                "like",
+                "dislike",
+                "voice_actors",
+                "hometown_map",
+                "character",
+                "experience_record",
+            },
+            exclude_none=True,
+        )
+
+        return "\n".join(
+            [
+                f"-# **{key.replace("_", " ").capitalize()}:** {value}"
+                for key, value in _data.items()
+            ]
+        )
+
 
 class _ImitationAssets(BaseModel):
     name_picture: str | None
@@ -94,3 +117,17 @@ class Imitation(BaseModel):
 
     assets: _ImitationAssets
     assets_a3: _ImitationAssets
+
+    @property
+    def URL(self) -> str:
+        return f"{config.WEBSITE_URL}/simulacra/{self.id}"
+
+    @property
+    def PREVIEW_NAME(self) -> str:
+        return f"[{self.rarity}] {self.name}"
+
+    @property
+    def LIMITED_EMOJI(self) -> str:
+        return (
+            str(EmojisEnum.BallRed) if self.is_limited else str(EmojisEnum.BallsMixed)
+        )
