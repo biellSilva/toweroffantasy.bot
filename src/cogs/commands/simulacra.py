@@ -17,6 +17,8 @@ class SimulacrumCog(commands.Cog):
     @app_commands.command(name="simulacrum", description="Get simulacrum information")
     @app_commands.rename(simulacrum_id="id")
     @app_commands.describe(simulacrum_id="Simulacrum ID")
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_installs(guilds=True, users=True)
     async def simulacrum_command(
         self, interaction: discord.Interaction, simulacrum_id: str
     ) -> None:

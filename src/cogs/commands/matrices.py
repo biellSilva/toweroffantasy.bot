@@ -16,6 +16,8 @@ class MatricesCog(commands.Cog):
     @app_commands.command(name="matrix", description="Get matrix information")
     @app_commands.rename(matrix_id="id")
     @app_commands.describe(matrix_id="Matrix ID")
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_installs(guilds=True, users=True)
     async def matrix_command(self, interaction: Interaction, matrix_id: str) -> None:
         matrix = await self.api.get_matrix(interaction.locale, matrix_id)
 
