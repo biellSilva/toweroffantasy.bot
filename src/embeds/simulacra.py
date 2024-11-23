@@ -18,7 +18,7 @@ class SimulacrumEmbeds:
             url=self.imitation.URL,
             color=convert_rarity_to_color(self.imitation.rarity),
             description=(
-                f"-# {self.imitation.unlock_info} {self.imitation.LIMITED_EMOJI}\n\n"
+                f"-# {self.imitation.unlock_info} {self.imitation.LIMITED_EMOJI}\n"
                 f"{self.imitation.extras.to_description}"
             ),
         )
@@ -26,11 +26,33 @@ class SimulacrumEmbeds:
         embed.set_thumbnail(url=self.imitation.assets.has_got_awaken_entrance)
 
         embed.set_footer(text="Imitation")
-        embed.set_image(url=self.imitation.assets.title_picture)
 
-        if self.imitation.assets_a3:
+        if not self.imitation.no_weapon:
+            embed.set_image(url=self.imitation.assets.title_picture)
+
+        if (
+            self.imitation.assets_a3
+            and self.imitation.assets_a3.title_picture
+            != self.imitation.assets.title_picture
+        ):
             embed_clone = embed.copy()
             embed_clone.set_image(url=self.imitation.assets_a3.title_picture)
             return [embed, embed_clone]
 
         return [embed]
+
+    def imitation_fashions_embed(self) -> list[Embed]:
+        embeds: list[Embed] = []
+
+        for fashion in self.imitation.fashions:
+            embed = Embed(
+                title=fashion.name,
+                color=convert_rarity_to_color(self.imitation.rarity),
+                description=f"-# {fashion.source}\n-# {fashion.desc}",
+            )
+
+            embed.set_thumbnail(url=fashion.assets.painting)
+
+            embeds.append(embed)
+
+        return embeds

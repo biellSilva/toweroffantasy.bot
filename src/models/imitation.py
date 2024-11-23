@@ -128,6 +128,8 @@ class Imitation(BaseModel):
 
     @property
     def LIMITED_EMOJI(self) -> str:
+        if self.no_weapon:
+            return ""
         return (
             str(EmojisEnum.BallRed) if self.is_limited else str(EmojisEnum.BallsMixed)
         )
