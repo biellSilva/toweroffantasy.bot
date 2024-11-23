@@ -6,11 +6,11 @@ class _Settings(BaseSettings):
 
     DISCORD_CLIENT_ID: str | None = None
     DISCORD_PUBLIC_KEY: str | None = None
-    DISCORD_TOKEN: str | None = None
+    DISCORD_TOKEN: str
 
     WEBSITE_URL: str = "https://toweroffantasy.info"
 
 
-config = _Settings()
+config = _Settings()  # type: ignore
 
 __all__ = ("config",)

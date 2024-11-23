@@ -1,15 +1,8 @@
-from dotenv import find_dotenv
+from src._settings import config
 
 if __name__ == "__main__":
-    from dotenv import get_key
-
     from src.bot import Bot
 
     BOT = Bot()
 
-    TOKEN = get_key(find_dotenv(), "DISCORD_BOT_TOKEN")
-
-    if not TOKEN:
-        raise ValueError("No token found in .env file")
-
-    BOT.run(token=TOKEN)
+    BOT.run(token=config.DISCORD_TOKEN)
