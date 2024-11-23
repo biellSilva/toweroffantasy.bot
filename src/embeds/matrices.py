@@ -21,6 +21,7 @@ class MatrixEmbeds:
             description=f"-# {self.suit.name}",
         )
         embed.set_footer(text="Sets")
+        embed.set_image(url=self.suit.assets.icon)
 
         for set_ in self.suit.sets:
             value = set_.description
@@ -35,6 +36,7 @@ class MatrixEmbeds:
     def pieces_embed(self) -> Embed:
         embed = Embed(color=convert_quality_to_color(self.suit.quality))
         embed.set_footer(text="Pieces")
+        embed.set_thumbnail(url=self.suit.matrices[0].assets.large_icon)
 
         for piece in self.suit.matrices:
             modifiers = " ".join(
