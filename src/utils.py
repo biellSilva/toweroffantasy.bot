@@ -16,6 +16,7 @@ def convert_locale(lang: Locale) -> LangsEnum:
         Locale.thai: LangsEnum.TH,
         Locale.chinese: LangsEnum.ZH_CN,
         Locale.indonesian: LangsEnum.ID,
+        Locale.russian: LangsEnum.RU,
     }
     return _locales.get(lang, LangsEnum.EN)
 

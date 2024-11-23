@@ -14,6 +14,7 @@ class LangsEnum(StrEnum):
     ID = "id"
     JA = "ja"
     PT = "pt"
+    RU = "ru"
     TH = "th"
     ZH_CN = "zh-CN"
 
