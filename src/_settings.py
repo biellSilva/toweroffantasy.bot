@@ -8,6 +8,8 @@ class _Settings(BaseSettings):
     DISCORD_PUBLIC_KEY: str | None = None
     DISCORD_TOKEN: str | None = None
 
+    WEBSITE_URL: str = "https://toweroffantasy.info"
+
 
 config = _Settings()
 
