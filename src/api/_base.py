@@ -31,6 +31,9 @@ class ApiBaseService[T: BaseModel]:
     async def _update_cache(self, lang: LangsEnum) -> None:
         pass
 
+    async def clear_cache(self) -> None:
+        self._cache.clear()
+
     async def _get_lang_from_cache(self, lang: LangsEnum) -> dict[str, T]:
         if lang not in self._cache:
             await self._update_cache(lang)
