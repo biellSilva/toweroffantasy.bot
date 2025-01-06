@@ -64,6 +64,7 @@ def convert_rarity_to_color(rarity: str) -> Colour:
 
 
 def convert_to_emoji(value: str) -> str:
+    value = value.replace(" ", "").replace("-", "")
     if value in EmojisEnum.__members__:
         return str(EmojisEnum[value])
     return str(PartialEmoji(name=value, id=None))
