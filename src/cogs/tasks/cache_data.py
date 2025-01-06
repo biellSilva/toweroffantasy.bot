@@ -24,8 +24,8 @@ class CacheDataCog(commands.Cog):
 
     @tasks.loop(minutes=30)
     async def cache_data(self) -> None:
-        await self.simulacra.clear_cache()
-        await self.matrices.clear_cache()
+        self.simulacra.clear_cache()
+        self.matrices.clear_cache()
 
         _logger.debug("Cache data cleared")
 
