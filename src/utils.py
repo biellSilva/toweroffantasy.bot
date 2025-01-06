@@ -78,7 +78,7 @@ def split_matrix_name(name: str) -> str:
     if ":" in name:
         return name.split(":")[0]
 
-    if "・" in name:
+    elif "・" in name:
         return name.split("・")[0]
 
     return name
