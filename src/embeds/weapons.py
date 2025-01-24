@@ -14,18 +14,40 @@ class WeaponEmbeds:
 
     def main_embed(self) -> list[Embed]:
         embed = Embed(
-            title=f"{self.weapon.PREVIEW_NAME} {self.weapon.LIMITED_EMOJI}",
+            title=self.weapon.PREVIEW_NAME,
             url=self.weapon.URL,
             color=convert_rarity_to_color(self.weapon.rarity),
             description=(
-                f"-# {self.weapon.desc}\n"
-                f"-# {convert_to_emoji(self.weapon.category.id)} {convert_to_emoji(self.weapon.element.id)}\n"
-                f"-# {self.weapon.shatter.to_desc} | {self.weapon.charge.to_desc}"
+                f"{convert_to_emoji(self.weapon.category.id)} {convert_to_emoji(self.weapon.element.id)} {self.weapon.LIMITED_EMOJI}\n"
+                f"*Shatter* {self.weapon.shatter.to_desc}\n"
+                f"*Charge* {self.weapon.charge.to_desc}\n"
+                f"-# {"\n-# ".join(self.weapon.desc.split("\n"))}\n"
             ),
         )
 
         embed.set_thumbnail(url=self.weapon.assets.item_large_icon)
+        embed.set_image(url=self.weapon.assets.lottery_drawing)
 
         embed.set_footer(text="Weapon")
 
         return [embed]
+
+    def passives_embed(self) -> list[Embed]:
+        embeds: list[Embed] = []
+
+        for ind, passive in enumerate(self.weapon.passives, 1):
+            embed = Embed(
+                color=convert_rarity_to_color(self.weapon.rarity),
+                description=passive,
+            )
+
+            embed.set_footer(text=f"Passive {ind}")
+
+            embeds.append(embed)
+
+        if embeds:
+            embeds[0].title = self.weapon.PREVIEW_NAME
+            embeds[0].url = self.weapon.URL
+            embeds[0].set_thumbnail(url=self.weapon.assets.item_large_icon)
+
+        return embeds
