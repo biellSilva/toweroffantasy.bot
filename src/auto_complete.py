@@ -28,8 +28,11 @@ class AutoCompleteHelper:
         self, interaction: Interaction, current: str
     ) -> list[Choice[str]]:
         data = sorted(
-            await self.matrices.get_all_from_cache(
-                lang=convert_locale(interaction.locale)
+            filter(
+                lambda x: "L1" not in x.id,
+                await self.matrices.get_all_from_cache(
+                    lang=convert_locale(interaction.locale)
+                ),
             ),
             key=lambda x: (
                 -convert_rarity_to_int(x.matrices[0].rarity),
@@ -101,7 +104,14 @@ class AutoCompleteHelper:
 
             data = list(
                 filter(
-                    lambda x: unidecode(char).lower() in unidecode(x.name).lower(),
+                    lambda x: unidecode(char).lower() in unidecode(x.name).lower()
+                    or unidecode(char).lower() in unidecode(x.id).lower()
+                    or (
+                        x.weapon_id
+                        and unidecode(char).lower() in unidecode(x.weapon_id).lower()
+                    )
+                    or unidecode(char).lower() in unidecode(x.avatar_id).lower()
+                    or unidecode(char).lower() in unidecode(x.sex).lower(),
                     data,
                 )
             )
@@ -117,8 +127,11 @@ class AutoCompleteHelper:
 
     async def weapon_id_autocomplete(self, interaction: "Interaction", current: str):
         data = sorted(
-            await self.weapons.get_all_from_cache(
-                lang=convert_locale(interaction.locale)
+            filter(
+                lambda x: x.is_warehouse,
+                await self.weapons.get_all_from_cache(
+                    lang=convert_locale(interaction.locale)
+                ),
             ),
             key=lambda x: (
                 -convert_rarity_to_int(x.rarity),
@@ -150,5 +163,4 @@ class AutoCompleteHelper:
                 value=weapon.id,
             )
             for weapon in data
-            if weapon.is_warehouse
         ][:25]
