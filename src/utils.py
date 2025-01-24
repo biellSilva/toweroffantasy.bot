@@ -67,6 +67,11 @@ def convert_to_emoji(value: str) -> str:
     value = value.replace(" ", "").replace("-", "")
     if value in EmojisEnum.__members__:
         return str(EmojisEnum[value])
+
+    for emoji in EmojisEnum:
+        if emoji.name.lower() == value.lower():
+            return str(emoji)
+
     return str(PartialEmoji(name=value, id=None))
 
 
