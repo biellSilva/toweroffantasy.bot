@@ -5,6 +5,7 @@ from discord.ext import commands
 from src.api.weapons import WeaponService
 from src.auto_complete import AutoCompleteHelper
 from src.embeds.weapons import WeaponEmbeds
+from src.views.weapons import WeaponsView
 
 
 class WeaponCog(commands.Cog):
@@ -25,7 +26,10 @@ class WeaponCog(commands.Cog):
 
         embed_controller = WeaponEmbeds(weapon=weapon)
 
-        await interaction.response.send_message(embeds=embed_controller.main_embed())
+        await interaction.response.send_message(
+            embeds=embed_controller.main_embed(),
+            view=WeaponsView(controller=embed_controller, owner=interaction.user),
+        )
 
     @weapon_command.autocomplete("weapon_id")
     async def weapon_id_autocomplete(
