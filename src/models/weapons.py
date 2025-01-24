@@ -3,13 +3,13 @@ from __future__ import annotations
 from pydantic import BaseModel
 
 from src._settings import config
-from src.types import EmojisEnum
+from src.types import EmojisEnum, ParseRegex
 
 
 class Element(BaseModel):
     id: str
     name: str
-    desc: str
+    desc: ParseRegex
     icon: str
 
     @property
@@ -34,14 +34,14 @@ class ShatterOrCharge(BaseModel):
 
     @property
     def to_desc(self) -> str:
-        return f"*{self.tier}* **{self.value}**"
+        return f"*{self.value}* **{self.tier}**"
 
 
 class Attack(BaseModel):
     id: str
     name: str
-    desc: str
-    short_desc: str | None
+    desc: ParseRegex
+    short_desc: ParseRegex | None
     icon: str
     tags: list[str]
     operations: list[str]
@@ -50,7 +50,7 @@ class Attack(BaseModel):
 
 class Skill(BaseModel):
     name: str | None
-    desc: str | None
+    desc: ParseRegex | None
     type: str
     icon: str
     attacks: list[Attack]
@@ -67,7 +67,7 @@ class NeedItem(BaseModel):
 
 
 class Advancement(BaseModel):
-    desc: str
+    desc: ParseRegex
     attributes: list[Attribute]
     need_item: NeedItem
     cost_type: str
@@ -80,9 +80,9 @@ class Advancement(BaseModel):
 class Fashion(BaseModel):
     id: str
     name: str
-    desc: str
-    use_desc: str
-    brief: str
+    desc: ParseRegex
+    use_desc: ParseRegex
+    brief: ParseRegex
     icon: str
     quality: str
     display_type_text: str
@@ -105,15 +105,15 @@ class Assets(BaseModel):
 
 class MultiElement(BaseModel):
     element: str
-    passives: list[str]
+    passives: list[ParseRegex]
 
 
 class WeaponSimple(BaseModel):
     id: str
     name: str
-    desc: str
-    brief: str
-    lottery_desc: str
+    desc: ParseRegex
+    brief: ParseRegex
+    lottery_desc: ParseRegex
     rarity: str
     quality: str
 
@@ -146,7 +146,7 @@ class WeaponSimple(BaseModel):
 class Weapon(WeaponSimple):
     skills: list[Skill] = []
     advancements: list[Advancement] = []
-    passives: list[str] = []
+    passives: list[ParseRegex] = []
     multi_element: list[MultiElement] = []
     fashions: list[Fashion] = []
     recommended_matrices: list[RecommendedMatrice] = []
