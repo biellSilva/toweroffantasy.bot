@@ -69,7 +69,7 @@ class _ImitationExtras(BaseModel):
 
         return "\n".join(
             [
-                f"-# **{key.replace("_", " ").capitalize()}:** {value}"
+                f"-# **{key.replace('_', ' ').capitalize()}:** {value}"
                 for key, value in _data.items()
             ]
         )
@@ -100,6 +100,36 @@ class _ImitationAssets(BaseModel):
     awaken_photo: str | None
 
 
+class _AttributeCondition(BaseModel):
+    name: str
+    desc: str
+    use_desc: str
+    icon: str
+    quality: str
+
+
+class _AttributeModifier(BaseModel):
+    id: str
+    name: str
+    desc: str
+    icon: str
+    value: str
+    operator: str
+
+
+class _Likeability(BaseModel):
+    condition: int
+    type: str
+    name: str | None
+    context: str | None
+    desc: str | None
+    unlock_desc: str | None
+    icon: str | None
+    big_icon: str | None
+    conditions: list[_AttributeCondition]
+    modifiers: list[_AttributeModifier]
+
+
 class Imitation(BaseModel):
     id: str
     name: str
@@ -117,6 +147,8 @@ class Imitation(BaseModel):
 
     assets: _ImitationAssets
     assets_a3: _ImitationAssets
+
+    likeabilities: list[_Likeability]
 
     @property
     def URL(self) -> str:
