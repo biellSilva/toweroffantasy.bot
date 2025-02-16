@@ -22,9 +22,7 @@ license = { text = "MIT" }
 distribution = false
 
 [tool.pdm.scripts]
-bot = "python main.py"
+start = "python main.py"
 
 [dependency-groups]
-dev = [
-    "types-cachetools>=5.5.0.20240820",
-]
+dev = ["types-cachetools>=5.5.0.20240820"]

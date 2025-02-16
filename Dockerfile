@@ -9,4 +9,4 @@ RUN pdm install
 
 COPY . /app
 
-CMD ["pdm", "run", "bot"]
+CMD ["pdm", "run", "start"]
