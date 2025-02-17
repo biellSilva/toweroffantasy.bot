@@ -19,7 +19,11 @@ class CacheDataCog(commands.Cog):
         _logger.debug("Cache data task started")
 
     async def on_unload(self) -> None:
-        self.cache_data.stop()
+        self.cache_data.cancel()
+
+        if self.cache_data.is_running():
+            self.cache_data.stop()
+
         _logger.debug("Cache data task stopped")
 
     @tasks.loop(minutes=30)
