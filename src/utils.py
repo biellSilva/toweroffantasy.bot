@@ -81,9 +81,9 @@ def get_limited_emoji(limited: bool) -> str:
 
 def split_matrix_name(name: str) -> str:
     if ":" in name:
-        return name.split(":")[0]
+        return name.rsplit(":", 1)[0]
 
     elif "・" in name:
-        return name.split("・")[0]
+        return name.rsplit("・", 1)[0]
 
     return name
