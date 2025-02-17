@@ -31,12 +31,14 @@ class _SectionSelector(Select["SimulacraView"]):
 
         self._options = {
             "imitation": controller.imitation_embed,
-            "fashions": controller.imitation_fashions_embed,
+            "fashions": controller.fashions_embed,
+            "likeabilities": controller.buff_likeability_embed,
+            "voice actors": controller.voice_actors_embed,
+            "gifts": controller.gifts_embed,
         }
 
         self.options = [
-            SelectOption(label=option.capitalize(), value=option)
-            for option in self._options
+            SelectOption(label=option.title(), value=option) for option in self._options
         ]
 
     async def callback(self, interaction: Interaction) -> None:
