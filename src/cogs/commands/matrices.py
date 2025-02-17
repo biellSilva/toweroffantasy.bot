@@ -19,7 +19,7 @@ class MatricesCog(commands.Cog):
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     @app_commands.allowed_installs(guilds=True, users=True)
     async def matrix_command(self, interaction: Interaction, matrix_id: str) -> None:
-        matrix = await self.api.get_matrix(interaction.locale, matrix_id)
+        matrix = await self.api.get_id(interaction.locale, matrix_id)
 
         controller = MatrixEmbeds(matrix)
 
