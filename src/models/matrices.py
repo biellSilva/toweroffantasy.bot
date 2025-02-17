@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+from src.models.base import BaseEntity
 from src.types import ParseRegex
 
 
@@ -55,7 +56,7 @@ class _SuitMatrice(BaseModel):
     assets: _MatriceAssets
 
 
-class MatrixSuit(BaseModel):
+class MatrixSuit(BaseEntity):
     id: str
     name: str
     quality: str

@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
 from src._settings import config
-from src.models.base import BackgroundColor
-from src.types import EmojisEnum
+from src.models.base import BackgroundColor, BaseEntity
+from src.types import EmojisEnum, ParseRegex
 
 
 class _FashionAssets(BaseModel):
@@ -113,7 +113,7 @@ class _AttributeModifier(BaseModel):
     name: str
     desc: str
     icon: str
-    value: str
+    value: float
     operator: str
 
 
@@ -122,15 +122,21 @@ class _Likeability(BaseModel):
     type: str
     name: str | None
     context: str | None
-    desc: str | None
+    desc: ParseRegex | None
     unlock_desc: str | None
     icon: str | None
     big_icon: str | None
     conditions: list[_AttributeCondition]
     modifiers: list[_AttributeModifier]
 
+    @property
+    def context_desc(self) -> str:
+        if not self.context:
+            return "Unknown"
+        return self.context.replace("<shuzi>", "").replace("</>", "")
 
-class Imitation(BaseModel):
+
+class Imitation(BaseEntity):
     id: str
     name: str
     desc: str

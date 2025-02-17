@@ -3,6 +3,7 @@ from __future__ import annotations
 from pydantic import BaseModel
 
 from src._settings import config
+from src.models.base import BaseEntity
 from src.types import EmojisEnum, ParseRegex
 
 
@@ -108,7 +109,7 @@ class MultiElement(BaseModel):
     passives: list[ParseRegex]
 
 
-class WeaponSimple(BaseModel):
+class WeaponSimple(BaseEntity):
     id: str
     name: str
     desc: ParseRegex
