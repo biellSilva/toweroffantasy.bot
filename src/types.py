@@ -65,6 +65,12 @@ class EmojisEnum(Enum):
     BallRed = PartialEmoji(name="BallRed", id=1309657895578767411)
     BallsMixed = PartialEmoji(name="BallsMixed", id=1309658158901235712)
 
+    SparklingHeart = "\U0001f496"
+    BrokenHeart = "\U0001f494"
+
+    SmallRedTriangleUp = "\U0001f53a"
+    SmallRedTriangleDown = "\U0001f53b"
+
     def __str__(self) -> str:
         return str(self.value)
 
