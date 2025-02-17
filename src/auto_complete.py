@@ -65,14 +65,16 @@ class AutoCompleteHelper:
             data = list(
                 filter(
                     lambda x: unidecode(char).lower()
-                    in unidecode(x.matrices[0].name).lower(),
+                    in unidecode(x.matrices[0].name).lower()
+                    or unidecode(char).lower() in unidecode(x.id).lower()
+                    or unidecode(char).lower() in unidecode(x.name).lower(),
                     data,
                 )
             )
 
         return [
             Choice(
-                name=f"[{matrix.matrices[0].rarity}] {split_matrix_name(matrix.matrices[0].name)}",
+                name=f"[{matrix.matrices[0].rarity}] {matrix.name} - {split_matrix_name(matrix.matrices[0].name)}",
                 value=matrix.id,
             )
             for matrix in data
