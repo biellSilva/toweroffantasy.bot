@@ -18,10 +18,14 @@ class BaseView(View):
     async def interaction_check(self, interaction: Interaction) -> bool:
         return self.validate_owner(interaction)
 
-    async def on_timeout(self) -> None:
-        pass
-
     async def on_error(
         self, interaction: Interaction, error: Exception, item: Item[Any]
     ) -> None:
+        msg = "An error occurred while processing your request. Please try again later."
+
+        if interaction.response.is_done():
+            await interaction.followup.send(content=msg, ephemeral=True)
+        else:
+            await interaction.response.send_message(content=msg, ephemeral=True)
+
         return await super().on_error(interaction, error, item)
