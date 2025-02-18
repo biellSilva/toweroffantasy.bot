@@ -21,7 +21,7 @@ class WeaponEmbeds:
                 f"{convert_to_emoji(self.weapon.category.id)} {convert_to_emoji(self.weapon.element.id)} {self.weapon.LIMITED_EMOJI}\n"
                 f"*Shatter* {self.weapon.shatter.to_desc}\n"
                 f"*Charge* {self.weapon.charge.to_desc}\n"
-                f"-# {"\n-# ".join(self.weapon.desc.split("\n"))}\n"
+                f"-# {'\n-# '.join(self.weapon.desc.split('\n'))}\n"
             ),
         )
 
@@ -35,13 +35,11 @@ class WeaponEmbeds:
     def passives_embed(self) -> list[Embed]:
         embeds: list[Embed] = []
 
-        for ind, passive in enumerate(self.weapon.passives, 1):
+        for passive in self.weapon.passives:
             embed = Embed(
                 color=convert_rarity_to_color(self.weapon.rarity),
                 description=passive,
             )
-
-            embed.set_footer(text=f"Passive {ind}")
 
             embeds.append(embed)
 
@@ -49,5 +47,6 @@ class WeaponEmbeds:
             embeds[0].title = self.weapon.PREVIEW_NAME
             embeds[0].url = self.weapon.URL
             embeds[0].set_thumbnail(url=self.weapon.assets.item_large_icon)
+            embeds[-1].set_footer(text="Passives")
 
         return embeds
