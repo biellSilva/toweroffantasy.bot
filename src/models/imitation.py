@@ -76,6 +76,8 @@ class _ImitationExtras(BaseModel):
 
 
 class _ImitationAssets(BaseModel):
+    icon: str | None
+    big_icon: str | None
     name_picture: str | None
     name_2_picture: str | None
     name_3_picture: str | None
