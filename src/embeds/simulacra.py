@@ -16,7 +16,9 @@ class SimulacrumEmbeds:
             title=self.imitation.PREVIEW_NAME,
             url=self.imitation.URL,
             color=convert_rarity_to_color(self.imitation.rarity),
-        ).set_thumbnail(url=self.imitation.assets.has_got_awaken_entrance)
+        ).set_thumbnail(
+            url=self.imitation.assets.big_icon or self.imitation.assets.icon
+        )
 
     def imitation_embed(self) -> list[Embed]:
         embed = self._default_embed.copy()
@@ -77,8 +79,11 @@ class SimulacrumEmbeds:
                 continue
 
             embed.add_field(
-                name=f"{likeability.name} [{likeability.condition} {EmojisEnum.SparklingHeart}]",
-                value=likeability.desc or "-# Unknown",
+                name=likeability.name,
+                value=(
+                    f"-# **\\{EmojisEnum.SparklingHeart} {likeability.condition}**"
+                    f"\n{likeability.desc or '-# Unknown'}"
+                ),
                 inline=False,
             )
 
@@ -103,14 +108,14 @@ class SimulacrumEmbeds:
         embed = self._default_embed.copy()
 
         embed.add_field(
-            name=f"Likes {EmojisEnum.SparklingHeart}",
+            name=f"Likes \\{EmojisEnum.SparklingHeart}",
             value="\n".join([f"-# {gift.name}" for gift in self.imitation.extras.like])
             or "-# No likes",
             inline=False,
         )
 
         embed.add_field(
-            name=f"Dislikes {EmojisEnum.BrokenHeart}",
+            name=f"Dislikes \\{EmojisEnum.BrokenHeart}",
             value="\n".join(
                 [f"-# {gift.name}" for gift in self.imitation.extras.dislike]
             )
