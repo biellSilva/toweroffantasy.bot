@@ -7,7 +7,6 @@ from unidecode import unidecode
 from src.api.matrices import MatricesService
 from src.api.simulacra import SimulacraService
 from src.api.weapons import WeaponService
-from src.types import QualityEnum, RarityEnum
 from src.utils import convert_locale, convert_rarity_to_int, split_matrix_name
 
 
@@ -28,53 +27,32 @@ class AutoCompleteHelper:
         self, interaction: Interaction, current: str
     ) -> list[Choice[str]]:
         data = sorted(
-            filter(
-                lambda x: "L1" not in x.id,
-                await self.matrices.get_all_from_cache(
-                    lang=convert_locale(interaction.locale)
-                ),
+            await self.matrices.get_all_from_cache(
+                lang=convert_locale(interaction.locale)
             ),
             key=lambda x: (
-                -convert_rarity_to_int(x.matrices[0].rarity),
-                unidecode(split_matrix_name(x.matrices[0].name)),
+                -convert_rarity_to_int(x.rarity),
+                unidecode(split_matrix_name(x.matrice_name)),
             ),
         )
 
         for char in current.split():
-            if unidecode(char).upper() in RarityEnum:
-                data = list(
-                    filter(
-                        lambda x: unidecode(x.matrices[0].rarity).lower()
-                        == unidecode(char).lower(),
-                        data,
-                    )
-                )
-                continue
-
-            if unidecode(char).upper() in QualityEnum:
-                data = list(
-                    filter(
-                        lambda x: unidecode(char).lower()
-                        in unidecode(x.matrices[0].quality).lower()
-                        or unidecode(char).lower() in unidecode(x.quality).lower(),
-                        data,
-                    )
-                )
-                continue
-
             data = list(
                 filter(
                     lambda x: unidecode(char).lower()
-                    in unidecode(x.matrices[0].name).lower()
+                    in unidecode(x.matrice_name).lower()
                     or unidecode(char).lower() in unidecode(x.id).lower()
-                    or unidecode(char).lower() in unidecode(x.name).lower(),
+                    or unidecode(char).lower() in unidecode(x.name).lower()
+                    or unidecode(char).lower() in unidecode(x.rarity).lower()
+                    or unidecode(char).lower() in unidecode(x.matrice_name).lower()
+                    or unidecode(char).lower() in unidecode(x.quality).lower(),
                     data,
                 )
             )
 
         return [
             Choice(
-                name=f"[{matrix.matrices[0].rarity}] {matrix.name} - {split_matrix_name(matrix.matrices[0].name)}",
+                name=f"[{matrix.rarity}] {matrix.name} - {matrix.matrice_name}",
                 value=matrix.id,
             )
             for matrix in data
@@ -94,25 +72,11 @@ class AutoCompleteHelper:
         )
 
         for char in current.split():
-            if unidecode(char).upper() in RarityEnum:
-                data = list(
-                    filter(
-                        lambda x: unidecode(x.rarity).lower()
-                        == unidecode(char).lower(),
-                        data,
-                    )
-                )
-                continue
-
             data = list(
                 filter(
-                    lambda x: unidecode(char).lower() in unidecode(x.name).lower()
-                    or unidecode(char).lower() in unidecode(x.id).lower()
-                    or (
-                        x.weapon_id
-                        and unidecode(char).lower() in unidecode(x.weapon_id).lower()
-                    )
-                    or unidecode(char).lower() in unidecode(x.avatar_id).lower()
+                    lambda x: unidecode(char).lower() in unidecode(x.id).lower()
+                    or unidecode(char).lower() in unidecode(x.name).lower()
+                    or unidecode(x.rarity).lower() == unidecode(char).lower()
                     or unidecode(char).lower() in unidecode(x.sex).lower(),
                     data,
                 )
@@ -124,16 +88,14 @@ class AutoCompleteHelper:
                 value=data.id,
             )
             for data in data
-            if "L1" not in data.id
         ][:25]
 
-    async def weapon_id_autocomplete(self, interaction: "Interaction", current: str):
+    async def weapon_id_autocomplete(
+        self, interaction: "Interaction", current: str
+    ) -> list[Choice[str]]:
         data = sorted(
-            filter(
-                lambda x: x.is_warehouse,
-                await self.weapons.get_all_from_cache(
-                    lang=convert_locale(interaction.locale)
-                ),
+            await self.weapons.get_all_from_cache(
+                lang=convert_locale(interaction.locale)
             ),
             key=lambda x: (
                 -convert_rarity_to_int(x.rarity),
@@ -142,19 +104,17 @@ class AutoCompleteHelper:
         )
 
         for char in current.split():
-            if unidecode(char).upper() in RarityEnum:
-                data = list(
-                    filter(
-                        lambda x: unidecode(x.rarity).lower()
-                        == unidecode(char).lower(),
-                        data,
-                    )
-                )
-                continue
-
             data = list(
                 filter(
-                    lambda x: unidecode(char).lower() in unidecode(x.name).lower(),
+                    lambda x: unidecode(char).lower() in unidecode(x.id).lower()
+                    or unidecode(char).lower() in unidecode(x.name).lower()
+                    or unidecode(x.rarity).lower() == unidecode(char).lower()
+                    or unidecode(char).lower()
+                    in unidecode(x.category.id).replace("-", "").lower()
+                    or unidecode(char).lower() in unidecode(x.category.name).lower()
+                    or unidecode(char).lower()
+                    in unidecode(x.element.id).replace("-", "").lower()
+                    or unidecode(char).lower() in unidecode(x.element.name).lower(),
                     data,
                 )
             )
