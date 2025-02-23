@@ -138,25 +138,15 @@ class _Likeability(BaseModel):
         return self.context.replace("<shuzi>", "").replace("</>", "")
 
 
-class Imitation(BaseEntity):
+class ImitationSimple(BaseEntity):
     id: str
     name: str
-    desc: str
-    unlock_info: str
     sex: str
     rarity: str
-    weapon_id: str | None
-    avatar_id: str
     is_limited: bool
     no_weapon: bool
 
-    fashions: list[_ImitationFashion]
-    extras: _ImitationExtras
-
     assets: _ImitationAssets
-    assets_a3: _ImitationAssets
-
-    likeabilities: list[_Likeability]
 
     @property
     def URL(self) -> str:
@@ -173,3 +163,14 @@ class Imitation(BaseEntity):
         return (
             str(EmojisEnum.BallRed) if self.is_limited else str(EmojisEnum.BallsMixed)
         )
+
+
+class Imitation(ImitationSimple):
+    weapon_id: str | None
+    avatar_id: str
+    desc: str
+    unlock_info: str
+    assets_a3: _ImitationAssets
+    fashions: list[_ImitationFashion]
+    extras: _ImitationExtras
+    likeabilities: list[_Likeability]

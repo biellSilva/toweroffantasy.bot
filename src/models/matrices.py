@@ -56,11 +56,15 @@ class _SuitMatrice(BaseModel):
     assets: _MatriceAssets
 
 
-class MatrixSuit(BaseEntity):
+class SuitSimple(BaseEntity):
     id: str
     name: str
     quality: str
+    rarity: str
+    matrice_name: str
     assets: _SuitAssets
+
+
+class Suit(SuitSimple):
     sets: list[_SuitSet]
-    matrices: list[_SuitMatrice]
     matrices: list[_SuitMatrice]
