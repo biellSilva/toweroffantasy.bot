@@ -1,7 +1,7 @@
 from src.api._base import ApiBaseService
-from src.models.matrices import MatrixSuit
+from src.models.matrices import Suit, SuitSimple
 
 
-class MatricesService(ApiBaseService[MatrixSuit]):
+class MatricesService(ApiBaseService[Suit, SuitSimple]):
     def __init__(self) -> None:
-        super().__init__(model=MatrixSuit, path="/matrices")
+        super().__init__(model=Suit, simple_model=SuitSimple, path="/matrices")
