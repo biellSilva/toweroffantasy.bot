@@ -5,11 +5,11 @@ from discord import Embed
 from src.utils import convert_quality_to_color, convert_to_emoji, split_matrix_name
 
 if TYPE_CHECKING:
-    from src.models.matrices import MatrixSuit
+    from src.models.matrices import Suit
 
 
 class MatrixEmbeds:
-    def __init__(self, suit: "MatrixSuit") -> None:
+    def __init__(self, suit: "Suit") -> None:
         self.suit = suit
 
     def sets_embed(self) -> Embed:
