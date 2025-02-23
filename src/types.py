@@ -5,7 +5,15 @@ from typing import Annotated
 from discord import PartialEmoji
 from pydantic import AfterValidator
 
-__all__ = ("LangsEnum", "RarityEnum", "QualityEnum", "EmojisEnum", "ParseRegex")
+__all__ = (
+    "LangsEnum",
+    "RarityEnum",
+    "QualityEnum",
+    "EmojisEnum",
+    "ParseRegex",
+    "ElementEnum",
+    "CategoryEnum",
+)
 
 
 class LangsEnum(StrEnum):
@@ -34,6 +42,28 @@ class QualityEnum(StrEnum):
     EPIC = "EPIC"
     LEGENDRY = "LEGENDRY"
     RED = "RED"
+
+
+class ElementEnum(StrEnum):
+    PHYSICS = "Physics"
+    PHYSICS_FLAME = "Physics-Flame"
+
+    FLAME = "Flame"
+    FLAME_PHYSICS = "Flame-Physics"
+
+    ICE = "Ice"
+    ICE_THUNDER = "Ice-Thunder"
+
+    THUNDER = "Thunder"
+    THUNDER_ICE = "Thunder-Ice"
+
+    SUPERPOWER = "SuperPower"
+
+
+class CategoryEnum(StrEnum):
+    DPS = "DPS"
+    SUP = "SUP"
+    TANK = "Tank"
 
 
 class EmojisEnum(Enum):
