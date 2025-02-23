@@ -5,6 +5,7 @@ from discord.ext import commands
 from src.api.matrices import MatricesService
 from src.auto_complete import AutoCompleteHelper
 from src.embeds.matrices import MatrixEmbeds
+from src.views.matrices import MatrixView
 
 
 class MatricesCog(commands.Cog):
@@ -24,7 +25,8 @@ class MatricesCog(commands.Cog):
         controller = MatrixEmbeds(matrix)
 
         await interaction.response.send_message(
-            embeds=[controller.sets_embed(), controller.pieces_embed()]
+            embeds=controller.sets_embed(),
+            view=MatrixView(controller=controller, owner=interaction.user),
         )
 
     @matrix_command.autocomplete("matrix_id")

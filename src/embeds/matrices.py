@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from discord import Embed
 
-from src.utils import convert_quality_to_color, convert_to_emoji, split_matrix_name
+from src.utils import convert_quality_to_color, convert_to_emoji
 
 if TYPE_CHECKING:
     from src.models.matrices import Suit
@@ -12,16 +12,19 @@ class MatrixEmbeds:
     def __init__(self, suit: "Suit") -> None:
         self.suit = suit
 
-    def sets_embed(self) -> Embed:
-        matrix = self.suit.matrices[0]
-
-        embed = Embed(
-            title=f"[{matrix.rarity}] {split_matrix_name(matrix.name)}",
+        self._default_embed = Embed(
+            title=f"[{self.suit.rarity}] {self.suit.name}",
             color=convert_quality_to_color(self.suit.quality),
-            description=f"-# {self.suit.name}",
+        ).set_thumbnail(
+            url=self.suit.matrices[0].assets.large_icon
+            or self.suit.matrices[0].assets.icon
         )
+
+    def sets_embed(self) -> list[Embed]:
+        embed = self._default_embed.copy()
+        embed.description = f"-# **{self.suit.matrice_name}**"
+
         embed.set_footer(text="Sets")
-        embed.set_image(url=self.suit.assets.icon)
 
         for set_ in self.suit.sets:
             value = set_.description
@@ -31,12 +34,12 @@ class MatrixEmbeds:
 
             embed.add_field(name=f"{set_.needs}x", value=value, inline=False)
 
-        return embed
+        return [embed]
 
-    def pieces_embed(self) -> Embed:
-        embed = Embed(color=convert_quality_to_color(self.suit.quality))
+    def pieces_embed(self) -> list[Embed]:
+        embed = self._default_embed.copy()
+
         embed.set_footer(text="Pieces")
-        embed.set_thumbnail(url=self.suit.matrices[0].assets.large_icon)
 
         for piece in self.suit.matrices:
             modifiers = " ".join(
@@ -48,4 +51,4 @@ class MatrixEmbeds:
                 inline=False,
             )
 
-        return embed
+        return [embed]
