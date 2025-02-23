@@ -3,7 +3,9 @@ from discord import Colour, Locale, PartialEmoji
 from src.types import EmojisEnum, LangsEnum
 
 
-def convert_locale(lang: Locale) -> LangsEnum:
+def convert_locale(lang: Locale | LangsEnum) -> LangsEnum:
+    if isinstance(lang, LangsEnum):
+        return lang
     _locales = {
         Locale.american_english: LangsEnum.EN,
         Locale.british_english: LangsEnum.EN,
