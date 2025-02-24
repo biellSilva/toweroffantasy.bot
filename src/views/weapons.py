@@ -26,6 +26,7 @@ class WeaponsView(BaseView):
         self.selector = _SectionSelector(controller)
         self.element_selector = _ElementSelector(controller)
         self.advance_selector = _AdvancementSelector(controller)
+        self.skill_selector = _SkillSelector(controller)
 
         self.add_item(self.selector)
 
@@ -45,6 +46,8 @@ class _SectionSelector(Select["WeaponsView"]):
             "passives": controller.passives_embed,
             "multi element": controller.multi_element_embed,
             "advancements": controller.advancements_embed,
+            "skills": controller.skill_embed,
+            "fashions": controller.fashions_embed,
         }
 
         self.options = [
@@ -67,6 +70,13 @@ class _SectionSelector(Select["WeaponsView"]):
 
         if self.values[0] == "advancements":
             self.view.add_item(self.view.advance_selector)
+            await interaction.edit_original_response(
+                embeds=self._options[self.values[0]](), view=self.view
+            )
+            return
+
+        if self.values[0] == "skills":
+            self.view.add_item(self.view.skill_selector)
             await interaction.edit_original_response(
                 embeds=self._options[self.values[0]](), view=self.view
             )
@@ -118,4 +128,26 @@ class _AdvancementSelector(Select["WeaponsView"]):
         await interaction.response.defer()
         await interaction.edit_original_response(
             embeds=self.controller.advancements_embed(int(self.values[0]))
+        )
+
+
+class _SkillSelector(Select["WeaponsView"]):
+    def __init__(self, controller: "WeaponEmbeds") -> None:
+        super().__init__(min_values=1, max_values=1)
+
+        self.controller = controller
+
+        self.options = [
+            SelectOption(
+                label=f"{skill.name} [{skill_type.name or skill_type.type}]",
+                value=f"{skill_type.type}-{skill.id}",
+            )
+            for skill_type in controller.weapon.skills
+            for skill in skill_type.attacks
+        ]
+
+    async def callback(self, interaction: Interaction) -> None:
+        await interaction.response.defer()
+        await interaction.edit_original_response(
+            embeds=self.controller.skill_embed(self.values[0])
         )
