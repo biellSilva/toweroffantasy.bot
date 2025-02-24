@@ -48,24 +48,30 @@ class SimulacrumEmbeds:
         return embeds
 
     def fashions_embed(self) -> list[Embed]:
+        if not self.imitation.fashions:
+            embed = self._default_embed.copy()
+            embed.description = "-# No fashions available"
+            embed.set_footer(text="Fashions")
+            return [embed]
+
         embeds: list[Embed] = []
 
         for fashion in self.imitation.fashions:
             embed = Embed(
-                title=fashion.name,
                 color=convert_rarity_to_color(self.imitation.rarity),
-                description=f"-# {fashion.source}\n-# {fashion.desc}",
+                description=(
+                    f"**{fashion.name}**\n"
+                    f"-# _**{fashion.source}**_\n\n"
+                    f"-# {fashion.desc}"
+                ),
             )
 
             embed.set_thumbnail(url=fashion.assets.painting)
 
             embeds.append(embed)
 
-        if not embeds:
-            embed = self._default_embed.copy()
-            embed.description = "-# No fashions available"
-            embeds.append(embed)
-
+        embeds[0].title = self.imitation.PREVIEW_NAME
+        embeds[0].url = self.imitation.URL
         embeds[-1].set_footer(text="Fashions")
 
         return embeds
