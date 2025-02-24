@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 
 from discord import Embed
 
+from src.types import EmojisEnum
 from src.utils import convert_rarity_to_color, convert_to_emoji
 
 if TYPE_CHECKING:
@@ -95,5 +96,14 @@ class WeaponEmbeds:
         if not self.weapon.advancements:
             embed.description = "-# No advancements"
             return [embed]
+
+        advance = self.weapon.advancements[index]
+
+        embed.description = (
+            f"-# Shatter **{advance.shatter.value} _{advance.shatter.tier}_**\n"
+            f"-# Charge **{advance.charge.value} _{advance.charge.tier}_**\n\n"
+            f"-# **{EmojisEnum.DarkStar.value * (index + 1)}**\n"
+            f"{advance.desc}"
+        )
 
         return [embed]

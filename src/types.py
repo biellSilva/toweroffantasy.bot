@@ -101,6 +101,10 @@ class EmojisEnum(Enum):
     SmallRedTriangleUp = "\U0001f53a"
     SmallRedTriangleDown = "\U0001f53b"
 
+    Star = "\U00002b50"
+    GlowingStar = "\U0001f31f"
+    DarkStar = "★"
+
     def __str__(self) -> str:
         return str(self.value)
 

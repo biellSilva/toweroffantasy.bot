@@ -89,3 +89,7 @@ def split_matrix_name(name: str) -> str:
         return name.rsplit("・", 1)[0]
 
     return name
+
+
+def weapon_advancement_star(index: int) -> str:
+    return EmojisEnum.Star.value if index in (2, 4) else EmojisEnum.GlowingStar.value
