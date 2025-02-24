@@ -4,7 +4,8 @@ from typing import TYPE_CHECKING
 from discord import Embed, Interaction, Member, SelectOption, User
 from discord.ui import Select
 
-from src.utils import convert_to_emoji, weapon_advancement_star
+from src.types import EmojisEnum
+from src.utils import convert_to_emoji
 from src.views._base import BaseView
 
 if TYPE_CHECKING:
@@ -29,8 +30,8 @@ class WeaponsView(BaseView):
         self.add_item(self.selector)
 
     def remove_selectors(self) -> None:
-        self.remove_item(self.element_selector)
-        self.remove_item(self.advance_selector)
+        self.clear_items()
+        self.add_item(self.selector)
 
 
 class _SectionSelector(Select["WeaponsView"]):
@@ -56,7 +57,9 @@ class _SectionSelector(Select["WeaponsView"]):
         await interaction.response.defer()
 
         if self.values[0] == "multi element":
-            self.view.add_item(self.view.element_selector)
+            if self.controller.weapon.multi_element:
+                self.view.add_item(self.view.element_selector)
+
             await interaction.edit_original_response(
                 embeds=self._options[self.values[0]](), view=self.view
             )
@@ -105,9 +108,8 @@ class _AdvancementSelector(Select["WeaponsView"]):
 
         self.options = [
             SelectOption(
-                label=f"{ind}°",
+                label=" ".join(EmojisEnum.DarkStar.value * ind),
                 value=str(ind - 1),
-                emoji=weapon_advancement_star(ind),
             )
             for ind in range(1, len(controller.weapon.advancements) + 1)
         ]
