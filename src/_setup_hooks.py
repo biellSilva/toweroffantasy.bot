@@ -4,6 +4,8 @@ from pathlib import Path
 import discord
 from discord.ext import commands
 
+from src._settings import config
+
 
 async def load_cogs(bot: commands.Bot) -> None:
     _logger = getLogger("tof.extensions")
@@ -43,12 +45,18 @@ async def change_presence(bot: commands.Bot) -> None:
 
     await bot.wait_until_ready()
 
-    await bot.change_presence(
-        activity=discord.CustomActivity(
-            name="being developed",
-            emoji="🛠️",
-        ),
-        status=discord.Status.dnd,
-    )
+    if config.ENV == "dev":
+        activity = discord.CustomActivity(
+            name="Under Development",
+        )
+        status = discord.Status.dnd
+    else:
+        activity = discord.Activity(
+            name="v4.6",
+            type=discord.ActivityType.playing,
+        )
+        status = discord.Status.online
+
+    await bot.change_presence(activity=activity, status=status)
 
     _logger.info("Bot presence changed")
