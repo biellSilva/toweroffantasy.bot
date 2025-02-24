@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Literal
 
 from discord.ext import commands
 
@@ -13,7 +13,7 @@ class OwnerCog(commands.Cog):
     async def sync(
         self,
         ctx: commands.Context[commands.Bot],
-        spec: Optional[Literal["guild", "copy", "clear"]] = None,
+        spec: Literal["guild", "copy", "clear"] | None = None,
     ) -> None:
         async with ctx.typing():
             if spec == "guild":
