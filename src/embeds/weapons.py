@@ -11,6 +11,11 @@ if TYPE_CHECKING:
 class WeaponEmbeds:
     def __init__(self, weapon: "Weapon") -> None:
         self.weapon = weapon
+        self._default_embed = Embed(
+            title=self.weapon.PREVIEW_NAME,
+            url=self.weapon.URL,
+            color=convert_rarity_to_color(self.weapon.rarity),
+        ).set_thumbnail(url=self.weapon.assets.item_large_icon)
 
     def main_embed(self) -> list[Embed]:
         embed = Embed(
@@ -33,20 +38,62 @@ class WeaponEmbeds:
         return [embed]
 
     def passives_embed(self) -> list[Embed]:
+        if not self.weapon.passives:
+            embed = self._default_embed.copy().set_footer(text="Passives")
+            embed.description = "-# No Passives"
+            return [embed]
+
         embeds: list[Embed] = []
 
         for passive in self.weapon.passives:
-            embed = Embed(
+            passive_embed = Embed(
                 color=convert_rarity_to_color(self.weapon.rarity),
                 description=passive,
             )
 
-            embeds.append(embed)
+            embeds.append(passive_embed)
 
-        if embeds:
-            embeds[0].title = self.weapon.PREVIEW_NAME
-            embeds[0].url = self.weapon.URL
-            embeds[0].set_thumbnail(url=self.weapon.assets.item_large_icon)
-            embeds[-1].set_footer(text="Passives")
+        embeds[0].title = self.weapon.PREVIEW_NAME
+        embeds[0].url = self.weapon.URL
+        embeds[0].set_thumbnail(url=self.weapon.assets.item_large_icon)
+
+        embeds[-1].set_footer(text="Passives")
 
         return embeds
+
+    def multi_element_embed(self, element: str = "Superpower") -> list[Embed]:
+        if not self.weapon.multi_element:
+            embed = self._default_embed.copy().set_footer(text="Multi-Element")
+            embed.description = "-# No multi-element"
+            return [embed]
+
+        for multi_element in self.weapon.multi_element:
+            if multi_element.element == element:
+                embeds: list[Embed] = []
+
+                for passive in multi_element.passives:
+                    passive_embed = Embed(
+                        color=convert_rarity_to_color(self.weapon.rarity),
+                        description=passive,
+                    )
+                    embeds.append(passive_embed)
+
+                embeds[0].title = self.weapon.PREVIEW_NAME
+                embeds[0].url = self.weapon.URL
+                embeds[0].set_thumbnail(url=self.weapon.assets.item_large_icon)
+
+                embeds[-1].set_footer(text="Multi-Element")
+
+                return embeds
+
+        embed = self._default_embed.copy().set_footer(text="Multi-Element")
+        embed.description = "-# Unknown multi-element"
+        return [embed]
+
+    def advancements_embed(self, index: int = 0) -> list[Embed]:
+        embed = self._default_embed.copy().set_footer(text="Advancements")
+        if not self.weapon.advancements:
+            embed.description = "-# No advancements"
+            return [embed]
+
+        return [embed]
