@@ -59,6 +59,8 @@ class _SectionSelector(Select["WeaponsView"]):
     async def callback(self, interaction: Interaction) -> None:
         await interaction.response.defer()
 
+        self.view.remove_selectors()
+
         if self.values[0] == "multi element":
             if self.controller.weapon.multi_element:
                 self.view.add_item(self.view.element_selector)
@@ -81,8 +83,6 @@ class _SectionSelector(Select["WeaponsView"]):
                 embeds=self._options[self.values[0]](), view=self.view
             )
             return
-
-        self.view.remove_selectors()
 
         await interaction.edit_original_response(
             embeds=self._options[self.values[0]](), view=self.view
