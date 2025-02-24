@@ -112,9 +112,6 @@ class MultiElement(BaseModel):
 class WeaponSimple(BaseEntity):
     id: str
     name: str
-    desc: ParseRegex
-    brief: ParseRegex
-    lottery_desc: ParseRegex
     rarity: str
     quality: str
 
@@ -145,6 +142,10 @@ class WeaponSimple(BaseEntity):
 
 
 class Weapon(WeaponSimple):
+    brief: ParseRegex
+    desc: ParseRegex
+    lottery_desc: ParseRegex
+
     skills: list[Skill] = []
     advancements: list[Advancement] = []
     passives: list[ParseRegex] = []
