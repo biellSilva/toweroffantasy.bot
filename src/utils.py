@@ -93,3 +93,7 @@ def split_matrix_name(name: str) -> str:
 
 def weapon_advancement_star(index: int) -> str:
     return EmojisEnum.Star.value if index in (2, 4) else EmojisEnum.GlowingStar.value
+
+
+def truncate_value(value: float) -> int | float:
+    return int(value) if value.is_integer() else value
