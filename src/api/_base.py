@@ -93,7 +93,6 @@ class ApiBaseService[T: BaseEntity, B: BaseEntity]:
                     **self._clear_query_params(query_params),
                 },
             ) as response:
-                print(response.real_url)
                 return [self._simple_model(**data) for data in await response.json()]
 
     async def fetch_autocomplete_data(
@@ -113,5 +112,4 @@ class ApiBaseService[T: BaseEntity, B: BaseEntity]:
                     **self._clear_query_params(query_params),
                 },
             ) as response:
-                print(response.real_url)
                 return [self._simple_model(**data) for data in await response.json()]
