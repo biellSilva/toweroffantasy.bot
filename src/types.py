@@ -1,9 +1,9 @@
 import re
 from enum import Enum, StrEnum
-from typing import Annotated
 
 from discord import PartialEmoji
 from pydantic import AfterValidator
+from typing_extensions import Annotated
 
 __all__ = (
     "LangsEnum",
@@ -95,6 +95,9 @@ class EmojisEnum(Enum):
     BallRed = PartialEmoji(name="BallRed", id=1309657895578767411)
     BallsMixed = PartialEmoji(name="BallsMixed", id=1309658158901235712)
 
+    SsrRarity = PartialEmoji(name="SsrRarity", id=1343651535405449226)
+    SrRarity = PartialEmoji(name="SrRarity", id=1343651402450210938)
+
     SparklingHeart = "\U0001f496"
     BrokenHeart = "\U0001f494"
 
@@ -105,13 +108,16 @@ class EmojisEnum(Enum):
     GlowingStar = "\U0001f31f"
     DarkStar = "★"
 
+    RightArrow = "⮞"
+
     def __str__(self) -> str:
         return str(self.value)
 
 
 def _convert_tag_to_markdown(value: str) -> str:
-    pattern = r"<shuzhi>(.*?)</>"
-    return re.sub(pattern, r"**\1**", value)
+    pattern = r"<(shuzhi|red|green|blue)>(.*?)</>"
+
+    return re.sub(pattern=pattern, repl=r"**\2**", string=value)
 
 
 ParseRegex = Annotated[str, AfterValidator(_convert_tag_to_markdown)]
