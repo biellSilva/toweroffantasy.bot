@@ -6,7 +6,7 @@ from cachetools import TTLCache
 from discord import Locale
 
 from src._settings import config
-from src.models.base import BaseEntity
+from src.models.base import BaseEntity, Pagination
 from src.types import LangsEnum
 from src.utils import convert_locale
 
@@ -93,23 +93,5 @@ class ApiBaseService[T: BaseEntity, B: BaseEntity]:
                     **self._clear_query_params(query_params),
                 },
             ) as response:
-                return [self._simple_model(**data) for data in await response.json()]
-
-    async def fetch_autocomplete_data(
-        self,
-        lang: Locale,
-        page: int = 1,
-        limit: int = 1000,
-        **query_params: Any,
-    ) -> list[B]:
-        async with self._get_client() as client:
-            async with client.get(
-                self._PATH,
-                params={
-                    "lang": convert_locale(lang),
-                    "page": page,
-                    "limit": limit,
-                    **self._clear_query_params(query_params),
-                },
-            ) as response:
-                return [self._simple_model(**data) for data in await response.json()]
+                response = Pagination[self._simple_model](**await response.json())
+                return response.data
