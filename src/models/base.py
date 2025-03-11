@@ -12,3 +12,11 @@ class BackgroundColor(BaseModel):
     a: float
     hex: str
     hex: str
+
+
+class Pagination[T: BaseModel](BaseModel):
+    data: list[T]
+    total_items: int
+    page: int
+    max_page: int
+    limit: int
