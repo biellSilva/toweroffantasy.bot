@@ -11,7 +11,6 @@ class BackgroundColor(BaseModel):
     b: float
     a: float
     hex: str
-    hex: str
 
 
 class Pagination[T: BaseModel](BaseModel):
