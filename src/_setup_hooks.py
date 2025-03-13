@@ -52,7 +52,7 @@ async def change_presence(bot: commands.Bot) -> None:
         status = discord.Status.dnd
     else:
         activity = discord.Activity(
-            name="v4.7.3",
+            name=config.GAME_VERSION,
             type=discord.ActivityType.playing,
         )
         status = discord.Status.online

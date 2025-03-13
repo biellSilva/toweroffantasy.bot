@@ -14,6 +14,8 @@ class _Settings(BaseSettings):
 
     WEBSITE_URL: str = "https://toweroffantasy.info"
 
+    GAME_VERSION: str = "v4.7"
+
 
 config = _Settings()  # type: ignore
 
