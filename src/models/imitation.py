@@ -79,8 +79,8 @@ class _ImitationAssets(BaseModel):
     icon: str | None
     big_icon: str | None
     name_picture: str | None
-    name_2_picture: str | None
-    name_3_picture: str | None
+    # name_2_picture: str | None
+    # name_3_picture: str | None
     desc_painting: str | None
     painting: str | None
     gray_painting: str | None
@@ -98,7 +98,7 @@ class _ImitationAssets(BaseModel):
     motto_2_picture: str | None
     title_picture: str | None
     imitation_virtual_shadow: str | None
-    awaken_name_picture: str | None
+    # awaken_name_picture: str | None
     awaken_photo: str | None
 
 
