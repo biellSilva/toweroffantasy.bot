@@ -38,13 +38,18 @@ class ShatterOrCharge(BaseModel):
         return f"*{self.value}* **{self.tier}**"
 
 
+class AttackTag(BaseModel):
+    id: str
+    name: str
+
+
 class Attack(BaseModel):
     id: str
     name: str
     desc: ParseRegex
     short_desc: ParseRegex | None
     icon: str
-    tags: list[str]
+    tags: list[AttackTag]
     operations: list[str]
     values: list[list[float]]
 
