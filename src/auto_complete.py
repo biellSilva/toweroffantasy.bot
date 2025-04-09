@@ -7,7 +7,7 @@ from unidecode import unidecode
 from src.api.matrices import MatricesService
 from src.api.simulacra import SimulacraService
 from src.api.weapons import WeaponService
-from src.utils import convert_locale, convert_rarity_to_int, split_matrix_name
+from src.utils import convert_locale
 
 
 class AutoCompleteHelper:
@@ -26,14 +26,8 @@ class AutoCompleteHelper:
     async def matrix_id_autocomplete(
         self, interaction: Interaction, current: str
     ) -> list[Choice[str]]:
-        data = sorted(
-            await self.matrices.get_all_from_cache(
-                lang=convert_locale(interaction.locale)
-            ),
-            key=lambda x: (
-                -convert_rarity_to_int(x.rarity),
-                unidecode(split_matrix_name(x.matrice_name)),
-            ),
+        data = await self.matrices.get_all_from_cache(
+            lang=convert_locale(interaction.locale)
         )
 
         for char in current.split():
@@ -61,14 +55,8 @@ class AutoCompleteHelper:
     async def simulacrum_id_autocomplete(
         self, interaction: Interaction, current: str
     ) -> list[Choice[str]]:
-        data = sorted(
-            await self.simulacra.get_all_from_cache(
-                lang=convert_locale(interaction.locale)
-            ),
-            key=lambda x: (
-                -convert_rarity_to_int(x.rarity),
-                unidecode(x.name),
-            ),
+        data = await self.simulacra.get_all_from_cache(
+            lang=convert_locale(interaction.locale)
         )
 
         for char in current.split():
@@ -93,14 +81,8 @@ class AutoCompleteHelper:
     async def weapon_id_autocomplete(
         self, interaction: "Interaction", current: str
     ) -> list[Choice[str]]:
-        data = sorted(
-            await self.weapons.get_all_from_cache(
-                lang=convert_locale(interaction.locale)
-            ),
-            key=lambda x: (
-                -convert_rarity_to_int(x.rarity),
-                unidecode(x.name),
-            ),
+        data = await self.weapons.get_all_from_cache(
+            lang=convert_locale(interaction.locale)
         )
 
         for char in current.split():
