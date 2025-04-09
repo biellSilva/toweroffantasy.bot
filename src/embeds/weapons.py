@@ -136,7 +136,7 @@ class WeaponEmbeds:
         if len(skill.desc) < 2000:
             embed.description = (
                 f"**{skill.name}**\n"
-                f"{f'-# _**{" - ".join(skill.tags)}**_\n' if skill.tags else ''}"
+                f"{f'-# _**{" - ".join([tag.name for tag in skill.tags])}**_\n' if skill.tags else ''}"
                 f"{
                     f'-# **{f" {EmojisEnum.RightArrow} ".join(skill.operations)}**\n\n'
                     if skill.operations
@@ -155,7 +155,7 @@ class WeaponEmbeds:
             if ind == 0:
                 embed.description = (
                     f"**{skill.name}**\n"
-                    f"-# _**{' - '.join(skill.tags)}**_\n"
+                    f"-# _**{' - '.join([tag.name for tag in skill.tags])}**_\n"
                     f"{
                         f'-# **{f" {EmojisEnum.RightArrow} ".join(skill.operations)}**\n\n'
                         if skill.operations
