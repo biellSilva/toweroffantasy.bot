@@ -1,9 +1,10 @@
 from datetime import timedelta
-from typing import Any, Self, overload
+from typing import Annotated, Any, Self, overload
 
 import aiohttp
 from cachetools import TTLCache
 from discord import Locale
+from pydantic import AfterValidator, BaseModel
 
 from src._settings import config
 from src.models.base import BaseEntity, Pagination
@@ -95,3 +96,23 @@ class ApiBaseService[T: BaseEntity, B: BaseEntity]:
             ) as response:
                 response = Pagination[self._simple_model](**await response.json())
                 return response.data
+
+
+class _ApiVersion(BaseModel):
+    api_version: str
+    game_version: Annotated[str, AfterValidator(lambda v: f"v{v}")]
+
+
+class ApiService:
+    __instance: Self | None = None
+
+    def __new__(cls) -> Self:
+        if cls.__instance is None:
+            cls.__instance = super().__new__(cls)
+        return cls.__instance
+
+    async def get_version(self) -> _ApiVersion:
+        async with aiohttp.ClientSession(config.API_URL) as client:
+            async with client.get("/version") as response:
+                data = await response.json()
+                return _ApiVersion(**data)
