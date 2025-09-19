@@ -5,6 +5,7 @@ import discord
 from discord.ext import commands
 
 from src._settings import config
+from src.api._base import ApiService
 
 
 async def load_cogs(bot: commands.Bot) -> None:
@@ -45,18 +46,18 @@ async def change_presence(bot: commands.Bot) -> None:
 
     await bot.wait_until_ready()
 
-    if config.ENV == "dev":
-        activity = discord.CustomActivity(
-            name="Under Development",
-        )
-        status = discord.Status.dnd
-    else:
+    activity = discord.CustomActivity(
+        name="Under Development",
+    )
+    status = discord.Status.dnd
+
+    if config.ENV != "dev":
         activity = discord.Activity(
-            name=config.GAME_VERSION,
+            name=(await ApiService().get_version()).game_version,
             type=discord.ActivityType.playing,
         )
         status = discord.Status.online
 
     await bot.change_presence(activity=activity, status=status)
 
-    _logger.info("Bot presence changed")
+    _logger.info("Bot presence changed to: %s | %s", activity.name, status.name)
