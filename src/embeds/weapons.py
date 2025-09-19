@@ -204,3 +204,30 @@ class WeaponEmbeds:
         embeds[-1].set_footer(text="Fashions")
 
         return embeds
+
+    def synesthesia_embed(self) -> list[Embed]:
+        if not self.weapon.synesthesia:
+            embed = self._default_embed.copy()
+            embed.description = "-# No synesthesia available"
+            embed.set_footer(text="Synesthesia")
+            return [embed]
+
+        embeds: list[Embed] = []
+
+        for syn in self.weapon.synesthesia:
+            embed = Embed(
+                color=convert_rarity_to_color(self.weapon.rarity),
+                description=(
+                    f"{syn.desc}\n"
+                    f"-# Star {syn.required_star}\n"
+                    f"-# Gold {syn.gold_cost}\n"
+                ),
+            )
+
+            embeds.append(embed)
+
+        embeds[0].title = self.weapon.PREVIEW_NAME
+        embeds[0].url = self.weapon.URL
+        embeds[-1].set_footer(text="Synesthesia")
+
+        return embeds

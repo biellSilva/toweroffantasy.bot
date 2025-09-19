@@ -114,6 +114,12 @@ class MultiElement(BaseModel):
     passives: list[ParseRegex]
 
 
+class Synesthesia(BaseModel):
+    desc: ParseRegex
+    required_star: int
+    gold_cost: int
+
+
 class WeaponSimple(BaseEntity):
     id: str
     name: str
@@ -157,3 +163,4 @@ class Weapon(WeaponSimple):
     multi_element: list[MultiElement] = []
     fashions: list[Fashion] = []
     recommended_matrices: list[RecommendedMatrice] = []
+    synesthesia: list[Synesthesia] = []

@@ -48,6 +48,7 @@ class _SectionSelector(Select["WeaponsView"]):
             "advancements": controller.advancements_embed,
             "skills": controller.skill_embed,
             "fashions": controller.fashions_embed,
+            "synesthesia": controller.synesthesia_embed,
         }
 
         self.options = [
