@@ -22,7 +22,7 @@ license = { text = "MIT" }
 distribution = false
 
 [tool.pdm.scripts]
-start = "python main.py"
+start = { cmd = "python main.py", env_file.override = ".env" }
 
 [dependency-groups]
 dev = ["types-cachetools>=5.5.0.20240820"]
